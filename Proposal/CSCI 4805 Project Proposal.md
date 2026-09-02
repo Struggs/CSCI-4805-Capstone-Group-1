@@ -154,13 +154,6 @@ AI will not be used for code generation; however, it may be used to locate any e
 
 Our team members have a variety of skills and backgrounds that can be made use of during this project. Ian Godfrey has experience working with java, C\#, C, C++, SQL, and Python. His expertise lies primarily in Python. Dallas Chillinsky is known by all as a guy who “can make it happen”. He has experience with Java, JavaScript, C\#, CSS, C++, HTML, and SQL. His skill in CSS and HTML will likely come in handy in the later stages of development. Elijah Crossan is the third member of this group with knowledge in Java, Python, SQL, HTML, Kotlin, JavaScript, and CSS. He admittedly is not the strongest coder of the bunch but he will do what he can. 
 
-Ian Godfrey \- Java, little bit of C\#, SQL, little bit of C++, most experience with Python, a little bit of C.
-
-Dallas Chillinsky \- Can make it happen ( java, javascript, c\#, css, C++, html, sql)
-
-Elijah Crossan \- Java, Python, SQL, HTML, Kotlin, JavaScript, CSS
-
-**Ezana \-**
 
 # 11\. Dependencies, limitations, and risks (Elijah)
 
@@ -175,7 +168,7 @@ To avoid this, we will have to create a tester or administrative mode that can b
 
 Many core features of our program rely on having an active database and user authentication system in place. Functions such as unique student profiles, marketplace listings, private messaging, and many others will fail if any errors in our database system or authentication logic occurs. Programming the front-end of our project may be blocked if setting up our database is delayed or impeded. 
 
-	To prevent stalling our front-end work, we will prioritize configuring our database and set up an authentication provider before any other development.
+To prevent stalling our front-end work, we will prioritize configuring our database and set up an authentication provider before any other development.
 
 ## Project and Technical Limitations:
 
@@ -183,13 +176,13 @@ Many core features of our program rely on having an active database and user aut
 
 Many features we plan to implement, such as student profiles, activity posts, marketplace listings, and etc, allow the user to upload images to the database. The unrestricted storing of many high-resolution images will likely exceed the free cloud storage capacity of many services, resulting in slower page loading times and processing speeds.
 
-	This issue can generally be resolved by implementing a file-size validation system that triggers before an image can be uploaded. We could also cap the number of images allowed per post or marketplace listing, or otherwise restrict image upload. 
+This issue can generally be resolved by implementing a file-size validation system that triggers before an image can be uploaded. We could also cap the number of images allowed per post or marketplace listing, or otherwise restrict image upload. 
 
 ### User-end Browser Compatibility: 
 
 Designing a web application for both desktop and mobile browsers can cause issues with the CSS code, address-bar resizing, malfunctioning touch-events, and degrade the over-all quality of the final product.
 
-	The best way to prevent this is to frequently check the program on both mobile and desktop without letting any discrepancies or malfunctions get out of hand. Checking the UI on both intended devices frequently will be easier than finishing the project and dealing with it afterwards. 
+The best way to prevent this is to frequently check the program on both mobile and desktop without letting any discrepancies or malfunctions get out of hand. Checking the UI on both intended devices frequently will be easier than finishing the project and dealing with it afterwards. 
 
 ## General Project Risks:
 
