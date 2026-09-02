@@ -152,7 +152,7 @@ AI will not be used for code generation; however, it may be used to locate any e
 
 # 10\. Team members’ backgrounds (Elijah)
 
-Our team members have a variety of skills and backgrounds that can be made use of during this project. Ian Godfrey has experience working with java, C\#, C, C++, SQL, and Python. His expertise lies primarily in Python. Dallas Chillinsky is known by all as a guy who “can make it happen”. He has experience with Java, JavaScript, C\#, CSS, C++, HTML, and SQL. His skill in CSS and HTML will likely come in handy in the later stages of development. Elijah Crossan is the third member of this group with knowledge in Java, Python, SQL, HTML, Kotlin, JavaScript, and CSS. He admittedly is not the strongest coder of the bunch but he will do what he can. 
+Our team members have a variety of skills and backgrounds that can be made use of during this project. Ian Godfrey has experience working with java, C\#, C, C++, SQL, and Python. His expertise lies primarily in Python. Dallas Chillinsky is known by all as a guy who “can make it happen”. He has experience with Java, JavaScript, C\#, CSS, C++, HTML, and SQL. His skill in CSS and HTML will likely come in handy in the later stages of development. Elijah Crossan is the third member of this group with knowledge in Java, Python, SQL, HTML, Kotlin, JavaScript, and CSS. He admittedly is not the strongest coder of the bunch but he will do what he can. Our fourth group member, Ezana, has experience with Java, Python, and a little bit of C++/C.
 
 
 # 11\. Dependencies, limitations, and risks (Elijah)
