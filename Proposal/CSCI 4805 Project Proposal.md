@@ -155,18 +155,17 @@ Our data sources come from within the website/app. We don’t plan on pulling da
 
 # 9\. AI Policy (Elijah)
 
-Our team has collectively agreed to abide by the following artificial intelligence policy, barring any unforeseen situations that may arise later in the development phase, which may result in a redefining of this policy. Artificial intelligence will be used sparingly for concept design, synthetic data generation, and general input on project structure and feature implementation. AI will be used consistently throughout the development phase to generate progress reports, identify scheduling concerns, and manage work assignments.
-
-While we have a general idea of how we want our project to function and the features we intend to include, it is possible for us to have overlooked certain facets of our project that may cause issues down the line. To help us combine our ideas effectively and lay a solid roadmap for the project's future, we intend to use AI to further refine the concept we have in mind. The project we have decided on will not likely require data generation; however, it is possible that we generate several mock student accounts with synthetic user information in order to test the capabilities of our program and the interactions with and clarity of any user data displayed.
-
-If the structure of our program becomes convoluted enough through the addition of different features and the features begin interfering with each other, or the features themselves aren’t executing as we would like them to, we may use artificial intelligence to generate ideas on how to better structure our program or implement our features; this will guarantee the program runs as smoothly as possible, and prevents the need to compromise on which features to keep or discard. We may, on occasion, submit our project outline as well as the current version of our project to an API with the intent of generating a status report regarding what parts of the project are complete and what still needs to be finished. This will help us stay on schedule as we complete tasks and ensure we don’t lose track of what we have done and what's left. Using AI like this will ensure our project remains cohesive and efficient without relying too heavily on artificial intelligence, such that the program has lost its uniquely human-influenced design.
-
-AI will not be used for code generation; however, it may be used to locate any errors we are incapable of finding ourselves collectively. If our code isn’t functioning as we would expect, we may use AI to generate several examples of similar instances of the specific coding mechanisms we're struggling with for reference.
+Our team will use artificial intelligence strictly as an assistive learning and troubleshooting tool rather than a code generator. Specifically, we will use AI to help explain complex technical concepts, clarify framework errors, assist with syntax debugging when the team reaches an impasse, generate synthetic mock data (e.g., sample user profiles) for testing, and help structure project management schedules. We will not use AI to generate application code, write project deliverables, or bypass our fundamental understanding of the architecture. Every team member remains solely responsible for writing, testing, and understanding all code integrated into the repository.
 
 # 10\. Team members’ backgrounds (Elijah)
 
-Our team members have a variety of skills and backgrounds that can be made use of during this project. Ian Godfrey has experience working with java, C\#, C, C++, SQL, and Python. His expertise lies primarily in Python. Dallas Chillinsky is known by all as a guy who “can make it happen”. He has experience with Java, JavaScript, C\#, CSS, C++, HTML, and SQL. His skill in CSS and HTML will likely come in handy in the later stages of development. Elijah Crossan is the third member of this group with knowledge in Java, Python, SQL, HTML, Kotlin, JavaScript, and CSS. He admittedly is not the strongest coder of the bunch but he will do what he can. Our fourth group member, Ezana, has experience with Java, Python, and a little bit of C++/C.
+Ian Godfrey: Advanced proficiency in Python; intermediate proficiency in Java, C#, and SQL; beginner proficiency in C and C++.
 
+Dallas Chillinsky: Intermediate proficiency in HTML, CSS, JavaScript, and Java; beginner to intermediate proficiency in C#, C++, and SQL.
+
+Elijah Crossan: Intermediate proficiency in HTML, CSS, JavaScript, and Java; beginner proficiency in Python, Kotlin, and SQL.
+
+Ezana Kinfe: Intermediate proficiency in Java and Python; beginner proficiency in C and C++.
 
 # 11\. Dependencies, limitations, and risks (Elijah)
 
@@ -210,5 +209,4 @@ To prevent this, we will thoroughly organize our features into priority tiers an
 
 Any group project can run into issues with individual schedules, sudden illness, heavy work loads in other courses, or other unpredictable set-backs.
 
-The solution to this is to communicate consistently and pray sincerely for a smooth ride. 
-
+The solution to this is to communicate consistently.
