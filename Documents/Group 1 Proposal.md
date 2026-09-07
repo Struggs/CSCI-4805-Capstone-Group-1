@@ -157,7 +157,7 @@ Our data sources come from within the website/app. We don’t plan on pulling da
 
 Our team will use artificial intelligence strictly as an assistive learning and troubleshooting tool rather than a code generator. Specifically, we will use AI to help explain complex technical concepts, clarify framework errors, assist with syntax debugging when the team reaches an impasse, generate synthetic mock data (e.g., sample user profiles) for testing, and help structure project management schedules. We will not use AI to generate application code, write project deliverables, or bypass our fundamental understanding of the architecture. Every team member remains solely responsible for writing, testing, and understanding all code integrated into the repository.
 
-# 10\. Team members’ backgrounds (Elijah)
+# 10\. Team members’ backgrounds
 
 Ian Godfrey: Advanced proficiency in Python; intermediate proficiency in Java, C#, and SQL; beginner proficiency in C and C++.
 
