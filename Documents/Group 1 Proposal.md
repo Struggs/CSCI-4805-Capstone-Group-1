@@ -15,7 +15,7 @@ CampusHub is a student social platform designed to help college students connect
 
 CampusHub will provide a localized one place where students are able to create a profile, find and post activities, communicate with other students, and buy or sell items through a student based marketplace. By keeping the platform focused within Austin Peay State University, CampusHub's mission is to make it easier for students to build connections and become more involved with campus life.
 
-# 4\. Description (Ezana Kinfe)
+# 4\. Description
 CampusHub will serve as an online community for students at APSU where students can meet new people, find events to go to, and exchange items. College students usually use a lot of different apps and platforms to do these different things which can become a hassle. CampusHub is meant to be one place that brings all these things together for all Austin Peay students.
 
 One of the main objectives of CampusHub is to make it easier for students to connect on campus. This could be extremely beneficial especially for new transfer students, incoming freshmen, commuters, and anyone who is just learning to navigate the Austin Peay campus. Beginning a journey at a new school can make it incredibly difficult to meet new people outside of class, particularly if someone doesn’t know many students. Even APSU students who have been here a while can have trouble meeting people outside of their classes. 
@@ -34,7 +34,7 @@ While there are already social media platforms, marketplace services, and univer
 Another important part of CampusHub will be keeping the platform centered around the student community. Student verification will help make sure students, particularly transfer students and students not familiar with the campus or Clarksville area that may be looking for an easier way to get more involved. 
 The main goal of CampusHub is to create an all-in-one platform for APSU students to connect with each other, communicate, find activities, and buy or sell items. All these features are meant to work together as part of a student-focused platform instead of it feeling like a bunch of separate tools. By keeping the project focused on APSU specifically, the team can make sure the platform is as useful as possible for the students it was designed for. The semester will focus on completing the features we previously mentioned and making the overall experience of the platform functional. If the project is successful, future iterations of the platform could include support towards additional universities. For now, the priority is to build a version of CampusHub that is catered towards APSU students helping them become more involved with campus life and more connected with other students. 
 
-# 5\. Feature List (Dallas)
+# 5\. Feature List
 
 ### Features We Plan to Complete
 
@@ -80,7 +80,7 @@ There are several features that would be useful but are outside the scope of one
 
 A future version could also explore additional marketplace features. However, processing payments directly through Campus Hub is not planned for the current project.
 
-# 6\. Initial Set of Technologies (Dallas)
+# 6\. Initial Set of Technologies
 
 The following technologies are our current plan for developing Campus Hub. Some of these may change as we begin development and learn more about what the project requires.
 
@@ -153,7 +153,7 @@ Server information is still TBD, as discussed before. We are still researching t
 
 Our data sources come from within the website/app. We don’t plan on pulling data in from other apps/websites and the data in the app will be user-generated and stored in the database of our website/app.
 
-# 9\. AI Policy (Elijah)
+# 9\. AI Policy
 
 Our team will use artificial intelligence strictly as an assistive learning and troubleshooting tool rather than a code generator. Specifically, we will use AI to help explain complex technical concepts, clarify framework errors, assist with syntax debugging when the team reaches an impasse, generate synthetic mock data (e.g., sample user profiles) for testing, and help structure project management schedules. We will not use AI to generate application code, write project deliverables, or bypass our fundamental understanding of the architecture. Every team member remains solely responsible for writing, testing, and understanding all code integrated into the repository.
 
@@ -167,7 +167,7 @@ Elijah Crossan: Intermediate proficiency in HTML, CSS, JavaScript, and Java; beg
 
 Ezana Kinfe: Intermediate proficiency in Java and Python; beginner proficiency in C and C++.
 
-# 11\. Dependencies, limitations, and risks (Elijah)
+# 11\. Dependencies, limitations, and risks
 
 ## Task and Technological Dependencies:
 
