@@ -381,184 +381,356 @@ picture.
 2.3.17. A successfully saved profile picture will remain associated with the user's profile after the user signs out and signs back in.
 
 # 2.4 Major and School Year / Class Standing
+
 2.4.1. The Edit Profile interface will contain a field for the user's major.
+
 2.4.2. The major field will be optional.
+
 2.4.3. The major field will accept text input.
+
 2.4.4. The major field will accept a maximum of 100 characters.
+
 2.4.5. If a major is provided and saved successfully, the major will be displayed on the user's Profile Page.
+
 2.4.6. If the major field is left blank, no major will be displayed on the user's Profile Page.
+
 2.4.7. The Edit Profile interface will contain a field for the user's school year or class standing.
+
 2.4.8. The school year or class standing field will be optional.
+
 2.4.9. The school year or class standing field will use a predefined list of selectable values.
+
 2.4.10. The available school year or class standing values will include:
 Freshman
 Sophomore
 Junior
 Senior
+
 2.4.11. The user will be able to select only one school year or class standing value at a time.
+
 2.4.12. If a school year or class standing is selected and saved successfully, the selected value will be displayed on the user's Profile Page.
+
 2.4.13. If no school year or class standing is selected, no school year or class standing will be displayed on the user's Profile Page.
+
 2.4.14. Selecting Cancel before saving changes will discard any unsaved changes made to the major or school year/class standing fields.
+
 2.4.15. If saving the updated major or school year/class standing fails, the previously saved values will remain unchanged.
+
 # 2.5 Transfer Student Status
+
 2.5.1. The Edit Profile interface will contain a field labeled Transfer Student.
+
 2.5.2. The Transfer Student field will provide Yes and No as selectable options.
+
 2.5.3. The user will be able to select only one Transfer Student option at a time.
+
 2.5.4. The Transfer Student field will be optional.
+
 2.5.5. If Yes is selected and saved, the user's profile will identify the user as a transfer student.
+
 2.5.6. If No is selected, transfer student status will not be displayed on the user's Profile Page.
+
 2.5.7. The saved Transfer Student value may be used by CampusHub to determine eligibility for activity posts limited to transfer students.
+
 2.5.8. The user will be able to change their Transfer Student selection through Edit Profile.
+
 # 2.6 Interests
+
 2.6.1. The Edit Profile interface will provide an option for the user to add interests to their profile.
+
 2.6.2. Interests will be optional.
+
 2.6.3. The user will be able to enter an interest using a text input field.
+
 2.6.4. Each interest will contain a maximum of 50 characters.
+
 2.6.5. A user will be able to save a maximum of 10 interests.
+
 2.6.6. The system will prevent the user from adding more than 10 interests.
+
 2.6.7. The system will prevent an empty interest from being added.
+
 2.6.8. The user will be able to remove an interest from their profile.
+
 2.6.9. Saved interests will be displayed on the user's Profile Page.
+
 2.6.10. If the user has no saved interests, the Profile Page will not display an empty interests list.
+
 2.6.11. Changes to interests will not become permanent until the user selects Save Changes.
+
 # 2.7 Viewing Another Student's Profile
+
 2.7.1. An authenticated user will be able to open another CampusHub user's Profile Page.
+
 2.7.2. Another student's Profile Page will display the student's name.
+
 2.7.3. Another student's Profile Page will display the student's profile picture or the default profile image.
+
 2.7.4. Another student's Profile Page will display the student's major when one has been provided.
+
 2.7.5. Another student's Profile Page will display the student's school year or class standing when one has been provided.
+
 2.7.6. Another student's Profile Page will display transfer student status when the student has selected Yes.
+
 2.7.7. Another student's Profile Page will display the student's interests when one or more have been provided.
+
 2.7.8. Another student's verified APSU email address will not be displayed on their Profile Page.
+
 2.7.9. A user viewing another student's profile will not be provided with the Edit Profile option.
+
 2.7.10. A user viewing another student's profile will be provided with a Message option.
+
 2.7.11. Selecting Message will open or begin a private conversation with the student.
+
 # 2.8 Profile Privacy and Permissions
+
 2.8.1. A user must be authenticated to access CampusHub student profiles.
+
 2.8.2. A user will only be permitted to edit the profile associated with their authenticated account.
+
 2.8.3. A user will not be permitted to modify another user's profile information.
+
 2.8.4. A user's verified APSU email address will not be included as publicly visible profile information.
+
 2.8.5. Profile editing requests will only be accepted for the authenticated user's profile.
+
 2.8.6. Profile information will only be updated after the requested changes successfully pass profile validation.
+
 # 2.9 Profile Error Handling
+
 2.9.1. If the system cannot retrieve profile information, the system will display an error message.
+
 2.9.2. A profile retrieval failure will not allow incorrect or incomplete profile information to overwrite previously stored profile data.
+
 2.9.3. If a profile update fails, the system will display an error message informing the user that the changes were not saved.
+
 2.9.4. A failed profile update will not overwrite the user's previously saved profile information.
+
 2.9.5. If a profile picture upload fails, the user's previously saved profile picture will remain unchanged.
+
 2.9.6. Invalid profile information will not be saved.
+
 2.9.7. When invalid profile information is entered, the system will identify the field that requires correction.
+
 2.9.8. After a successful profile update, the Profile Page will display the newly saved information.
+
 ## 3. Home Page and Navigation
+
 # 3.1 Home Page Access
+
 3.1.1. After a successful sign in, the user will be directed to the CampusHub Home Page.
+
 3.1.2. After a new user completes initial profile creation, the user will be directed to the CampusHub Home Page.
+
 3.1.3. The Home Page will only be accessible to authenticated CampusHub users.
+
 3.1.4. If an unauthenticated user attempts to access the Home Page, the system will redirect the user to the account access page.
+
 3.1.5. The Home Page will serve as the primary landing page for authenticated users.
+
 3.1.6. The Home Page will provide access to the CampusHub activity feed.
+
 # 3.2 Main Navigation
+
 3.2.1. The CampusHub interface will contain a main navigation menu for authenticated users.
+
 3.2.2. The main navigation menu will provide access to Home.
+
 3.2.3. The main navigation menu will provide access to Marketplace.
+
 3.2.4. The main navigation menu will provide access to Messages.
+
 3.2.5. The main navigation menu will provide access to Profile.
+
 3.2.6. The main navigation menu will provide access to Sign Out.
+
 3.2.7. The main navigation menu will remain available while the user is accessing authenticated CampusHub pages.
+
 # 3.3 Home Navigation
+
 3.3.1. Selecting Home from the main navigation menu will open the CampusHub Home Page.
+
 3.3.2. Selecting Home while already on the Home Page will keep the user on the Home Page.
+
 3.3.3. Returning to the Home Page will display the current activity feed.
+
 # 3.4 Marketplace Navigation
+
 3.4.1. Selecting Marketplace from the main navigation menu will open the Marketplace page.
+
 3.4.2. The Marketplace page will only be accessible to authenticated users.
+
 3.4.3. Selecting Marketplace from another CampusHub page will navigate the user to the Marketplace without signing the user out.
+
 # 3.5 Messages Navigation
+
 3.5.1. Selecting Messages from the main navigation menu will open the user's private messaging area.
+
 3.5.2. The Messages page will only be accessible to authenticated users.
+
 3.5.3. Selecting Messages from another CampusHub page will navigate the user to the messaging area without ending the authenticated session.
+
 # 3.6 Profile Navigation
+
 3.6.1. Selecting Profile from the main navigation menu will open the authenticated user's Profile Page.
+
 3.6.2. The Profile Page will display the profile associated with the currently authenticated account.
+
 3.6.3. Selecting Profile will not allow the user to access another user's editable profile information.
+
 # 3.7 Basic Navigation Behavior
+
 3.7.1. Navigation links will open the CampusHub section associated with the selected option.
+
 3.7.2. The system will maintain the user's authenticated session while the user moves between CampusHub pages.
+
 3.7.3. Moving between CampusHub pages will not require the user to sign in again during an active session.
+
 3.7.4. The currently selected section will be visually identifiable in the main navigation.
+
 3.7.5. Navigation controls will remain functional after the user moves between CampusHub sections.
+
 3.7.6. If a requested CampusHub page fails to load, the system will display an error message.
+
 3.7.7. A failed page load will not automatically end the user's authenticated session.
+
 3.7.8. The user will be able to navigate to another available CampusHub section after a page-loading error.
+
 # 3.8 Sign Out Navigation
+
 3.8.1. The main navigation menu will contain a Sign Out option.
+
 3.8.2. Selecting Sign Out will begin the sign-out process.
+
 3.8.3. Detailed sign-out and session-ending behavior will be defined in the Sign Out and Session Behavior section.
+
 ## 4. Activity Feed
+
 # 4.1 Display Activity Posts 
+
 4.1.1. The CampusHub Home Page will display an activity feed consisting of posts created by authenticated CampusHub users. 
+
 4.1.2. The activity feed will only display posts where the authenticated user meets the target audience filter requirements defined in Section 6. 
+
 4.1.3. If there are no activity posts available, a message will be displayed in the activity feed indicating that there are no available posts. 
+
 4.1.4. The activity feed will update dynamically in real-time when new posts are created, edited, or deleted. 
-4.1.5. If the user is not connected to the internet when accessing the feed or when real-time updates occur, the system will display an error message indicating that connection has been lost and cached posts cannot be updated.
+
+4.1.5. If the user is not connected to the internet when accessing the feed or when real-time updates occur, the system will display an error message indicating that 
+connection has been lost and cached posts cannot be updated.
+
 # 4.2 Information shown on each post
 
 4.2.1. Each activity post displayed in the feed will show the name of the student who created the post. 
+
 4.2.2. Each activity post will display the profile picture or default profile image of the student who created the post. 
+
 4.2.3. Selecting the poster's name or profile picture will open that student's Profile Page as defined in Section 2.7. 
+
 4.2.4. Each activity post will display the full text or description that the author is required to provide to post.. 
+
 4.2.5. Each activity post will display an uploaded image if the author attached one to the post. 
+
 4.2.6. If the author did not attach an image, no image placeholder will be displayed for that post. 
+
 4.2.7. Each activity post will display the timestamp indicating when the post was created, date and time.. 
+
 4.2.8. Each activity post will display the target audience filter selected by the author. 
+
 4.2.9. Each activity post will display the total number of comments and interactions associated with the post.
+
 #4.3 Order of posts
+
 4.3.1. Activity posts in the feed will be displayed in reverse chronological order by default. 
+
 4.3.2. The most recently created activity posts will appear at the top of the activity feed. 
+
 4.3.3. Older activity posts will appear further down the feed.
+
 # 4.4 Viewing an Individual Post 
+
 4.4.1. Selecting an activity post from the feed will open the individual post view. 
-4.4.2. The individual post view will display all information associated with the post, including author details, full text, attached image, timestamp, and target audience, and a back button. 
+
+4.4.2. The individual post view will display all information associated with the post, including author details, full text, attached image, timestamp, and target audience, 
+and a back button. 
+
 4.4.2.1 Clicking the back arrow will take the user to the previous page. 
+
 4.4.3. The individual post view will display the complete list of comments associated with the post. 
+
 4.4.4. The individual post view will provide access to the comment creation feature defined in Section 7. 
+
 4.4.5. If the authenticated user is the author of the post, the individual post view will provide options to edit or delete the post.
+
 ## 5. Create Activity Post
+
 # 5.1 Post Description / Text 
+
 5.1.1. The CampusHub interface will provide a control allowing authenticated users to create a new activity post. 
+
 5.1.2. The create post interface will contain a text input field for the post description. 
+
 5.1.3. The post description field will accept alphanumeric characters, punctuation, and standard symbols. 
+
 5.1.4. The post description field will require at least one character. 
+
 5.1.5. The post description field will accept a maximum of 500 characters. 
+
 5.1.6. The interface will display a character counter showing remaining characters. 
+
 5.1.7. The system will prevent text input beyond 500 characters.
+
 # 5.2 Optional image
+
 5.2.1. The create post interface will provide an option to attach an image. 
+
 5.2.2. Attaching an image to an activity post will be optional. 
+
 5.2.3. The system will accept image files only in .jpg, .jpeg, and .png formats. 
+
 5.2.4. The system will reject any uploaded image exceeding 5 MB in size. 
+
 5.2.5. If an unsupported file type is selected, the system will reject the file and display an error message stating that the format is not supported. 
+
 5.2.6. If a selected file exceeds 5 MB, the system will reject the file and display an error message stating that the file size exceeds the limit. 
+
 5.2.7. The create post interface will display an image thumbnail preview once an image is selected. 
+
 5.2.8. The interface will provide an option to remove the selected image before publishing which will return the post to the prior state.
+
 # 5.3 Create and Cancel Post 
+
 5.3.1. The create post interface will contain a button labeled Post. 
+
 5.3.2. Selecting Post will check for any errors in all post fields before submission. 
+
 5.3.3. If submission is successful, the system will publish the post, close the creation interface, and insert the post at the top of the activity feed. 
+
 5.3.4. The create post interface will contain a button labeled Cancel. 
+
 5.3.5. Selecting Cancel will discard all entered text, attached images, and selected audience settings. 
+
 5.3.6. If Cancel is selected after text or an image has been entered, the system will request confirmation before discarding the draft. 
+
 5.3.7. Confirming cancellation will close the creation interface and return the user to the activity feed.
+
 # 5.4 Required Fields and Limits 
+
 5.4.1. The post description field will be required. 
+
 5.4.2. The target audience selection field defined in Section 6 will be required. 
-5.4.3. If a user attempts to submit a post with an empty description, the system will halt submission and display an error message indicating that description text is required. 
+
+5.4.3. If a user attempts to submit a post with an empty description, the system will halt submission and display an error message indicating that description text is 
+required. 
+
 5.4.4. If a user attempts to submit a post without selecting a target audience, the system will halt submission and display an error message indicating that an audience must be selected. 
+
 5.4.5. A post may contain a maximum of one attached image. 
-5.4.6. If network connectivity is lost during submission, the system will display an error message indicating that the post failed to publish and retain the user's entered draft.
+
+5.4.6. If network connectivity is lost during submission, the system will display an error message indicating that the post failed to publish and retain the user's entered 
+draft.
+
 5.4.7. If the user exits the app before completing the post, the post will be saved as a draft.
-
-
 
 
 
