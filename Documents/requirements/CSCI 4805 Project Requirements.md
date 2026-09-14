@@ -1,5 +1,5 @@
-### Project Name
-### CampusHub
+# Project Name
+# CampusHub
 The name CampusHub was chosen because the application is intended to provide one central place, or "hub," where Austin Peay State University students can connect with other students, find activities, communicate, and use a student marketplace.
 ## Team Member Names
 Dallas Chillinsky
@@ -22,10 +22,10 @@ Supabase Storage will be used to store user-uploaded images such as profile pict
 Git and GitHub will be used for version control and the project repository.
 Discord will be used for team communication and coordination.
 ChatGPT will be used as an assistive learning and troubleshooting tool in accordance with the team's AI policy.
-### Requirements List
+# Requirements List
 
 ## 1. Account Access and Creation
-# 1.1 Initial Account Access
+### 1.1 Initial Account Access
 
 1.1.1. When a user accesses the CampusHub website and is not signed in, the system will display the CampusHub account access page.
 
@@ -38,7 +38,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 1.1.5. Selecting Sign Up will display the new account registration process.
 
 1.1.6. Selecting Sign In will display the existing-user sign-in form.
-# 1.2 Student Email Registration
+### 1.2 Student Email Registration
 
 1.2.1. The Sign Up process will first request the user's APSU student email address.
 
@@ -70,7 +70,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 
 1.2.4.5. If the email address is valid and is not already registered, the system will begin the email verification process.
 
-# 1.3 Student Email Verification
+### 1.3 Student Email Verification
 
 1.3.1. CampusHub will verify a user's APSU student email address before allowing the user to complete account creation.
 
@@ -104,7 +104,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 
 1.3.9. After successful email verification, the system will continue to create passwords.
 
-# 1.4 Password Creation
+### 1.4 Password Creation
 
 1.4.1. After successful student email verification, the system will display the password creation form.
 
@@ -130,7 +130,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 
 1.4.5.5. The user will not be allowed to continue until the password fields match.
 
-# 1.5 Password Requirements
+### 1.5 Password Requirements
 
 1.5.1. CampusHub passwords must contain at least eight characters.
 
@@ -154,7 +154,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 
 1.5.9.2. If both password fields are valid and match, the account creation process will continue to initial profile creation.
 
-1.6 Initial Profile Creation
+###1.6 Initial Profile Creation
 
 1.6.1. After the user's student email has been verified and a valid password has been created, the system will display the initial profile creation form.
 
@@ -190,7 +190,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 
 1.6.10. After the initial profile is successfully created, the user will be directed to the CampusHub home page.
 
-# 1.7 Existing User Sign In
+### 1.7 Existing User Sign In
 
 1.7.1. The CampusHub account access page will provide a Sign In option for users who have already created an account.
 
@@ -242,7 +242,7 @@ ChatGPT will be used as an assistive learning and troubleshooting tool in accord
 
 1.7.10. After a successful sign-in, the user will be directed to the CampusHub home page.
 
-# 1.8 Forgot Password
+### 1.8 Forgot Password
 
 Since the login mockup already shows Forgot password?, I would include this. It is also a normal enough authentication feature that it makes sense for a senior project 
 without adding much unnecessary scope.
@@ -269,7 +269,7 @@ without adding much unnecessary scope.
 
 1.8.10. After the password is successfully changed, the user will be able to return to the Sign In page and sign in using the new password.
 
-# 2.1 Profile Page
+### 2.1 Profile Page
 
 2.1.1. The Profile Page will only be accessible to authenticated CampusHub users.
 
@@ -303,7 +303,7 @@ without adding much unnecessary scope.
 
 2.1.16. If the profile data cannot be retrieved, the system will display an error message instead of displaying incomplete profile information
 
-# 2.2 Edit Profile
+### 2.2 Edit Profile
 
 2.2.1. The authenticated user's Profile Page will contain an Edit Profile option.
 
@@ -344,7 +344,7 @@ picture.
 
 2.2.19. Successfully saved profile changes will remain available after the user signs out and signs back into CampusHub.
 
-# 2.3 Profile Picture
+### 2.3 Profile Picture
 
 2.3.1. A CampusHub profile may contain one profile picture.
 
@@ -380,7 +380,7 @@ picture.
 
 2.3.17. A successfully saved profile picture will remain associated with the user's profile after the user signs out and signs back in.
 
-# 2.4 Major and School Year / Class Standing
+### 2.4 Major and School Year / Class Standing
 
 2.4.1. The Edit Profile interface will contain a field for the user's major.
 
@@ -416,7 +416,7 @@ Senior
 
 2.4.15. If saving the updated major or school year/class standing fails, the previously saved values will remain unchanged.
 
-# 2.5 Transfer Student Status
+### 2.5 Transfer Student Status
 
 2.5.1. The Edit Profile interface will contain a field labeled Transfer Student.
 
@@ -434,7 +434,7 @@ Senior
 
 2.5.8. The user will be able to change their Transfer Student selection through Edit Profile.
 
-# 2.6 Interests
+### 2.6 Interests
 
 2.6.1. The Edit Profile interface will provide an option for the user to add interests to their profile.
 
@@ -458,7 +458,7 @@ Senior
 
 2.6.11. Changes to interests will not become permanent until the user selects Save Changes.
 
-# 2.7 Viewing Another Student's Profile
+### 2.7 Viewing Another Student's Profile
 
 2.7.1. An authenticated user will be able to open another CampusHub user's Profile Page.
 
@@ -482,7 +482,7 @@ Senior
 
 2.7.11. Selecting Message will open or begin a private conversation with the student.
 
-# 2.8 Profile Privacy and Permissions
+### 2.8 Profile Privacy and Permissions
 
 2.8.1. A user must be authenticated to access CampusHub student profiles.
 
@@ -496,7 +496,7 @@ Senior
 
 2.8.6. Profile information will only be updated after the requested changes successfully pass profile validation.
 
-# 2.9 Profile Error Handling
+### 2.9 Profile Error Handling
 
 2.9.1. If the system cannot retrieve profile information, the system will display an error message.
 
@@ -516,7 +516,7 @@ Senior
 
 ## 3. Home Page and Navigation
 
-# 3.1 Home Page Access
+### 3.1 Home Page Access
 
 3.1.1. After a successful sign in, the user will be directed to the CampusHub Home Page.
 
@@ -530,7 +530,7 @@ Senior
 
 3.1.6. The Home Page will provide access to the CampusHub activity feed.
 
-# 3.2 Main Navigation
+### 3.2 Main Navigation
 
 3.2.1. The CampusHub interface will contain a main navigation menu for authenticated users.
 
@@ -546,7 +546,7 @@ Senior
 
 3.2.7. The main navigation menu will remain available while the user is accessing authenticated CampusHub pages.
 
-# 3.3 Home Navigation
+### 3.3 Home Navigation
 
 3.3.1. Selecting Home from the main navigation menu will open the CampusHub Home Page.
 
@@ -554,7 +554,7 @@ Senior
 
 3.3.3. Returning to the Home Page will display the current activity feed.
 
-# 3.4 Marketplace Navigation
+### 3.4 Marketplace Navigation
 
 3.4.1. Selecting Marketplace from the main navigation menu will open the Marketplace page.
 
@@ -562,7 +562,7 @@ Senior
 
 3.4.3. Selecting Marketplace from another CampusHub page will navigate the user to the Marketplace without signing the user out.
 
-# 3.5 Messages Navigation
+### 3.5 Messages Navigation
 
 3.5.1. Selecting Messages from the main navigation menu will open the user's private messaging area.
 
@@ -570,7 +570,7 @@ Senior
 
 3.5.3. Selecting Messages from another CampusHub page will navigate the user to the messaging area without ending the authenticated session.
 
-# 3.6 Profile Navigation
+### 3.6 Profile Navigation
 
 3.6.1. Selecting Profile from the main navigation menu will open the authenticated user's Profile Page.
 
@@ -578,7 +578,7 @@ Senior
 
 3.6.3. Selecting Profile will not allow the user to access another user's editable profile information.
 
-# 3.7 Basic Navigation Behavior
+### 3.7 Basic Navigation Behavior
 
 3.7.1. Navigation links will open the CampusHub section associated with the selected option.
 
@@ -596,7 +596,7 @@ Senior
 
 3.7.8. The user will be able to navigate to another available CampusHub section after a page-loading error.
 
-# 3.8 Sign Out Navigation
+### 3.8 Sign Out Navigation
 
 3.8.1. The main navigation menu will contain a Sign Out option.
 
@@ -606,7 +606,7 @@ Senior
 
 ## 4. Activity Feed
 
-# 4.1 Display Activity Posts 
+### 4.1 Display Activity Posts 
 
 4.1.1. The CampusHub Home Page will display an activity feed consisting of posts created by authenticated CampusHub users. 
 
@@ -619,7 +619,7 @@ Senior
 4.1.5. If the user is not connected to the internet when accessing the feed or when real-time updates occur, the system will display an error message indicating that 
 connection has been lost and cached posts cannot be updated.
 
-# 4.2 Information shown on each post
+### 4.2 Information shown on each post
 
 4.2.1. Each activity post displayed in the feed will show the name of the student who created the post. 
 
@@ -639,7 +639,7 @@ connection has been lost and cached posts cannot be updated.
 
 4.2.9. Each activity post will display the total number of comments and interactions associated with the post.
 
-#4.3 Order of posts
+### 4.3 Order of posts
 
 4.3.1. Activity posts in the feed will be displayed in reverse chronological order by default. 
 
@@ -647,7 +647,7 @@ connection has been lost and cached posts cannot be updated.
 
 4.3.3. Older activity posts will appear further down the feed.
 
-# 4.4 Viewing an Individual Post 
+### 4.4 Viewing an Individual Post 
 
 4.4.1. Selecting an activity post from the feed will open the individual post view. 
 
@@ -664,7 +664,7 @@ and a back button.
 
 ## 5. Create Activity Post
 
-# 5.1 Post Description / Text 
+### 5.1 Post Description / Text 
 
 5.1.1. The CampusHub interface will provide a control allowing authenticated users to create a new activity post. 
 
@@ -680,7 +680,7 @@ and a back button.
 
 5.1.7. The system will prevent text input beyond 500 characters.
 
-# 5.2 Optional image
+### 5.2 Optional image
 
 5.2.1. The create post interface will provide an option to attach an image. 
 
@@ -698,7 +698,7 @@ and a back button.
 
 5.2.8. The interface will provide an option to remove the selected image before publishing which will return the post to the prior state.
 
-# 5.3 Create and Cancel Post 
+### 5.3 Create and Cancel Post 
 
 5.3.1. The create post interface will contain a button labeled Post. 
 
@@ -714,7 +714,7 @@ and a back button.
 
 5.3.7. Confirming cancellation will close the creation interface and return the user to the activity feed.
 
-# 5.4 Required Fields and Limits 
+### 5.4 Required Fields and Limits 
 
 5.4.1. The post description field will be required. 
 
