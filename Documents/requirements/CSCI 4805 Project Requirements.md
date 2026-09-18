@@ -1,6 +1,7 @@
 # **Project Name**
 
 CampusHub  
+
 The name CampusHub was chosen because the application is intended to provide one central place, or "hub," where Austin Peay State University students can connect with other students, find activities, communicate, and use a student marketplace.
 
 # **Team Member Names**
