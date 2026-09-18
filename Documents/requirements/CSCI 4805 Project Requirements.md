@@ -14,6 +14,7 @@ The name CampusHub was chosen because the application is intended to provide one
 # **Abstract**
 
 CampusHub is a student social platform designed to help college students connect with others on campus. The primary goal is to help transfer students and students who may be unfamiliar with the campus or Clarksville area meet new people, discover activities, and become more involved with other students.  
+
 CampusHub will provide one centralized place where students can create profiles, find and post activities, communicate with other students, and buy or sell items through a student-based marketplace. By keeping the platform focused on the Austin Peay State University community, CampusHub aims to make it easier for students to build connections and become more involved with campus life.
 
 # **Tools & Technologies**
