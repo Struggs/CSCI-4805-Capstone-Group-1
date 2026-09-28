@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusHub Messages</title>
+    </head>
+<body>
+    <main id="messages-page">
+        <h1>Messages</h1>
+        <section id="conversation-list">
+            <h2>Conversations</h2>
+            <div class="conversation">
+                <h3>John Doe</h3>
+                <p>Hey, how's it going?</p>
+                <span>10:30 AM</span>
+            </div>
+            <div class="conversation">
+                <h3>Jane Smith</h3>
+                <p>Are we still on for the meeting tomorrow?</p>
+                <span>Yesterday</span>
+            </div>
+        </section>
+        <section id="current chat">
+            <h2>John Doe</h2>
+        <div id="message-history">
+            <div class="recieved-message">
+                <p>Hey, how's it going?</p>
+                <span>10:30 AM</span>
+            </div>
+            <div class="sent-message">
+                <p>I'm doing good, how about you?</p>
+                <span>10:31 AM</span>
+            </div>
+        </div>
+        <form id="message-form">
+            <label for="message-input">Message</label>
+            <textarea
+            id="message-input"
+            maxlength="1000"
+            placeholder="Type a message"
+            required>
+        </textarea>
+        <button type="submit">Send</button>
+        </form>
+        </section>
+    </main>
+</body>
+</html>
