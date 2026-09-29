@@ -5,16 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusHub Comments</title>
+    <link rel="stylesheet" href="../style.css">
 
 </head>
 
 <body>
     <textarea name="comment" id="comment" placeholder="Leave your comment here..."></textarea>
     <button id="post">Post</button>
+    <button id="comments-button">Comments</button>
     <h2>Comments:</h2>
-    <div id="comments-section">
+    <div id="comments-section" hidden>
         <!-- Comments will be dynamically added here -->
     </div>
+    <button id="view-more-comments-button" hidden>View More Comments</button>
 
     <script src="../javascript/comments.js"></script>
 </body>
