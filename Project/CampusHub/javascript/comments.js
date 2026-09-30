@@ -4,13 +4,26 @@ const commentsSection = document.getElementById('comments-section');
 const commentsButton = document.getElementById('comments-button');
 const viewMoreCommentsButton = document.getElementById('view-more-comments-button');
 const shortenedCommentLength = 200; // Length at which comments will be shortened
+const charCount = document.getElementById('char-count');
+const commentsList = document.getElementById('comments-list');
 
 postButton.addEventListener('click', () => {
     const commentText = commentInput.value;
-    if (commentText) {
+    if (commentText.trim()) {
         displayComments([commentText]);
         commentInput.value = '';
+        charCount.textContent = '0/1000';
+        postButton.disabled = true;
     }
+    else {
+        postButton.disabled = true;
+    }
+});
+
+commentInput.addEventListener('input', () => {
+    const currentLength = commentInput.value.length;
+    charCount.textContent = `${currentLength}/1000`;
+    postButton.disabled = commentInput.value.trim() === '';
 });
 
 commentsButton.addEventListener('click', () => {
@@ -38,6 +51,9 @@ function displayComments(comments) {
     comments.forEach(comment => {
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
+        if (commentsList.children.length >= 25) {
+            commentDiv.hidden = true;
+        }
         if (comment.length > shortenedCommentLength) {
             commentDiv.textContent = comment.substring(0, shortenedCommentLength) + '...';
             const viewMoreButton = document.createElement('button');
@@ -58,6 +74,9 @@ function displayComments(comments) {
         } else {
             commentDiv.textContent = comment;
         }
-        commentsSection.appendChild(commentDiv);
+        commentsList.appendChild(commentDiv);
+        if (commentsList.querySelector('.comment[hidden]')) {
+            viewMoreCommentsButton.hidden = false;
+        }
     });
 }
