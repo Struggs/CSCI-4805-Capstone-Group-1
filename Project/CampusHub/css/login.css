@@ -193,6 +193,22 @@ body {
     transform: scale(0.99);
 }
 
+/* testing login bypass */
+.test-login {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.test-login a {
+    color: #777;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.test-login a:hover {
+    text-decoration: underline;
+}
+
 
 /* create account section */
 .create-account {
