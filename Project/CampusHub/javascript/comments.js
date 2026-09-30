@@ -8,9 +8,7 @@ const shortenedCommentLength = 200; // Length at which comments will be shortene
 postButton.addEventListener('click', () => {
     const commentText = commentInput.value;
     if (commentText) {
-        const commentDiv = document.createElement('div');
-        commentDiv.textContent = commentText;
-        commentsSection.appendChild(commentDiv);
+        displayComments([commentText]);
         commentInput.value = '';
     }
 });
@@ -36,21 +34,30 @@ viewMoreCommentsButton.addEventListener('click', () => {
     }
 });
 
-for (let i = 1; i <= 100; i++) {
-    const testComment = document.createElement('div');
-    testComment.classList.add('comment');
-    if (i === 1) {
-        testComment.textContent = `This is a long test comment. `.repeat(10);
-        if (testComment.textContent.length > shortenedCommentLength) {
-            testComment.textContent =
-                testComment.textContent.slice(0, shortenedCommentLength) + '...';
+function displayComments(comments) {
+    comments.forEach(comment => {
+        const commentDiv = document.createElement('div');
+        commentDiv.classList.add('comment');
+        if (comment.length > shortenedCommentLength) {
+            commentDiv.textContent = comment.substring(0, shortenedCommentLength) + '...';
+            const viewMoreButton = document.createElement('button');
+            viewMoreButton.textContent = 'View More';
+            commentDiv.appendChild(viewMoreButton);
+            let isExpanded = false;
+            viewMoreButton.addEventListener('click', () => {
+                if (isExpanded) {
+                    commentDiv.textContent = comment.substring(0, shortenedCommentLength) + '...';
+                    viewMoreButton.textContent = 'View More';
+                } else {
+                    commentDiv.textContent = comment;
+                    viewMoreButton.textContent = 'View Less';
+                }
+                commentDiv.appendChild(viewMoreButton);
+                isExpanded = !isExpanded;
+            });
+        } else {
+            commentDiv.textContent = comment;
         }
-    } else {
-        testComment.textContent = `Test comment ${i}`;
-    }
-
-    if (i > 25) {
-        testComment.hidden = true;
-    }
-    commentsSection.appendChild(testComment);
+        commentsSection.appendChild(commentDiv);
+    });
 }
