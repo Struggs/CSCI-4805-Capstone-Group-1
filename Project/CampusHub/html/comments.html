@@ -16,11 +16,14 @@
         <div id="comments-list"></div>
         <!-- Comments will be dynamically added here -->
         <button id="view-more-comments-button" hidden>View More Comments</button>
-        <div class="comment-input-container">
-            <textarea name="comment" id="comment" placeholder="Leave your comment here..." maxlength="1000"></textarea>
-            <p id="char-count">0/1000</p>
-        </div>
-        <button id="post" disabled>Post</button>
+        <form id="comment-form">
+            <div class="comment-input-container">
+                <textarea name="comment" id="comment" placeholder="Leave your comment here..."
+                    maxlength="1000"></textarea>
+                <p id="char-count">0/1000</p>
+            </div>
+            <button id="post" disabled>Post</button>
+        </form>
     </div>
 
     <script src="../javascript/comments.js"></script>

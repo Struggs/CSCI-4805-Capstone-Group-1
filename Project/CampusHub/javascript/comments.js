@@ -6,8 +6,10 @@ const viewMoreCommentsButton = document.getElementById('view-more-comments-butto
 const shortenedCommentLength = 200; // Length at which comments will be shortened
 const charCount = document.getElementById('char-count');
 const commentsList = document.getElementById('comments-list');
+const commentForm = document.getElementById('comment-form');
 
-postButton.addEventListener('click', () => {
+commentForm.addEventListener('submit', (event) => {
+    event.preventDefault();
     const commentText = commentInput.value;
     if (commentText.trim()) {
         displayComments([commentText]);
