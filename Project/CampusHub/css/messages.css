@@ -1,0 +1,222 @@
+/* CampusHub - Section 10 Private Messaging */
+#messages-page{
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    grid-template-areas:
+    "title title"
+    "conversations chat";
+    gap: 20px;
+
+}
+/*messages title*/
+#messages-page > h1{ 
+    grid-area: title;
+    margin: 0;
+
+}
+/*conversations list*/
+#conversation-list{
+    grid-area: conversations;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+
+}
+/*conversations heading */
+#conversation-list h2{
+    margin-top:0;
+    margin-bottom: 15px;
+}
+/*individual conversation item*/
+#messages-page .conversation {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    text-align: left;
+    cursor: pointer;
+}
+/*conversation hover */
+#messages-page .conversation:hover{
+    background-color: #eeeeee;
+}
+/*conversation profile picture */
+.conversation-profile-picture{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/* conversation text information */
+.conversation-info{
+    display: flex;
+    flex-direction: column;
+
+width: 100%;
+min-width: 0;
+}
+/*student name*/
+.conversation-info strong {
+    margin-bottom: 4px;
+}
+/* most recent message */ 
+.recent-message {
+    color: #555;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+/* most recent message time*/
+.recent-message-time {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #777;
+}
+/*currently opened chat */
+#current-chat{
+    grid-area: chat;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+
+
+}
+/*name at top of opened conversation */
+#current-chat > h2{
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+/*area containing messages */
+#message-history{
+    min-height: 400px;
+    max-height: 500px;
+
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px 5px;
+}
+/*received message */
+.received-message{
+    align-self: flex-start;
+    max-width: 70%;
+    background-color: #eeeeee;
+    padding: 10px 14px;
+    border-radius: 12px;
+
+}
+/*sent message */
+.sent-message{
+    align-self: flex-end;
+    max-width: 70%;
+    background-color: #ba0c2f;
+    color:white;
+    padding: 10px 14px;
+    border-radius: 12px;
+}
+/*remove extra paragraph spacing inside message bubbles */
+.received-message p, .sent-message p{
+    margin: 4px 0;
+}
+/*message sender name */
+.message-sender{
+    font-weight: bold;
+    font-size: 12px;
+}
+/*message time */
+.message-time{
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+}
+/*message form */
+#message-form{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-top: 15px;
+}
+/*message label */
+#message-form label{
+    grid-column: 1/-1;
+    font-weight: 600;
+}
+/*message text box */
+#message-input{
+    width: 100%;
+    min-height:50px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+    box-sizing: border-box;
+    
+}
+/*text box when selected */
+#message-input:focus{
+    border-color: #ba0c2f;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(186, 12, 47, 0.12);
+}
+/*send button */
+#send-message-button{
+    padding: 0 22px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ba0c2f;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+/*send button hover */
+#send-message-button:hover{
+    background-color: #990a27;
+}
+/*error message */
+#message-error,
+#conversation-error{
+
+    color: #b00020;
+    font-size: 14px;
+}
+/*phone / smaller screen layout */
+@media (max-width: 750px){
+    #messages-page{
+        grid-template-columns: 1fr;
+        grid-template-areas:
+        "title"
+        "conversations"
+        "chat";
+    }
+    #message-history{
+        min-height: 300px;
+    }
+    .received-message, .sent-message{
+        max-width: 85%;
+    }
+    #message-form{
+        grid-template-columns: 1fr;
+    }
+    #send-message-button{
+        padding: 12px;
+
+    }
+}
