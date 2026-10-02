@@ -53,6 +53,25 @@
                     Sign In
                 </button>
 
+<!--Temp Bypass system -->
+                <button type="button" class="bypass-btn" onclick="bypassLogin()" style="background-color: #6c757d; margin-top: 10px;">
+                [TEST] Bypass Login & Open Feed
+                </button>
+
+                <script>
+                function bypassLogin() {
+                var testUser = {
+                name: "Sample User",
+                profilePicture: "image.png"
+                };
+
+                localStorage.setItem("campusHubUser", JSON.stringify(testUser));
+
+                window.location.href = "feed.html";
+                }
+                </script>
+<!---->
+
             </form>
 
             <div class="create-account">
@@ -64,5 +83,3 @@
 
     </main>
 
-</body>
-</html>
