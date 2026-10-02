@@ -1,0 +1,8 @@
+h1 {
+    color: var(--text-color);
+    margin-bottom: 4px;
+}
+
+.marketplace-subtitle {
+    color: #6b7280;
+}
