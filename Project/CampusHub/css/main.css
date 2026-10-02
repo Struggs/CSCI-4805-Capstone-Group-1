@@ -10,9 +10,9 @@ body {
 }
 
 .main-header {
-    height: 70px;
-    background-color: #1e3a8a;
-    color: white;
+    height: 90px;
+    background-color: #ba0c2f;
+    color: #ba0c2f;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,7 +26,7 @@ body {
 
 .main-header h1 {
     font-size: 28px;
-    color: #ba0c2f; /* APSU red */
+    color: #ba0c2f;
     margin-bottom: 2px;
 }
 
@@ -38,21 +38,21 @@ body {
 /* Dashboard wrapper that pushes content below the fixed header */
 .dashboard-layout {
     display: flex;
-    margin-top: 70px;
-    min-height: calc(100vh - 70px);
+    margin-top: 90px;
+    min-height: calc(100vh - 90px);
 }
 
 .navbar {
     width: 260px;
-    background-color: #ffffff;
-    border-right: 1px solid #e5e7eb;
-    padding: 1.5rem 1rem;
+    background-color: White;
+    border-right: 2px solid #ba0c2f;
+    padding: 1rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     position: sticky;
-    top: 70px;
-    height: calc(100vh - 70px);
+    top: 90px;
+    height: calc(100vh - 90px);
     overflow-y: auto;
 }
 
@@ -60,7 +60,8 @@ body {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: #374151;
+    background-color: #ba0c2f;
+    color: White;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
@@ -68,8 +69,8 @@ body {
 }
 
 .nav-button:hover, .nav-button.active {
-    background-color: #eff6ff;
-    color: #1e3a8a;
+    background-color: #7d071f;
+    color: rgb(179, 179, 179);
 }
 
 .main-content {
