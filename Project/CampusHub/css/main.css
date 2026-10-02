@@ -26,7 +26,7 @@ body {
 
 .main-header h1 {
     font-size: 28px;
-    color: #ba0c2f;
+    color: #ba0c2f; 
     margin-bottom: 2px;
 }
 
@@ -35,7 +35,6 @@ body {
     color: #e5e7eb;
 }
 
-/* Dashboard wrapper that pushes content below the fixed header */
 .dashboard-layout {
     display: flex;
     margin-top: 90px;
