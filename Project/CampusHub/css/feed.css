@@ -5,31 +5,21 @@
 }
 
 
-/* font for the whole page */
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
 .activity-feed-page{
 
-    /* centers the login box */
     display: flex;
     justify-content: center;
     align-items: center;
 
     padding: 20px;
 
-    /* campus image with white overlay */
-    background-image:
-        linear-gradient(
-            rgba(255, 255, 255, 0.55),
-            rgba(255, 255, 255, 0.55)
-        ),
-        url("../images/campus-background.jpg");
-
-    /* keeps image covering the screen */
     background-size: cover;
     background-position: center;
 }
+
 .feed-header{
 text-align: center;
 margin-bottom: 30px;
@@ -49,7 +39,7 @@ margin-bottom: 30px;
     max-width: 700px;
 
     /* slightly transparent white background */
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: White ;
 
     padding: 40px;
 
@@ -59,5 +49,6 @@ margin-bottom: 30px;
     /* shadow behind login box */
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
 }
+
 
 
