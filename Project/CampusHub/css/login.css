@@ -1,0 +1,272 @@
+/* campushub login page */
+
+
+/* resets default spacing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* background image for login page */
+body {
+    background-image: url("../../../Documents/requirements/apsu background image.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+/* font for the whole page */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* main login screen */
+.login-page {
+    min-height: 100vh;
+
+    /* centers the login box */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    /* campus image with white overlay */
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.55),
+            rgba(255, 255, 255, 0.55)
+        ),
+        url("../images/campus-background.jpg");
+
+    /* keeps image covering the screen */
+    background-size: cover;
+    background-position: center;
+}
+
+
+/* main login box */
+.login-card {
+    width: 100%;
+    max-width: 430px;
+
+    /* slightly transparent white background */
+    background-color: rgba(255, 255, 255, 0.95);
+
+    padding: 40px;
+
+    /* rounds the corners */
+    border-radius: 14px;
+
+    /* shadow behind login box */
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+}
+
+
+/* login header */
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+/* campushub title */
+.login-header h1 {
+    font-size: 36px;
+    color: #ba0c2f;
+    margin-bottom: 8px;
+}
+
+
+/* text under campushub */
+.login-header p {
+    color: #555;
+    font-size: 16px;
+}
+
+
+/* login form */
+.login-form {
+    width: 100%;
+}
+
+
+/* spacing between form sections */
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+/* email and password labels */
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #222;
+}
+
+
+/* email and password boxes */
+.form-group input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #ccc;
+    border-radius: 7px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    /* smooth change when input is selected */
+    transition: border-color 0.2s,
+                box-shadow 0.2s;
+}
+
+
+/* changes input when user clicks it */
+.form-group input:focus {
+    border-color: #ba0c2f;
+
+    /* small red glow around input */
+    box-shadow: 0 0 0 3px rgba(186, 12, 47, 0.12);
+}
+
+
+/* forgot password area */
+.forgot-password {
+    text-align: right;
+
+    margin-top: -8px;
+    margin-bottom: 22px;
+}
+
+
+/* forgot password link */
+.forgot-password a {
+    color: #ba0c2f;
+
+    font-size: 14px;
+
+    text-decoration: none;
+}
+
+
+/* underline when mouse is over link */
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+
+/* sign in button */
+.sign-in-button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 7px;
+
+    background-color: #ba0c2f;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    /* changes mouse to pointer */
+    cursor: pointer;
+
+    /* smooth button changes */
+    transition: background-color 0.2s,
+                transform 0.1s;
+}
+
+
+/* darker red when mouse is over button */
+.sign-in-button:hover {
+    background-color: #990a27;
+}
+
+
+/* slightly shrinks button when clicked */
+.sign-in-button:active {
+    transform: scale(0.99);
+}
+
+/* testing login bypass */
+.test-login {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.test-login a {
+    color: #777;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.test-login a:hover {
+    text-decoration: underline;
+}
+
+
+/* create account section */
+.create-account {
+    text-align: center;
+
+    margin-top: 28px;
+    padding-top: 22px;
+
+    /* line separating sign in and sign up */
+    border-top: 1px solid #ddd;
+}
+
+
+/* new to campushub text */
+.create-account p {
+    color: #666;
+
+    font-size: 14px;
+
+    margin-bottom: 6px;
+}
+
+
+/* create account link */
+.create-account a {
+    color: #ba0c2f;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+/* underline when mouse is over link */
+.create-account a:hover {
+    text-decoration: underline;
+}
+
+
+/* changes layout for smaller screens */
+@media (max-width: 500px) {
+
+    /* makes login box fit better on phones */
+    .login-card {
+        padding: 30px 22px;
+    }
+
+    /* makes title smaller on phones */
+    .login-header h1 {
+        font-size: 30px;
+    }
+
+}

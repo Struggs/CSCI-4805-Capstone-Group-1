@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusHub | Activity Feed</title>
+    <link rel="stylesheet" href="../css/feed.css">
+</head>
+<body>
+
+    <main class="activity-feed-page">
+
+        <header class="feed-header">
+            <h1>Activity Feed</h1>
+            <p>Whats Going on Now</p>
+            <button onclick="window.location.href='index.html'" style="float: right;">Log Out</button>
+        </header>
+
+        <div class ="activity-feed" style ="display: flex; flex-direction: column; gap:10px;">
+
+        </div>
+
+        <!-- Post Creation and Interface -->
+        <section class="CreatePostInterface">
+
+            <button class="post-interface-button" onclick="openCreatePostInterface()"> Create Post</button>
+
+            <div id="CreatePostInterface" class="interface" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
+                <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
+                    <h2>Create Post</h2>
+                    
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" placeholder="Enter post title" required>
+
+                    <label for="postDescription">Description</label>
+                    <textarea id="postDescription" placeholder="Enter Post Description" maxlength="500"></textarea>
+
+                    <label for="postImage">Add Picture</label>
+                    <input type="file" id="postImage" accept="image/*">
+
+                    <label for="audienceFilter">Target Audience</label>
+                    <select id="audienceFilter" onchange="handleAudienceChange()">
+                        <option value="All">All Students</option>
+                        <option value="Major">By Major</option>
+                        <option value="Year">By Year</option>
+                    </select>
+
+                    <select id="majorSelect" style="display: none;">
+                        <option value="CSCI">CSCI</option>
+                        <option value="MATH">MATH</option>
+                    </select>
+
+                    <select id="yearSelect" style="display: none;">
+                        <option value="Freshman">Freshman</option>
+                        <option value="Sophomore">Sophomore</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Senior">Senior</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <button onclick="PostSubmission()">Share Post</button>
+                    <button onclick="closeCreatePostInterface()">Cancel</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feed Container -->
+        <div id="feed" style="margin-top: 20px;"></div>
+    </main>
+
+    <!-- Template for activity feed post -->   
+    <template id="post-template">
+        <div class="post-card" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 6px;">
+            <h3 class="post-title"></h3>
+            <p class="post-author"></p>
+            <p class="post-desc"></p>
+            <div class="post-stats"></div>
+        </div> 
+    </template>
+
+    <script src="activityfeed.js"></script>
+</body>
+</html>
