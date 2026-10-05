@@ -11,7 +11,7 @@ body {
 
 .main-header {
     height: 70px;
-    background-color: #1e3a8a;
+    background-color: White;
     color: white;
     display: flex;
     flex-direction: column;
@@ -32,7 +32,7 @@ body {
 
 .main-header p {
     font-size: 14px;
-    color: #e5e7eb;
+    color: #ba0c2f;
 }
 
 .dashboard-layout {
@@ -59,7 +59,7 @@ body {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: #374151;
+    color: #ba0c2f;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
