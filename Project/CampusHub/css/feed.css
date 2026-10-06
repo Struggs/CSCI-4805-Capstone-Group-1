@@ -38,15 +38,24 @@ margin-bottom: 30px;
     width: 100%;
     max-width: 700px;
 
-    /* slightly transparent white background */
     background-color: White ;
 
     padding: 40px;
 
-    /* rounds the corners */
     border-radius: 14px;
 
-    /* shadow behind login box */
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+}
+.post-card {
+    width: 100%;
+    max-width: 430px;
+
+    background-color: rgba(255, 255, 255, 0.95);
+
+    padding: 40px;
+
+    border-radius: 14px;
+
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
 }
 

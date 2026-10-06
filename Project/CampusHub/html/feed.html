@@ -16,17 +16,27 @@
             <button onclick="window.location.href='index.html'" style="float: right;">Log Out</button>
         </header>
 
+
         <div class ="activity-feed" style ="display: flex; flex-direction: column; gap:10px;">
 
-        </div>
+            <div id="feed" style="margin-top: 20px;"></div>
 
-        <!-- Post Creation and Interface -->
+
+            <template id="post-template">
+            <div class="post-card" style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
+            <h3 class="post-title"></h3>
+            <p class="post-author"></p>
+            <p class="post-desc"></p>
+            <div class="post-stats"></div>
+            </div>
+            </template> 
+        </div>  
+    <!-- Post Creation and Interface -->
         <section class="CreatePostInterface">
 
-            <button class="post-interface-button" onclick="openCreatePostInterface()"> Create Post</button>
+            <button class="post-interface-button" onclick="createPostInterface()"> Create Post</button>
 
-            <div id="CreatePostInterface" class="interface" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
-                <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
+            <div id="createPostInterface" class="interface" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">                <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
                     <h2>Create Post</h2>
                     
                     <label for="postTitle">Title</label>
@@ -66,19 +76,9 @@
         </section>
 
         <!-- Feed Container -->
-        <div id="feed" style="margin-top: 20px;"></div>
     </main>
+  
 
-    <!-- Template for activity feed post -->   
-    <template id="post-template">
-        <div class="post-card" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 6px;">
-            <h3 class="post-title"></h3>
-            <p class="post-author"></p>
-            <p class="post-desc"></p>
-            <div class="post-stats"></div>
-        </div> 
-    </template>
-
-    <script src="activityfeed.js"></script>
+    <script src="../javascript/activityfeed.js"></script>
 </body>
 </html>
