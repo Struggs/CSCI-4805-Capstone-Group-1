@@ -10,9 +10,120 @@
 </head>
 
 <body>
-    <h1>Marketplace</h1>
-    <p class="marketplace-subtitle">Buy and sell with other APSU students</p>
+    <div class="marketplace-header">
+        <div>
+            <h1>Marketplace</h1>
+            <p class="marketplace-subtitle">Buy and sell items with other APSU students.</p>
+        </div>
+        <button id="create-listing">+ Sell an Item</button>
+    </div>
 
+    <div class="marketplace-controls">
+        <div class="marketplace-search">
+            <span class="search-icon"></span>
+            <input type="text" placeholder="Search marketplace...">
+        </div>
+
+        <div class="marketplace-filters">
+            <div class="filter">
+                <select id="category">
+                    <option value="">Category</option>
+                    <option value="textbooks">Textbooks</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="dorm-essentials">Dorm Essentials</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="tickets">Tickets</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="filter price-filter">
+                <button type="button" id="price-filter-button">Price</button>
+                <div class="price-dropdown">
+                    <input type="number" id="min-price" placeholder="Min" min="0">
+                    <span>to</span>
+                    <input type="number" id="max-price" placeholder="Max" min="0">
+                </div>
+            </div>
+
+            <div class="filter">
+                <select id="condition">
+                    <option value="">Condition</option>
+                    <option value="new">New</option>
+                    <option value="like-new">Used Like New</option>
+                    <option value="used">Used</option>
+                </select>
+            </div>
+
+            <button id="clear-filters">Clear Filters</button>
+        </div>
+
+    </div>
+
+    <div class="marketplace-listings">
+        <h2>Listings</h2>
+        <div id="listings-grid">
+            <!-- Listings will be dynamically generated here -->
+            <!-- Temporary example listings for styling -->
+
+            <div class="listing-card">
+                <div class="listing-image">
+                    No Image
+                </div>
+
+                <div class="listing-info">
+                    <h3>Calculus Textbook</h3>
+                    <p class="listing-price">$45.00</p>
+                    <p class="listing-condition">Used Like New</p>
+
+                    <div class="listing-seller">
+                        <span>John Smith</span>
+                    </div>
+
+                    <p class="listing-time">Posted 2 hours ago</p>
+                </div>
+            </div>
+
+            <div class="listing-card">
+                <div class="listing-image">
+                    No Image
+                </div>
+
+                <div class="listing-info">
+                    <h3>Mini Fridge</h3>
+                    <p class="listing-price">$80.00</p>
+                    <p class="listing-condition">Used</p>
+
+                    <div class="listing-seller">
+                        <span>Sarah Johnson</span>
+                    </div>
+
+                    <p class="listing-time">Posted 1 day ago</p>
+                </div>
+            </div>
+
+            <div class="listing-card">
+                <div class="listing-image">
+                    No Image
+                </div>
+
+                <div class="listing-info">
+                    <h3>Concert Tickets</h3>
+                    <p class="listing-price">$120.00</p>
+                    <p class="listing-condition">New</p>
+
+                    <div class="listing-seller">
+                        <span>Michael Brown</span>
+                    </div>
+
+                    <p class="listing-time">Posted 3 days ago</p>
+                </div>
+            </div>
+        </div>
+
+        <p id="no-listings">No listings found.</p>
+        <button type="button" id="view-more-listings">View More Listings</button>
+    </div>
 </body>
 
 </html>
