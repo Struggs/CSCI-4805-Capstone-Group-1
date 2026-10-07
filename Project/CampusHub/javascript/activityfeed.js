@@ -1,5 +1,4 @@
 
-// this is from ai and i have no idea what does or how it works its just temp
 
 var storedUser = localStorage.getItem("campusHubUser");
 var currentUser = storedUser ? JSON.parse(storedUser) : { name: "Test Student", profilePicture: "image.png" };
@@ -19,7 +18,19 @@ commentCount:0,
 likeCount: 0
 }
 ]
+function createPostInterface() {
+    var interfaceDiv = document.getElementById('createPostInterface');
+    if (interfaceDiv) {
+        interfaceDiv.style.display = "block";
+    }
+}
 
+function closeCreatePostInterface() {
+    var interfaceDiv = document.getElementById('createPostInterface');
+    if (interfaceDiv) {
+        interfaceDiv.style.display = "none";
+    }
+}
 function showActivityFeed(posts, container, filteredAudience = "ALl"){
 if (filteredAudience === undefined) {
         filteredAudience = "All";
