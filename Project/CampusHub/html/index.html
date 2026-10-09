@@ -21,7 +21,7 @@
                 <p>Connect with your campus.</p>
             </div>
 
-            <form class="login-form">
+            <form class="login-form" id="login-form">
 
                 <div class="form-group">
                     <label for="email">APSU Student Email</label>
@@ -53,21 +53,27 @@
                     Sign In
                 </button>
 
+                <p id="message"></p>
+
             </form>
 
             <!-- testing only remove before final release -->
             <div class="test-login">
-                <a href="CampusHub.html">bypass login for testing</a>
+                <a href="/Project/CampusHub/html/CampusHub.html">
+                    bypass login for testing
+                </a>
             </div>
 
             <div class="create-account">
                 <p>New to CampusHub?</p>
-                <a href="#">Create an account</a>
+                <a href="./signup.html">Create an account</a>
             </div>
 
         </div>
 
     </main>
-        <script type="module" src="../javascript/supabaseClient.js"></script>
+
+    <script type="module" src="../javascript/login.js"></script>
+
 </body>
 </html>

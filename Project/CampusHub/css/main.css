@@ -11,6 +11,9 @@ body {
 
 /* 1. Header spans full width at the top */
 .main-header {
+    height: 70px;
+    background-color: White;
+    color: white;
     height: 90px;
     background-color: #ba0c2f;
     color: #ffffff;
@@ -33,7 +36,7 @@ body {
 
 .main-header p {
     font-size: 14px;
-    color: #e5e7eb;
+    color: #ba0c2f;
 }
 
 /* 2. Container that forces children (navbar + main-content) side-by-side */

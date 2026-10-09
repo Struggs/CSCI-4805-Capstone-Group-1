@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusHub - Create Profile</title>
+
+    <link rel="stylesheet" href="../css/createProfile.css">
+</head>
+
+<body>
+
+    <main class="profile-container">
+
+        <h1>Create Your Profile</h1>
+
+        <form id="profile-form">
+
+            <label for="name">Name</label>
+
+            <input
+                type="text"
+                id="name"
+                maxlength="100"
+                required
+            >
+
+            <button type="submit">
+                Create Profile
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+    </main>
+
+    <script
+        type="module"
+        src="../javascript/createProfile.js">
+    </script>
+
+</body>
+</html>
