@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusHub Sign Up</title>
+
+    <link rel="stylesheet" href="../css/signup.css">
+</head>
+
+<body>
+
+    <main class="signup-container">
+
+        <h1>CampusHub</h1>
+        <h2>Create Account</h2>
+
+        <form id="signup-form">
+
+            <label for="email">APSU Student Email</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="student@students.apsu.edu"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                required
+            >
+
+            <label for="confirm-password">Confirm Password</label>
+            <input
+                type="password"
+                id="confirm-password"
+                required
+            >
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+        <p>
+            Already have an account?
+            <a href="./index.html">Sign In</a>
+        </p>
+
+    </main>
+
+    <script type="module" src="../javascript/signup.js"></script>
+
+</body>
+</html>
