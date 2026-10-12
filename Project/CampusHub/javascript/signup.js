@@ -35,14 +35,14 @@ signupForm.addEventListener('submit', async (event) => {
 
     // create account with Supabase
     const { data, error } = await supabase.auth.signUp({
-    email: email,
-    password: password,
-
-    options: {
-        emailRedirectTo:
-            'http://localhost:5173/Project/CampusHub/html/verified.html'
-    }
-})
+        email: email,
+        password: password,
+        // redirect to verified.html after email verification
+        options: {
+            emailRedirectTo:
+                'https://campushub-capstone.vercel.app/Project/CampusHub/html/verified.html'
+         }
+    })
 
     // check for Supabase error
     if (error) {
