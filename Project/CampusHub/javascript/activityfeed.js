@@ -12,12 +12,12 @@ profilePicture: "image.png",
 timeStamp: "get time function",
 audienceFilter: "get filter function",
 title: "get title",
-decription: "get description",
+description: "get description",
 image: "image1.png",
 commentCount:0,
 likeCount: 0
-}
-]
+}]
+
 function createPostInterface() {
     var interfaceDiv = document.getElementById('createPostInterface');
     if (interfaceDiv) {
@@ -31,8 +31,13 @@ function closeCreatePostInterface() {
         interfaceDiv.style.display = "none";
     }
 }
-function showActivityFeed(posts, container, filteredAudience = "ALl"){
-if (filteredAudience === undefined) {
+
+function showActivityFeed(posts, container, filteredAudience = "All"){
+    if (!container) {
+        return;
+    }
+
+    if (filteredAudience === undefined) {
         filteredAudience = "All";
     }
 if (filteredAudience === "All") {
@@ -113,5 +118,8 @@ function PostSubmission() {
 }
 window.onload = function() {
     var feedContainer = document.getElementById('feed');
-    showActivityFeed(feedPosts, feedContainer, "All");
+
+    if (feedContainer) {
+        showActivityFeed(feedPosts, feedContainer, "All");
+    }
 };

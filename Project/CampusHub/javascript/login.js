@@ -31,6 +31,28 @@ loginForm.addEventListener('submit', async (event) => {
 
     console.log('Login successful:', data)
 
-    // go to profile creation
+     // get signed-in user
+    const user = data.user
+
+    // check if this user already has a CampusHub profile
+    const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle()
+
+    if (profileError) {
+        console.error('Profile check error:', profileError)
+        message.textContent = 'Unable to load your profile.'
+        return
+    }
+
+    // existing user already has a profile
+    if (profile) {
+        window.location.href = './CampusHub.html'
+        return
+    }
+
+    // account exists but profile has not been created yet
     window.location.href = './createProfile.html'
 })
