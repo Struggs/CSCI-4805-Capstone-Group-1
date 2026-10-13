@@ -49,10 +49,10 @@ loginForm.addEventListener('submit', async (event) => {
 
     // existing user already has a profile
     if (profile) {
-        window.location.href = './CampusHub.html'
+        window.location.href = '/Project/CampusHub/html/CampusHub.html'
         return
     }
 
     // account exists but profile has not been created yet
-    window.location.href = './createProfile.html'
+    window.location.href = '/Project/CampusHub/html/createProfile.html'
 })

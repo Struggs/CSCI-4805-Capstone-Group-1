@@ -56,4 +56,6 @@ profileForm.addEventListener('submit', async (event) => {
     console.log('Profile created:', data)
 
     message.textContent = 'Profile created successfully.'
+
+    window.location.href = '/Project/CampusHub/html/CampusHub.html'
 })
