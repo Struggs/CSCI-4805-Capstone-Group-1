@@ -168,4 +168,52 @@ export async function createPost() {
 // select post table, insert new row 
     const { error } = await supabase
         .from('posts')
-        .ins
+        .insert({
+            user_id: authData.user.id,
+            title: title || null,
+            post_text: description,
+            image_path: null,
+            audience: audience || 'All'
+        });
+
+    if (error) {
+        console.error('Error creating post:', error);
+        alert('Your post could not be saved.');
+        return;
+    }
+//clear value input containers
+    titleInput.value = '';
+    descriptionInput.value = '';
+
+    const imageInput = document.getElementById('postImage');
+    if (imageInput) imageInput.value = '';
+
+    closeCreatePostInterface();
+//load posts from supabase
+    await loadPosts();
+}
+
+export function createPostInterface() {
+    const element = document.getElementById('createPostInterface');
+    if (element) element.style.display = 'block';
+}
+
+export function closeCreatePostInterface() {
+    const element = document.getElementById('createPostInterface');
+    if (element) element.style.display = 'none';
+}
+
+export function handleAudienceChange() {
+    const audience = document.getElementById('audienceFilter').value;
+
+    document.getElementById('majorSelect').style.display =
+        audience === 'Major' ? 'block' : 'none';
+
+    document.getElementById('yearSelect').style.display =
+        audience === 'Year' ? 'block' : 'none';
+}
+
+window.createPostInterface = createPostInterface;
+window.closeCreatePostInterface = closeCreatePostInterface;
+window.handleAudienceChange = handleAudienceChange;
+window.PostSubmission = createPost;

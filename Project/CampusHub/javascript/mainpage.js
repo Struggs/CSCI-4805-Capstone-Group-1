@@ -46,4 +46,21 @@ navbar.addEventListener('click', async (event) => {
         if (!content) {
             throw new Error(`No supported content wrapper found in ${pageUrl.href}`);
         }
-//remove existing content in ma
+//remove existing content in main child and replace with copy 
+// of element and its decendents. 
+        mainContent.replaceChildren(
+            document.importNode(content, true)
+        );
+
+        if (content.classList.contains('activity-feed-page')) {
+            await initializeActivityFeed();
+        }
+
+        console.log('Feature loaded successfully.');
+
+    } catch (error) {
+        console.error('Feature loading error:', error);
+        mainContent.textContent =
+            'Unable to load this feature. Check the browser console.';
+    }
+});
