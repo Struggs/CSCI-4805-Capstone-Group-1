@@ -1,72 +1,88 @@
-  <main class="activity-feed-page">
+<main class="activity-feed-page">
 
-        <header class="feed-header">
-            <h1>Activity Feed</h1>
-            <p>Whats Going on Now</p>
-            <button onclick="window.location.href='index.html'" style="float: right;">Log Out</button>
-        </header>
-
-
-        <div class ="activity-feed" style ="display: flex; flex-direction: column; gap:10px;">
-
-                    <!-- Feed Container -->
-
-            <div id="feed" style="margin-top: 20px;"></div>
+    <header class="feed-header">
+        <h1>Activity Feed</h1>
+        <p>Whats Going on Now</p>
+        <button onclick="window.location.href='index.html'" style="float: right;">Log Out</button>
+    </header>
 
 
-            <template id="post-template">
-            <div class="post-card" style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
-            <h3 class="post-title"></h3>
-            <p class="post-author"></p>
-            <p class="post-desc"></p>
-            <div class="post-stats"></div>
+    <div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
+
+        <!-- Feed Container -->
+
+        <div id="feed" style="margin-top: 20px;"></div>
+
+
+        <template id="post-template">
+            <div class="post-card"
+                style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
+                <h3 class="post-title"></h3>
+                <p class="post-author"></p>
+                <p class="post-desc"></p>
+                <div class="post-stats"></div>
+                <button type="button" class="comments-button">💬 Comments</button>
+                <div class="comments-section" hidden>
+                    <h2>Comments:</h2>
+                    <div class="comments-list"></div>
+                    <!-- Comments will be dynamically added here -->
+                    <button class="view-more-comments-button" hidden>View More Comments</button>
+                    <form class="comment-form">
+                        <div class="comment-input-container">
+                            <textarea name="comment" class="comment" placeholder="Leave your comment here..."
+                                maxlength="1000"></textarea>
+                            <p class="char-count">0/1000</p>
+                        </div>
+                        <button class="post" disabled>Post</button>
+                    </form>
+                </div>
             </div>
-            </template> 
-        </div>  
+        </template>
+    </div>
     <!-- Post Creation and Interface -->
-        <section class="CreatePostInterface">
+    <section class="CreatePostInterface">
 
-            <button class="post-interface-button" onclick="createPostInterface()"> Create Post</button>
+        <button class="post-interface-button" onclick="createPostInterface()"> Create Post</button>
 
-            <div id="createPostInterface" class="interface" style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">                <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
-                    <h2>Create Post</h2>
-                    
-                    <label for="postTitle">Title</label>
-                    <input type="text" id="postTitle" placeholder="Enter post title" required>
+        <div id="createPostInterface" class="interface"
+            style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
+            <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
+                <h2>Create Post</h2>
 
-                    <label for="postDescription">Description</label>
-                    <textarea id="postDescription" placeholder="Enter Post Description" maxlength="500"></textarea>
+                <label for="postTitle">Title</label>
+                <input type="text" id="postTitle" placeholder="Enter post title" required>
 
-                    <label for="postImage">Add Picture</label>
-                    <input type="file" id="postImage" accept="image/*">
+                <label for="postDescription">Description</label>
+                <textarea id="postDescription" placeholder="Enter Post Description" maxlength="500"></textarea>
 
-                    <label for="audienceFilter">Target Audience</label>
-                    <select id="audienceFilter" onchange="handleAudienceChange()">
-                        <option value="All">All Students</option>
-                        <option value="Major">By Major</option>
-                        <option value="Year">By Year</option>
-                    </select>
+                <label for="postImage">Add Picture</label>
+                <input type="file" id="postImage" accept="image/*">
 
-                    <select id="majorSelect" style="display: none;">
-                        <option value="CSCI">CSCI</option>
-                        <option value="MATH">MATH</option>
-                    </select>
+                <label for="audienceFilter">Target Audience</label>
+                <select id="audienceFilter" onchange="handleAudienceChange()">
+                    <option value="All">All Students</option>
+                    <option value="Major">By Major</option>
+                    <option value="Year">By Year</option>
+                </select>
 
-                    <select id="yearSelect" style="display: none;">
-                        <option value="Freshman">Freshman</option>
-                        <option value="Sophomore">Sophomore</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Senior">Senior</option>
-                    </select>
-                </div>
+                <select id="majorSelect" style="display: none;">
+                    <option value="CSCI">CSCI</option>
+                    <option value="MATH">MATH</option>
+                </select>
 
-                <div style="margin-top: 10px;">
-                    <button onclick="PostSubmission()">Share Post</button>
-                    <button onclick="closeCreatePostInterface()">Cancel</button>
-                </div>
+                <select id="yearSelect" style="display: none;">
+                    <option value="Freshman">Freshman</option>
+                    <option value="Sophomore">Sophomore</option>
+                    <option value="Junior">Junior</option>
+                    <option value="Senior">Senior</option>
+                </select>
             </div>
-        </section>
+
+            <div style="margin-top: 10px;">
+                <button onclick="PostSubmission()">Share Post</button>
+                <button onclick="closeCreatePostInterface()">Cancel</button>
+            </div>
+        </div>
+    </section>
 
 </main>
-  
-

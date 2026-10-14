@@ -1,3 +1,19 @@
+import { supabase } from './supabaseClient.js';
+
+// Original standalone comments functionality.
+// Being adapted for individual Activity Feed posts.
+
+function getCommentElements(postCard) {
+    return {
+        commentsSection: postCard.querySelector('.comments-section'),
+        commentsList: postCard.querySelector('.comments-list'),
+        commentForm: postCard.querySelector('.comment-form'),
+        commentInput: postCard.querySelector('.comment'),
+        charCount: postCard.querySelector('.char-count'),
+        postButton: postCard.querySelector('.post')
+    };
+}
+
 const postButton = document.getElementById('post');
 const commentInput = document.getElementById('comment');
 const commentsSection = document.getElementById('comments-section');
