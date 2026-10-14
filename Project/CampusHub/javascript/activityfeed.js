@@ -3,10 +3,13 @@ import { supabase } from '../javascript/supabaseClient.js';
 let feedPosts = [];
 let currentAudience = 'All';
 
+//starting point, waits for loadPosts to finish.
 export async function initializeActivityFeed() {
     await loadPosts();
 }
-
+// searches for container in html, if no container, throw error and return
+// else fetch posts table from supabase and specific columns.
+//handles if supabase throws error
 async function loadPosts() {
     const feedContainer = document.getElementById('feed');
 
@@ -27,19 +30,21 @@ async function loadPosts() {
         feedContainer.textContent = 'Unable to load posts.';
         return;
     }
-
+//creates empty array if posts is null, takes each post and extracts authors if, remove false values, removes dupe ids, 
+//converts the set back into an array
     const userIds = [...new Set(
         (posts ?? []).map(post => post.user_id).filter(Boolean)
     )];
 
+//empty object that will map ids to profiles
     let profilesById = {};
-
+//if id found, selects profiles from database with selected columns, then return profiles with ids in user id array
     if (userIds.length > 0) {
         const { data: profiles, error: profilesError } = await supabase
             .from('profiles')
             .select('id, name, image_path, major, school_year, transfer_student')
             .in('id', userIds);
-
+// handles errors from profile table retrieval else maps to profiles by id
         if (profilesError) {
             console.error('Error loading profiles:', profilesError);
         } else {
@@ -48,7 +53,9 @@ async function loadPosts() {
             );
         }
     }
-
+// attaches profiles to their posts. copies properties of post then 
+// looks up authors profile using id. adds profile to new "prof property"
+// for post.
     feedPosts = (posts ?? []).map(post => ({
         ...post,
         profile: profilesById[post.user_id] ?? null
@@ -57,6 +64,7 @@ async function loadPosts() {
     showActivityFeed(feedPosts, feedContainer, currentAudience);
 }
 
+//finds template in html
 function showActivityFeed(posts, container, audience = 'All') {
     const template = document.getElementById('post-template');
 
@@ -64,22 +72,25 @@ function showActivityFeed(posts, container, audience = 'All') {
         console.error('Feed container or post template is missing.');
         return;
     }
-
+//select filtered audience property from database and replace
+//  container with relevent posts
     const filteredPosts = audience === 'All'
         ? posts
         : posts.filter(post => post.audience === audience);
 
     container.replaceChildren();
 
+//if no posts in selected audiance show message
     if (filteredPosts.length === 0) {
         container.textContent = 'No posts to display yet.';
         return;
     }
-
+//runs once for each post to give it its structer. 
+//clone template for each post and tie profile
     filteredPosts.forEach(post => {
         const clone = template.content.cloneNode(true);
         const profile = post.profile;
-
+//finds element in cloned template using css labels with consideration for empty values
         clone.querySelector('.post-title').textContent =
             post.title || '';
 
@@ -88,15 +99,15 @@ function showActivityFeed(posts, container, audience = 'All') {
 
         clone.querySelector('.post-desc').textContent =
             post.post_text || '';
-
+//displays creation time
         clone.querySelector('.post-stats').textContent =
             post.created_at
                 ? new Date(post.created_at).toLocaleString()
                 : '';
 
+//display profile image.
         const card = clone.querySelector('.post-card');
 
-        // Add an author profile image if the template supports it.
         const profileImage = clone.querySelector('.post-profile-picture');
 
         if (profileImage) {
@@ -109,26 +120,28 @@ function showActivityFeed(posts, container, audience = 'All') {
             }
         }
 
-        // Add the post image if one is stored.
+// Add the post image if one is stored.
         if (post.image_path) {
-            const image = document.createElement('img');
-            image.src = post.image_path;
-            image.alt = 'Post attachment';
-            image.className = 'post-image';
-            image.style.maxWidth = '100%';
+            const image = document.createElement('img'); //creates element
+            image.src = post.image_path; //points to image
+            image.alt = 'Post attachment'; //gives text
+            image.className = 'post-image'; //css class
+            image.style.maxWidth = '100%'; //formatting
             image.style.height = 'auto';
-            card.appendChild(image);
+            card.appendChild(image); // adds image to card
         }
-
+// adds card to feed
         container.appendChild(clone);
     });
 }
 
 export async function createPost() {
+
+// finds elements in html
     const titleInput = document.getElementById('postTitle');
     const descriptionInput = document.getElementById('postDescription');
     const audienceInput = document.getElementById('audienceFilter');
-
+//extract values entered, no whitespace >:(
     const title = titleInput.value.trim();
     const description = descriptionInput.value.trim();
 
@@ -136,15 +149,15 @@ export async function createPost() {
         alert('Please enter a description of 1–500 characters.');
         return;
     }
-
+//sets audiance 
     let audience = audienceInput.value;
-
+//for retrieving specific audience 
     if (audience === 'Major') {
         audience = document.getElementById('majorSelect').value;
     } else if (audience === 'Year') {
         audience = document.getElementById('yearSelect').value;
     }
-
+//pulls from database to see if user is signed in.
     const { data: authData, error: authError } =
         await supabase.auth.getUser();
 
@@ -152,54 +165,7 @@ export async function createPost() {
         alert('Please sign in before creating a post.');
         return;
     }
-
+// select post table, insert new row 
     const { error } = await supabase
         .from('posts')
-        .insert({
-            user_id: authData.user.id,
-            title: title || null,
-            post_text: description,
-            image_path: null,
-            audience: audience || 'All'
-        });
-
-    if (error) {
-        console.error('Error creating post:', error);
-        alert('Your post could not be saved.');
-        return;
-    }
-
-    titleInput.value = '';
-    descriptionInput.value = '';
-
-    const imageInput = document.getElementById('postImage');
-    if (imageInput) imageInput.value = '';
-
-    closeCreatePostInterface();
-    await loadPosts();
-}
-
-export function createPostInterface() {
-    const element = document.getElementById('createPostInterface');
-    if (element) element.style.display = 'block';
-}
-
-export function closeCreatePostInterface() {
-    const element = document.getElementById('createPostInterface');
-    if (element) element.style.display = 'none';
-}
-
-export function handleAudienceChange() {
-    const audience = document.getElementById('audienceFilter').value;
-
-    document.getElementById('majorSelect').style.display =
-        audience === 'Major' ? 'block' : 'none';
-
-    document.getElementById('yearSelect').style.display =
-        audience === 'Year' ? 'block' : 'none';
-}
-
-window.createPostInterface = createPostInterface;
-window.closeCreatePostInterface = closeCreatePostInterface;
-window.handleAudienceChange = handleAudienceChange;
-window.PostSubmission = createPost;
+        .ins
