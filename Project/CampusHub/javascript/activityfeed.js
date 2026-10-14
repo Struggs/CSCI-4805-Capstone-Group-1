@@ -1,117 +1,205 @@
+import { supabase } from '../javascript/supabaseClient.js';
 
+let feedPosts = [];
+let currentAudience = 'All';
 
-var storedUser = localStorage.getItem("campusHubUser");
-var currentUser = storedUser ? JSON.parse(storedUser) : { name: "Test Student", profilePicture: "image.png" };
-
-//
-
-let feedPosts = [ {
-id: 1,
-author: "get author",
-profilePicture: "image.png",
-timeStamp: "get time function",
-audienceFilter: "get filter function",
-title: "get title",
-decription: "get description",
-image: "image1.png",
-commentCount:0,
-likeCount: 0
-}
-]
-function createPostInterface() {
-    var interfaceDiv = document.getElementById('createPostInterface');
-    if (interfaceDiv) {
-        interfaceDiv.style.display = "block";
-    }
+export async function initializeActivityFeed() {
+    await loadPosts();
 }
 
-function closeCreatePostInterface() {
-    var interfaceDiv = document.getElementById('createPostInterface');
-    if (interfaceDiv) {
-        interfaceDiv.style.display = "none";
-    }
-}
-function showActivityFeed(posts, container, filteredAudience = "ALl"){
-if (filteredAudience === undefined) {
-        filteredAudience = "All";
-    }
-if (filteredAudience === "All") {
-        filteredPosts = posts;
-    } else {
-        filteredPosts = posts.filter(function(post) {
-            return post.audienceFilter === filteredAudience;
-        });
-    }
-    container.innerHTML = "";
-    var template = document.getElementById('post-template');
+async function loadPosts() {
+    const feedContainer = document.getElementById('feed');
 
-    filteredPosts.forEach(function(post) {
-        var postClone = template.content.cloneNode(true);
-
-        postClone.querySelector('.post-title').textContent = post.title;
-        postClone.querySelector('.post-author').textContent = "By: " + post.author;
-        postClone.querySelector('.post-desc').textContent = post.description;
-        postClone.querySelector('.post-stats').textContent = "❤️ " + post.likeCount + " | 💬 " + post.commentCount;
-
-        container.appendChild(postClone);
-    });    
-}
-
-function createPost(userId){
-
-    const postTitle = document.getElementById('postTitle').value.trim();
-    const postDescription = document.getElementById('postDescription').value.trim();
-    const postImage = document.getElementById('postImage').value.trim();
-    var audienceFilter = document.getElementById('audienceFilter').value;
-
-    // Handle nested dropdown values
-    if (audienceFilter === "Major") {
-        audienceFilter = document.getElementById('majorSelect').value;
-    } else if (audienceFilter === "Year") {
-        audienceFilter = document.getElementById('yearSelect').value;
-    }
-
-    if (!postTitle || !postDescription) {
-        alert('Please fill out the title and description!');
+    if (!feedContainer) {
+        console.error('Activity feed container was not found.');
         return;
     }
 
-const newPost = {
-        id: Date.now(), 
-        author: userId.name,
-        profilePicture: userId.profilePicture,
-        timeStamp: new Date(), 
-        audienceFilter: audienceFilter || "All",
-        title: postTitle,
-        description: postDescription,
-        image: postImage || "",
-        commentCount: 0,
-        likeCount: 0
-    };
+    feedContainer.textContent = 'Loading posts...';
 
-    feedPosts.unshift(newPost);
+    const { data: posts, error: postsError } = await supabase
+        .from('posts')
+        .select('id, user_id, title, post_text, image_path, audience, created_at')
+        .order('created_at', { ascending: false });
 
-    var feedContainer = document.getElementById('feed');
-    showActivityFeed(feedPosts, feedContainer, "All");
-}
-function handleAudienceChange() {
-    var primaryDropdown = document.getElementById('audienceFilter');
-    var majorDropdown = document.getElementById('majorSelect');
-    var yearDropdown = document.getElementById('yearSelect');
-
-    majorDropdown.style.display = "none";
-    yearDropdown.style.display = "none";
-
-    if (primaryDropdown.value === "Major") {
-        majorDropdown.style.display = "block";
-    } else if (primaryDropdown.value === "Year") {
-        yearDropdown.style.display = "block";
+    if (postsError) {
+        console.error('Error loading posts:', postsError);
+        feedContainer.textContent = 'Unable to load posts.';
+        return;
     }
+
+    const userIds = [...new Set(
+        (posts ?? []).map(post => post.user_id).filter(Boolean)
+    )];
+
+    let profilesById = {};
+
+    if (userIds.length > 0) {
+        const { data: profiles, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, name, image_path, major, school_year, transfer_student')
+            .in('id', userIds);
+
+        if (profilesError) {
+            console.error('Error loading profiles:', profilesError);
+        } else {
+            profilesById = Object.fromEntries(
+                (profiles ?? []).map(profile => [profile.id, profile])
+            );
+        }
+    }
+
+    feedPosts = (posts ?? []).map(post => ({
+        ...post,
+        profile: profilesById[post.user_id] ?? null
+    }));
+
+    showActivityFeed(feedPosts, feedContainer, currentAudience);
 }
-function PostSubmission() {
-    createPost(currentUser);
+
+function showActivityFeed(posts, container, audience = 'All') {
+    const template = document.getElementById('post-template');
+
+    if (!container || !template) {
+        console.error('Feed container or post template is missing.');
+        return;
+    }
+
+    const filteredPosts = audience === 'All'
+        ? posts
+        : posts.filter(post => post.audience === audience);
+
+    container.replaceChildren();
+
+    if (filteredPosts.length === 0) {
+        container.textContent = 'No posts to display yet.';
+        return;
+    }
+
+    filteredPosts.forEach(post => {
+        const clone = template.content.cloneNode(true);
+        const profile = post.profile;
+
+        clone.querySelector('.post-title').textContent =
+            post.title || '';
+
+        clone.querySelector('.post-author').textContent =
+            profile?.name || 'CampusHub Student';
+
+        clone.querySelector('.post-desc').textContent =
+            post.post_text || '';
+
+        clone.querySelector('.post-stats').textContent =
+            post.created_at
+                ? new Date(post.created_at).toLocaleString()
+                : '';
+
+        const card = clone.querySelector('.post-card');
+
+        // Add an author profile image if the template supports it.
+        const profileImage = clone.querySelector('.post-profile-picture');
+
+        if (profileImage) {
+            if (profile?.image_path) {
+                profileImage.src = profile.image_path;
+                profileImage.alt = profile.name || 'Student profile';
+                profileImage.hidden = false;
+            } else {
+                profileImage.hidden = true;
+            }
+        }
+
+        // Add the post image if one is stored.
+        if (post.image_path) {
+            const image = document.createElement('img');
+            image.src = post.image_path;
+            image.alt = 'Post attachment';
+            image.className = 'post-image';
+            image.style.maxWidth = '100%';
+            image.style.height = 'auto';
+            card.appendChild(image);
+        }
+
+        container.appendChild(clone);
+    });
 }
-window.onload = function() {
-    var feedContainer = document.getElementById('feed');
-    showActivityFeed(feedPosts, feedContainer, "All");
-};
+
+export async function createPost() {
+    const titleInput = document.getElementById('postTitle');
+    const descriptionInput = document.getElementById('postDescription');
+    const audienceInput = document.getElementById('audienceFilter');
+
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+
+    if (!description || description.length > 500) {
+        alert('Please enter a description of 1–500 characters.');
+        return;
+    }
+
+    let audience = audienceInput.value;
+
+    if (audience === 'Major') {
+        audience = document.getElementById('majorSelect').value;
+    } else if (audience === 'Year') {
+        audience = document.getElementById('yearSelect').value;
+    }
+
+    const { data: authData, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError || !authData.user) {
+        alert('Please sign in before creating a post.');
+        return;
+    }
+
+    const { error } = await supabase
+        .from('posts')
+        .insert({
+            user_id: authData.user.id,
+            title: title || null,
+            post_text: description,
+            image_path: null,
+            audience: audience || 'All'
+        });
+
+    if (error) {
+        console.error('Error creating post:', error);
+        alert('Your post could not be saved.');
+        return;
+    }
+
+    titleInput.value = '';
+    descriptionInput.value = '';
+
+    const imageInput = document.getElementById('postImage');
+    if (imageInput) imageInput.value = '';
+
+    closeCreatePostInterface();
+    await loadPosts();
+}
+
+export function createPostInterface() {
+    const element = document.getElementById('createPostInterface');
+    if (element) element.style.display = 'block';
+}
+
+export function closeCreatePostInterface() {
+    const element = document.getElementById('createPostInterface');
+    if (element) element.style.display = 'none';
+}
+
+export function handleAudienceChange() {
+    const audience = document.getElementById('audienceFilter').value;
+
+    document.getElementById('majorSelect').style.display =
+        audience === 'Major' ? 'block' : 'none';
+
+    document.getElementById('yearSelect').style.display =
+        audience === 'Year' ? 'block' : 'none';
+}
+
+window.createPostInterface = createPostInterface;
+window.closeCreatePostInterface = closeCreatePostInterface;
+window.handleAudienceChange = handleAudienceChange;
+window.PostSubmission = createPost;
