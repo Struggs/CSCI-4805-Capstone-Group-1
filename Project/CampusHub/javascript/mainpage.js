@@ -1,4 +1,5 @@
 import { initializeActivityFeed } from './activityfeed.js';
+import { initializeMyPosts } from './myPosts.js';
 
 //finds nav bar and main content based on css
 
@@ -39,6 +40,7 @@ navbar.addEventListener('click', async (event) => {
 //search for containers.
         const content =
             doc.querySelector('.activity-feed-page') ||
+            doc.querySelector('.my-posts-page') ||
             doc.querySelector('.marketplace-page') ||
             doc.querySelector('.comments-page') ||
             doc.querySelector('.messages-page');
@@ -53,10 +55,12 @@ navbar.addEventListener('click', async (event) => {
         );
 
         if (content.classList.contains('activity-feed-page')) {
-            await initializeActivityFeed();
-        }
+        await initializeActivityFeed();
+        } else if (content.classList.contains('my-posts-page')) {
+        await initializeMyPosts();
+}
 
-        console.log('Feature loaded successfully.');
+console.log('Feature loaded successfully.');
 
     } catch (error) {
         console.error('Feature loading error:', error);

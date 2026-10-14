@@ -9,10 +9,12 @@ export async function initializeActivityFeed() {
     await loadPosts();
 }
 
-// searches for container in html, if no container, throw error and return
+// searches for container in html, if no container,
+//  throw error and return
 // else fetch posts table from supabase and specific columns.
 //handles if supabase throws error
 async function loadPosts() {
+    const { data: authData } = await supabase.auth.getUser();
     const feedContainer = document.getElementById('feed');
 
     if (!feedContainer) {
@@ -33,7 +35,9 @@ async function loadPosts() {
         return;
     }
 
-    //creates empty array if posts is null, takes each post and extracts authors id, removes false values, removes duplicate ids,
+    //creates empty array if posts is null, 
+    // takes each post and extracts authors id, 
+    // removes false values, removes duplicate ids,
     //converts the set back into an array
     const userIds = [...new Set(
         (posts ?? []).map(post => post.user_id).filter(Boolean)
