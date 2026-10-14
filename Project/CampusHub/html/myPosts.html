@@ -1,0 +1,26 @@
+  <main class="my-posts-page">
+
+        <header class="feed-header">
+            <h1>My Posts</h1>
+            <p>View your posts</p>
+        </header>
+
+    <div class ="my-posts-feed" style ="display: flex; flex-direction: column; gap:10px;">
+
+            <!-- Feed Container -->
+
+        <div id="my-posts" style="margin-top: 20px;"></div>
+
+        <template id="post-template">
+            <div class="post-card" style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
+            <img class="post-profile-picture"
+            alt="Student profile"
+            hidden
+            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+            <h3 class="post-title"></h3>
+            <p class="post-author"></p>
+            <p class="post-desc"></p>
+            <div class="post-stats"></div>
+            </div>
+            </template> 
+        </div>  

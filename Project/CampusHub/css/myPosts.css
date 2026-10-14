@@ -1,0 +1,60 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.my-posts-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-size: cover;
+    background-position: center;
+}
+
+.myPosts-header{
+text-align: center;
+margin-bottom: 30px;
+}
+.myPosts-header h1{
+     font-size: 36px;
+    color: #ba0c2f;
+    margin-bottom: 8px;
+}
+.myPosts-header p{
+     color: #555;
+    font-size: 16px;
+}
+.my-posts-feed{
+
+    width: 100%;
+    max-width: 700px;
+
+    background-color: White ;
+
+    padding: 40px;
+
+    border-radius: 14px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+}
+.post-card {
+    width: 100%;
+    max-width: 430px;
+
+    background-color: rgba(255, 255, 255, 0.95);
+
+    padding: 40px;
+
+    border-radius: 14px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+}
+
+
+
