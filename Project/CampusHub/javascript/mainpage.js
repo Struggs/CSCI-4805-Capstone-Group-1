@@ -1,43 +1,66 @@
-document.querySelectorAll('.nav-button').forEach(function(button) {
-    button.addEventListener('click', async function(e) {
-        e.preventDefault();
-        
-        // Update active state styling
-        document.querySelectorAll('.nav-button').forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-        
-        button.classList.add('active');
+import { initializeActivityFeed } from './activityfeed.js';
 
-        // Fetch and load target page content
-        var page = button.getAttribute('data-page');
+//finds nav bar and main content based on css
 
-        try {
-            var response = await fetch(page);
-            var html = await response.text();
+const navbar = document.querySelector('.navbar');
+const mainContent = document.querySelector('.main-content');
 
-            // Parse fetched HTML
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(html, 'text/html');
+//runs when user clicks, event tells what was clicked
 
-            // Use .main-content if the loaded page has one,
-            // otherwise use the whole body
-            var content = doc.querySelector('.main-content') || doc.body;
+navbar.addEventListener('click', async (event) => {
 
-            // Insert the page into CampusHub.html
-            document.querySelector('.main-content').innerHTML =
-                content.innerHTML;
+    //where click happened, searches up through parents to nearest nav-button element
+    const button = event.target.closest('.nav-button');
 
-            // Run profile JavaScript after profile.html is loaded
-            if (page === 'profile.html') {
-                const profileModule =
-                    await import('../javascript/profile.js');
+    if (!button) return;
 
-                await profileModule.loadProfile();
-            }
-
-        } catch (error) {
-            console.error('Error loading page content:', error);
-        }
+    event.preventDefault();
+// pinpoints destination.
+    const pageUrl = new URL(button.getAttribute('href'), window.location.href);
+// removes css from each button to update css
+    document.querySelectorAll('.nav-button').forEach((link) => {
+        link.classList.remove('active');
     });
+
+    button.classList.add('active');
+//fetch the url and await response if not ok throw error
+    try {
+        console.log('Loading feature:', pageUrl.href);
+
+        const response = await fetch(pageUrl);
+
+        if (!response.ok) {
+            throw new Error(`Failed to load ${pageUrl.href}: ${response.status}`);
+        }
+//turn response to string, DOMParser converts string 
+// to document javascript can search. 
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+//search for containers.
+        const content =
+            doc.querySelector('.activity-feed-page') ||
+            doc.querySelector('.marketplace-page') ||
+            doc.querySelector('.comments-page') ||
+            doc.querySelector('.messages-page');
+
+        if (!content) {
+            throw new Error(`No supported content wrapper found in ${pageUrl.href}`);
+        }
+//remove existing content in main child and replace with copy 
+// of element and its decendents. 
+        mainContent.replaceChildren(
+            document.importNode(content, true)
+        );
+
+        if (content.classList.contains('activity-feed-page')) {
+            await initializeActivityFeed();
+        }
+
+        console.log('Feature loaded successfully.');
+
+    } catch (error) {
+        console.error('Feature loading error:', error);
+        mainContent.textContent =
+            'Unable to load this feature. Check the browser console.';
+    }
 });
