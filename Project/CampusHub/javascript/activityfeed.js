@@ -173,7 +173,7 @@ export async function createPost() {
             title: title || null,
             post_text: description,
             image_path: null,
-            audience: audience || 'All'
+            audience: audience || 'All Students'
         });
 
     if (error) {
