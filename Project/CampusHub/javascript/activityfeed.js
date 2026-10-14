@@ -166,6 +166,8 @@ export async function createPost() {
         return;
     }
 // select post table, insert new row 
+console.log('Audience being submitted:', JSON.stringify(audience));
+
     const { error } = await supabase
         .from('posts')
         .insert({
@@ -173,7 +175,7 @@ export async function createPost() {
             title: title || null,
             post_text: description,
             image_path: null,
-            audience: audience || 'All'
+            audience: audience || 'All Students'
         });
 
     if (error) {
