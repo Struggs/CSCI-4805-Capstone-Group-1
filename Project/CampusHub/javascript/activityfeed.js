@@ -1,5 +1,6 @@
 
 import { supabase } from './supabaseClient.js';
+import { initializeComments } from './comments.js';
 
 let feedPosts = [];
 let currentAudience = 'All';
@@ -147,6 +148,15 @@ function showActivityFeed(posts, container, audience = 'All') {
             image.style.height = 'auto';
             card.appendChild(image); // adds image to card
         }
+
+        const commentsButton = card.querySelector('.comments-button');
+        const commentsSection = card.querySelector('.comments-section');
+
+        commentsButton.addEventListener('click', () => {
+            commentsSection.hidden = !commentsSection.hidden;
+        });
+
+        initializeComments(card, post.id);
 
         // adds card to feed
         container.appendChild(clone);

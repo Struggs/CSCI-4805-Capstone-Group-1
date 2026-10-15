@@ -10,62 +10,91 @@ function getCommentElements(postCard) {
         commentForm: postCard.querySelector('.comment-form'),
         commentInput: postCard.querySelector('.comment'),
         charCount: postCard.querySelector('.char-count'),
-        postButton: postCard.querySelector('.post')
+        postButton: postCard.querySelector('.post'),
+        viewMoreCommentsButton: postCard.querySelector('.view-more-comments-button')
     };
 }
 
-const postButton = document.getElementById('post');
-const commentInput = document.getElementById('comment');
-const commentsSection = document.getElementById('comments-section');
-const commentsButton = document.getElementById('comments-button');
-const viewMoreCommentsButton = document.getElementById('view-more-comments-button');
 const shortenedCommentLength = 200; // Length at which comments will be shortened
-const charCount = document.getElementById('char-count');
-const commentsList = document.getElementById('comments-list');
-const commentForm = document.getElementById('comment-form');
 
-commentForm.addEventListener('submit', (event) => {     //Prevent the default form submission behavior
-    event.preventDefault();
-    const commentText = commentInput.value;
-    if (commentText.trim()) {
-        displayComments([commentText]);
+export function initializeComments(postCard, postId) {
+    const elements = getCommentElements(postCard);
+    const { commentInput, charCount, postButton, commentForm } = elements;
+
+    if (!commentInput || !charCount || !postButton) {
+        console.error('Comment controls not found for post: ', postId);
+        return;
+    }
+
+    commentInput.addEventListener('input', () => {
+        charCount.textContent = `${commentInput.value.length}/1000`;
+        postButton.disabled = commentInput.value.trim() === '';
+    });
+
+    commentForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const commentText = commentInput.value.trim();
+
+        if (!commentText) {
+            return;
+        }
+
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+        if (authError || !user) {
+            console.error('Unable to identify the signed-in user:', authError);
+            return;
+        }
+
+        const { error } = await supabase
+            .from('comments')
+            .insert([{
+                user_id: user.id,
+                post_id: postId,
+                comment_text: commentText
+            }]);
+
+        if (error) {
+            console.error('Error posting comment:', error);
+            return;
+        }
+
         commentInput.value = '';
         charCount.textContent = '0/1000';
         postButton.disabled = true;
-    }
-    else {
-        postButton.disabled = true;
-    }
-});
 
-commentInput.addEventListener('input', () => {  // Update character count and enable/disable post button based on input
-    const currentLength = commentInput.value.length;
-    charCount.textContent = `${currentLength}/1000`;
-    postButton.disabled = commentInput.value.trim() === '';
-});
-
-commentsButton.addEventListener('click', () => {    // Show the comments section and check if there are hidden comments to display the "View More Comments" button
-    commentsSection.hidden = false;
-    const hiddenComments = commentsSection.querySelectorAll('.comment[hidden]');
-    if (hiddenComments.length > 0) {
-        viewMoreCommentsButton.hidden = false;
-    }
-})
-
-viewMoreCommentsButton.addEventListener('click', () => {    // Show the next 25 hidden comments and hide the "View More Comments" button if there are no more hidden comments
-    const hiddenComments = commentsSection.querySelectorAll('.comment[hidden]');
-    const nextComments = Array.from(hiddenComments).slice(0, 25);
-    nextComments.forEach(comment => {
-        comment.hidden = false;
-
+        // Refresh comments after posting a new one
+        await loadComments(postId, elements);
     });
-    const remainingComments = commentsSection.querySelectorAll('.comment[hidden]'); // Check if there are any remaining hidden comments
-    if (remainingComments.length === 0) {
-        viewMoreCommentsButton.hidden = true;
-    }
-});
 
-function displayComments(comments) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
+    loadComments(postId, elements);
+
+}
+
+async function loadComments(postId, elements) {
+    const { data, error } = await supabase
+        .from('comments')
+        .select('comment_text')
+        .eq('post_id', postId)
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        console.error('Error loading comments:', error);
+        return;
+    }
+
+    const { commentsList, viewMoreCommentsButton } = elements;
+    commentsList.innerHTML = '';
+    displayComments(
+        data.map(comment => comment.comment_text),
+        commentsList,
+        viewMoreCommentsButton
+    );
+
+}
+
+function displayComments(comments, commentsList, viewMoreCommentsButton) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
     comments.forEach(comment => {
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
