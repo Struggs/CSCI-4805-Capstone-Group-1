@@ -19,6 +19,7 @@ const shortenedCommentLength = 200; // Length at which comments will be shortene
 
 export function initializeComments(postCard, postId) {
     const elements = getCommentElements(postCard);
+    let commentsOffset = 0; // Track the number of comments currently displayed
     const { commentInput, charCount, postButton, commentForm } = elements;
 
     if (!commentInput || !charCount || !postButton) {
@@ -64,20 +65,27 @@ export function initializeComments(postCard, postId) {
         charCount.textContent = '0/1000';
         postButton.disabled = true;
 
+
         // Refresh comments after posting a new one
+        commentsOffset = 0; // Reset offset to load the latest comments
         await loadComments(postId, elements);
     });
 
-    loadComments(postId, elements);
+    elements.viewMoreCommentsButton.addEventListener('click', async () => {
+        commentsOffset += 25; // Increase the offset to load the next set of comments
+        await loadComments(postId, elements, commentsOffset);
+    })
+    loadComments(postId, elements, commentsOffset);
 
 }
 
-async function loadComments(postId, elements) {
+async function loadComments(postId, elements, offset = 0) {
     const { data, error } = await supabase
         .from('comments')
         .select('comment_text')
         .eq('post_id', postId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+        .range(offset, offset + 25); // Limit to the first 25 comments
 
     if (error) {
         console.error('Error loading comments:', error);
@@ -85,12 +93,16 @@ async function loadComments(postId, elements) {
     }
 
     const { commentsList, viewMoreCommentsButton } = elements;
-    commentsList.innerHTML = '';
+    if (offset === 0) {
+        commentsList.innerHTML = ''; // Clear existing comments only on the initial load
+    }
     displayComments(
-        data.map(comment => comment.comment_text),
+        data.slice(0, 25).map(comment => comment.comment_text),
         commentsList,
         viewMoreCommentsButton
     );
+
+    viewMoreCommentsButton.hidden = data.length <= 25;
 
 }
 
@@ -98,9 +110,6 @@ function displayComments(comments, commentsList, viewMoreCommentsButton) {    //
     comments.forEach(comment => {
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
-        if (commentsList.children.length >= 25) {
-            commentDiv.hidden = true;
-        }
         if (comment.length > shortenedCommentLength) { // Check if the comment exceeds the shortened length
             commentDiv.textContent = comment.substring(0, shortenedCommentLength) + '...';
             const viewMoreButton = document.createElement('button');
@@ -122,8 +131,5 @@ function displayComments(comments, commentsList, viewMoreCommentsButton) {    //
             commentDiv.textContent = comment;
         }
         commentsList.appendChild(commentDiv);   // Append the comment to the comments list
-        if (commentsList.querySelector('.comment[hidden]')) {
-            viewMoreCommentsButton.hidden = false;
-        }
     });
 }
