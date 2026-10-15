@@ -16,6 +16,26 @@ export default defineConfig({
                     'Project/CampusHub/html/CampusHub.html'
                 ),
 
+                createProfile: resolve(
+                    process.cwd(),
+                    'Project/CampusHub/html/createProfile.html'
+                ),
+
+                signup: resolve(
+                    process.cwd(),
+                    'Project/CampusHub/html/signup.html'
+                ),
+
+                verified: resolve(
+                    process.cwd(),
+                    'Project/CampusHub/html/verified.html'
+                ),
+
+                profile: resolve(
+                    process.cwd(),
+                    'Project/CampusHub/html/profile.html'
+                ),
+
                 feed: resolve(
                     process.cwd(),
                     'Project/CampusHub/html/feed.html'

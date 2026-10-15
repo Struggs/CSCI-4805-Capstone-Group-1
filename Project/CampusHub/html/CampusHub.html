@@ -7,6 +7,8 @@
     <title>Main Page</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/feed.css">
+    <link rel="stylesheet" href="../css/myPosts.css">
+
 </head>
 
 <body>
@@ -20,13 +22,14 @@
 
     <div class="dashboard-layout">
         <nav class="navbar">
+
             <a href="feed.html" class="nav-button" data-page="feed.html">Activity Feed</a>
+            <a href="myPosts.html" class="nav-button" data-page="myPosts.html">My Posts</a>
             <a href="marketplace.html" class="nav-button" data-page="marketplace.html">Marketplace</a>
             <a href="messages.html" class="nav-button" data-page="messages.html">Messages</a>
 
-        </nav>
-        <main class="main-content">
-        </main>
+
+            <main class="main-content"></main>
     </div>
 
     <footer>
@@ -35,7 +38,7 @@
         </div>
     </footer>
 
-    <script src="../javascript/mainpage.js" defer></script>
+    <script type="module" src="../javascript/mainpage.js"></script>
     <script src="../javascript/activityfeed.js"></script>
 
 
