@@ -34,6 +34,11 @@ export default defineConfig({
                 messages: resolve(
                     process.cwd(),
                     'Project/CampusHub/html/messages.html'
+                ),
+
+                myPosts: resolve(
+                    process.cwd(),
+                    'Project/CampusHub/html/myPosts.html'
                 )
             }
         }
