@@ -1,0 +1,180 @@
+<main class="activity-feed-page">
+
+    <header class="feed-header">
+        <h1>Activity Feed</h1>
+        <p>Whats Going on Now</p>
+        <button onclick="window.location.href='index.html'" style="float: right;">Log Out</button>
+    </header>
+
+
+    <div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
+
+        <!-- Feed Container -->
+
+        <div id="feed" style="margin-top: 20px;"></div>
+
+
+        <template id="post-template">
+            <div class="post-card"
+                style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
+
+                <img class="post-profile-picture" alt="Student profile" hidden
+                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+
+                <h3 class="post-title"></h3>
+                <p class="post-author"></p>
+                <p class="post-desc"></p>
+                <div class="post-stats"></div>
+
+                <button type="button" class="comments-button">💬 Comments</button>
+
+                <div class="comments-section" hidden>
+                    <h2>Comments:</h2>
+
+                    <div class="comments-list"></div>
+
+                    <!-- Comments will be dynamically added here -->
+                    <button class="view-more-comments-button" hidden>
+                        View More Comments
+                    </button>
+
+                    <form class="comment-form">
+                        <div class="comment-input-container">
+                            <textarea name="comment" class="comment" placeholder="Leave your comment here..."
+                                maxlength="1000"></textarea>
+
+                            <p class="char-count">0/1000</p>
+                        </div>
+
+                        <button class="post" disabled>Post</button>
+                    </form>
+                </div>
+            </div>
+        </template>
+    </div>
+    <!-- Post Creation and Interface -->
+    <section class="CreatePostInterface">
+
+        <button class="post-interface-button" onclick="createPostInterface()"> Create Post</button>
+
+        <div id="createPostInterface" class="interface"
+            style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
+            <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
+                <h2>Create Post</h2>
+
+                <label for="postTitle">Title</label>
+                <input type="text" id="postTitle" placeholder="Enter post title" required>
+
+                <label for="postDescription">Description</label>
+                <textarea id="postDescription" placeholder="Enter Post Description" maxlength="500"></textarea>
+                <label for="postImage">Add Picture</label>
+                <input type="file" id="postImage" accept="image/*">
+
+                <label for="audienceFilter">Target Audience *</label>
+                <select id="audienceFilter" name="audienceFilter" onchange="handleAudienceChange()" required>
+                    <option value="All Students">All Students</option>
+                    <option value="Major">Specific Major</option>
+                    <option value="Course Subject">Course Subject</option>
+                    <option value="Year">Class Standing</option>
+                    <option value="Transfer Students Only">Transfer Students Only</option>
+                </select>
+
+                <div id="majorSelectContainer" style="display: none;">
+                    <label for="majorSelect">Select Major</label>
+                    <select id="majorSelect" name="majorSelect">
+                        <option value="">Select a major...</option>
+                        <option value="Accounting">Accounting</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Art">Art</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Business Administration">Business Administration</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Communication">Communication</option>
+                        <option value="Computer Information Systems">Computer Information Systems</option>
+                        <option value="Computer Information Technology">Computer Information Technology</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Criminal Justice">Criminal Justice</option>
+                        <option value="Economics">Economics</option>
+                        <option value="Education">Education</option>
+                        <option value="Engineering Technology">Engineering Technology</option>
+                        <option value="English">English</option>
+                        <option value="Finance">Finance</option>
+                        <option value="History">History</option>
+                        <option value="Kinesiology">Kinesiology</option>
+                        <option value="Management">Management</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Nursing">Nursing</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Political Science">Political Science</option>
+                        <option value="Psychological Science">Psychological Science</option>
+                        <option value="Social Work">Social Work</option>
+                        <option value="Sociology">Sociology</option>
+                        <option value="Theatre Arts">Theatre Arts</option>
+                        <option value="University Studies">University Studies</option>
+                    </select>
+                </div>
+
+                <div id="courseSubjectContainer" style="display: none;">
+                    <label for="courseSubjectSelect">Select Course Subject</label>
+                    <select id="courseSubjectSelect" name="courseSubjectSelect">
+                        <option value="">Select a subject...</option>
+                        <option value="ACCT">ACCT</option>
+                        <option value="AGRI">AGRI</option>
+                        <option value="ANTH">ANTH</option>
+                        <option value="ART">ART</option>
+                        <option value="ASTR">ASTR</option>
+                        <option value="BIOL">BIOL</option>
+                        <option value="CHEM">CHEM</option>
+                        <option value="COMM">COMM</option>
+                        <option value="CSCI">CSCI</option>
+                        <option value="CRJ">CRJ</option>
+                        <option value="DANC">DANC</option>
+                        <option value="ECON">ECON</option>
+                        <option value="EDUC">EDUC</option>
+                        <option value="ENGL">ENGL</option>
+                        <option value="FINC">FINC</option>
+                        <option value="FREN">FREN</option>
+                        <option value="GEOG">GEOG</option>
+                        <option value="GEOL">GEOL</option>
+                        <option value="GERM">GERM</option>
+                        <option value="HIST">HIST</option>
+                        <option value="MATH">MATH</option>
+                        <option value="MGMT">MGMT</option>
+                        <option value="MKTG">MKTG</option>
+                        <option value="MUS">MUS</option>
+                        <option value="NURS">NURS</option>
+                        <option value="PHIL">PHIL</option>
+                        <option value="PHYS">PHYS</option>
+                        <option value="POLS">POLS</option>
+                        <option value="PSYC">PSYC</option>
+                        <option value="SOC">SOC</option>
+                        <option value="SPAN">SPAN</option>
+                        <option value="THEA">THEA</option>
+                    </select>
+                </div>
+
+                <div id="yearSelectContainer" style="display: none;">
+                    <label for="yearSelect">Select Class Standing</label>
+                    <select id="yearSelect" name="yearSelect">
+                        <option value="">Select a class year...</option>
+                        <option value="Freshman">Freshman</option>
+                        <option value="Sophomore">Sophomore</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Senior">Senior</option>
+                        <option value="Undeclared">Undeclared</option>
+                    </select>
+                </div>
+
+
+
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button onclick="PostSubmission()">Share Post</button>
+                <button onclick="closeCreatePostInterface()">Cancel</button>
+            </div>
+        </div>
+    </section>
+
+</main>
