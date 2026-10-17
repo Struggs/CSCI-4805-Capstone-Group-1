@@ -40,8 +40,8 @@ signupForm.addEventListener('submit', async (event) => {
         // redirect to verified.html after email verification
         options: {
             emailRedirectTo:
-                'https://campushub-capstone.vercel.app/Project/CampusHub/html/verified.html'
-         }
+                `${window.location.origin}/Project/CampusHub/html/verified.html`
+        }
     })
 
     // check for Supabase error

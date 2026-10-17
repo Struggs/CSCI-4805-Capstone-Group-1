@@ -1,13 +1,49 @@
 import { initializeActivityFeed } from './activityfeed.js';
 import { initializeMyPosts } from './myPosts.js';
+import { initializeProfile } from './profile.js';
+import { getCurrentUserProfile, getProfileImageUrl } from './profileutils.js';
 
 //finds nav bar and main content based on css
-
 const navbar = document.querySelector('.navbar');
 const mainContent = document.querySelector('.main-content');
 
-//runs when user clicks, event tells what was clicked
+// load current user info into sidebar
+async function loadSidebarUser() {
 
+    const sidebarProfilePicture =
+        document.getElementById(
+            'sidebar-profile-picture'
+        )
+
+    const sidebarProfileName =
+        document.getElementById(
+            'sidebar-profile-name'
+        )
+
+
+    const profile =
+        await getCurrentUserProfile()
+
+
+    if (!profile) {
+        return
+    }
+
+
+    sidebarProfileName.textContent =
+        profile.name || 'Student'
+
+
+    sidebarProfilePicture.src =
+        getProfileImageUrl(
+            profile.image_path
+        )
+}
+
+// run when CampusHub first loads
+loadSidebarUser();
+
+//runs when user clicks, event tells what was clicked
 navbar.addEventListener('click', async (event) => {
 
     //where click happened, searches up through parents to nearest nav-button element
@@ -43,7 +79,8 @@ navbar.addEventListener('click', async (event) => {
             doc.querySelector('.my-posts-page') ||
             doc.querySelector('.marketplace-page') ||
             doc.querySelector('.comments-page') ||
-            doc.querySelector('.messages-page');
+            doc.querySelector('.messages-page') ||
+            doc.querySelector('.profile-page');
 
         if (!content) {
             throw new Error(`No supported content wrapper found in ${pageUrl.href}`);
@@ -58,6 +95,8 @@ navbar.addEventListener('click', async (event) => {
             await initializeActivityFeed();
         } else if (content.classList.contains('my-posts-page')) {
             await initializeMyPosts();
+        } else if (content.classList.contains('profile-page')) {
+            await initializeProfile();
         }
 
         console.log('Feature loaded successfully.');
