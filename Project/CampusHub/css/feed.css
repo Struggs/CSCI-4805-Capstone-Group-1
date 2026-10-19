@@ -73,4 +73,13 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 10px;
+    margin-bottom: 12px;
+}
+
+.comment-content {
+    background-color: #f0f2f5;
+    border-radius: 18px;
+    padding: 10px 14px;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
