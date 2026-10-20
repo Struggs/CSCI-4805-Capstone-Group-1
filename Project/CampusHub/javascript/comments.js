@@ -22,12 +22,26 @@ const shortenedCommentLength = 200; // Length at which comments will be shortene
 function formatCommentDate(createdAt) {
     const commentDate = new Date(createdAt);
     const now = new Date();
-    const hoursSincePosted = (now - commentDate) / (1000 * 60 * 60);
-    if (hoursSincePosted < 12) {
-        return commentDate.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit'
-        });
+    const minutesSincePosted = Math.floor((now - commentDate) / (1000 * 60));
+    const hoursSincePosted = Math.floor(minutesSincePosted / 60);
+    const daysSincePosted = Math.floor(hoursSincePosted / 24);
+    if (minutesSincePosted < 1) {
+        return 'Just now';
+    }
+    if (minutesSincePosted < 60) {
+        return `${minutesSincePosted} minute${minutesSincePosted === 1 ? '' : 's'} ago`;
+    }
+
+    if (hoursSincePosted < 24) {
+        return `${hoursSincePosted} hour${hoursSincePosted === 1 ? '' : 's'} ago`;
+    }
+
+    if (daysSincePosted < 7) {
+        return `${daysSincePosted} day${daysSincePosted === 1 ? '' : 's'} ago`;
+    }
+
+    if (daysSincePosted === 7) {
+        return '1 week ago';
     }
     return commentDate.toLocaleDateString('en-US', {
         month: 'numeric',
