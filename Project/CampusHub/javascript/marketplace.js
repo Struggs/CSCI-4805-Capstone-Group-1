@@ -1,5 +1,5 @@
 
-document.addEventListener("DOMContentLoaded", function () {
+export function initializeMarketplace() {
     //Marketplace elements
     const searchInput = document.querySelector(".marketplace-search input");
     const categoryFilter = document.getElementById("category");
@@ -521,6 +521,6 @@ function displayListings() {
     });
     priceDropdown.style.display = "none";
     displayListings();
-});
+}
         
  
