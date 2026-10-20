@@ -148,9 +148,9 @@ return listings.filter(function (listing){
 const matchesCategory =
     category === "" || listing.category === category;
 const matchesCondition = 
-    condition === "" || listing.condtion === condition;
+    condition === "" || listing.condition === condition;
 const matchesMin = 
-    minPrice === "" || listing.price <= Number(minPrice);
+    minPrice === "" || listing.price >= Number(minPrice);
 const matchesMax =
     maxPrice === "" || listing.price <= Number(maxPrice);
 return matchesSearch &&
@@ -162,21 +162,17 @@ return matchesSearch &&
 }
 
 function displayListings() {
-    const filteredLisitngs = getFilteredListings();
-    const visibleListings = filteredLisitngs.slice(0, visibleCount);
-    listingsGrid.innterHTML= "";
+    const filteredListings = getFilteredListings();
+    const visibleListings = filteredListings.slice(0, visibleCount);
+    listingsGrid.innerHTML= "";
     visibleListings.forEach(function (listing){
         const card = document.createElement("div");
         card.className = "listing-card";
 
         const image = makeElement("div", "listing-image", "No Image");
-        const title = makeElement("div", "listing-info");
+        const info = makeElement("div", "listing-info");
+        const title = makeElement("h3", "", listing.title);
         const price = makeElement(
-            "p",
-            "listing-price",
-            formatPrice(listing.price)
-        );
-        const condition = makeElement(
             "p",
             "listing-price",
             formatPrice(listing.price)
