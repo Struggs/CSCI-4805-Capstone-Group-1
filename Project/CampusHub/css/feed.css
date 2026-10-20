@@ -83,3 +83,11 @@ body {
     min-width: 0;
     overflow-wrap: anywhere;
 }
+
+.comment-timestamp {
+    display: block;
+    font-size: 12px;
+    color: #65676b;
+    margin-top: 4px;
+    margin-left: 10px;
+}

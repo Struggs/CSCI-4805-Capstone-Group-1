@@ -19,6 +19,23 @@ function getCommentElements(postCard) {
 
 const shortenedCommentLength = 200; // Length at which comments will be shortened
 
+function formatCommentDate(createdAt) {
+    const commentDate = new Date(createdAt);
+    const now = new Date();
+    const hoursSincePosted = (now - commentDate) / (1000 * 60 * 60);
+    if (hoursSincePosted < 12) {
+        return commentDate.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+    }
+    return commentDate.toLocaleDateString('en-US', {
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
+
 export function initializeComments(postCard, postId) {
     const elements = getCommentElements(postCard);
     let commentsOffset = 0; // Track the number of comments currently displayed
@@ -89,7 +106,7 @@ async function loadComments(postId, elements, offset = 0) {
 
     const { data, error } = await supabase
         .from('comments')
-        .select('user_id, comment_text')
+        .select('user_id, comment_text, created_at')
         .eq('post_id', postId)
         .order('created_at', { ascending: true })
         .range(offset, offset + 25); // Limit to the first 25 comments
@@ -121,6 +138,9 @@ async function loadComments(postId, elements, offset = 0) {
 async function displayComments(comments, commentsList, viewMoreCommentsButton) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
     for (const comment of comments) {
         const commentText = comment.comment_text;
+        const commentTimestamp = document.createElement('small');
+        commentTimestamp.classList.add('comment-timestamp');
+        commentTimestamp.textContent = formatCommentDate(comment.created_at);
         const userProfile = await getUserProfile(comment.user_id);
         const profileImageUrl = getProfileImageUrl(userProfile?.image_path);
 
@@ -129,6 +149,9 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton) {
 
         const commentContent = document.createElement('div');
         commentContent.classList.add('comment-content');
+
+        const commentWrapper = document.createElement('div');
+        commentWrapper.classList.add('comment-wrapper');
 
         const commentTextDiv = document.createElement('div');
         commentTextDiv.classList.add('comment-text');
@@ -165,8 +188,11 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton) {
             commentTextDiv.textContent = commentText;  // Display the full comment if it's within the shortened length
         }
         commentDiv.prepend(profileImage);
-        commentDiv.appendChild(commentContent);
+        commentWrapper.appendChild(commentContent);
+        commentWrapper.appendChild(commentTimestamp);
+        commentDiv.appendChild(commentWrapper);
         commentsList.appendChild(commentDiv);   // Append the comment to the comments list
+
     }
 
 }
