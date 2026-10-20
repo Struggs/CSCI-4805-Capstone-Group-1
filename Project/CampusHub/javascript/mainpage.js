@@ -59,7 +59,9 @@ navbar.addEventListener('click', async (event) => {
             await initializeActivityFeed();
         } else if (content.classList.contains('my-posts-page')) {
             await initializeMyPosts();
-        }
+        } else if (content.classList.contains('marketplace-page')) {
+                initializeMarketplace();
+}
 
         console.log('Feature loaded successfully.');
 
