@@ -1,5 +1,6 @@
 import { initializeActivityFeed } from './activityfeed.js';
 import { initializeMyPosts } from './myPosts.js';
+import { initializeMarketplace } from './marketplace.js';
 
 //finds nav bar and main content based on css
 
