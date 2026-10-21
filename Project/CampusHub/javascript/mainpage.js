@@ -1,5 +1,6 @@
 import { initializeActivityFeed } from './activityfeed.js';
 import { initializeMyPosts } from './myPosts.js';
+import { initializeMarketplace } from './marketplace.js';
 import { initializeProfile } from './profile.js';
 import { getCurrentUserProfile, getProfileImageUrl } from './profileutils.js';
 
@@ -95,9 +96,11 @@ navbar.addEventListener('click', async (event) => {
             await initializeActivityFeed();
         } else if (content.classList.contains('my-posts-page')) {
             await initializeMyPosts();
-        } else if (content.classList.contains('profile-page')) {
-            await initializeProfile();
-        }
+} else if (content.classList.contains('marketplace-page')) {
+    initializeMarketplace();
+} else if (content.classList.contains('profile-page')) {
+    await initializeProfile();
+}
 
         console.log('Feature loaded successfully.');
 
