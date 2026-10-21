@@ -44,11 +44,13 @@ async function loadConversations() {
         conversation.appendChild(name);
         conversationList.appendChild(conversation);
 
-        conversation.addEventListener("click", function () {
-            selectedConversation = conversation;
-            currentChatTitle.textContent = name.textContent;
-            clearMessageError();
-        });
+        conversation.addEventListener("click", async function () {
+    selectedConversation = conversation;
+    currentChatTitle.textContent = name.textContent;
+    clearMessageError();
+
+    await loadMessages(chat.id);
+});
     }
 }
 
