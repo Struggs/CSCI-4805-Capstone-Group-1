@@ -316,9 +316,6 @@ export function closeEditPostInterface() {
 
     editingPost = null;
 }
-export async function deletePost(){
-
-}
 
 window.editSubmission = editPostSubmission;
 window.closeEditPostInterface = closeEditPostInterface;
