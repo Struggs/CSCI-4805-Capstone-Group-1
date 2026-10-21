@@ -8,16 +8,51 @@ const messageHistory = document.getElementById("message-history");
 const messageForm = document.getElementById("message-form")
 const messageInput = document.getElementById("message-input");
 let selectedConversation = null;
-conversations.forEach(function (conversation) {
-    conversation.addEventListener("click", function () {
-        selectedConversation = conversation;
-        //Gets the student's name 
-        const studentName = conversation.querySelector("h3").textContent;
-        //Displays the student's name at the top of the chat
-        currentChatTitle.textContent = studentName;
-        clearMessageError();
-    });
-});
+async function loadConversations() {
+    const { data: { user }, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError || !user) {
+        showMessageError("Please log in to view conversations.");
+        return;
+    }
+
+    const { data, error } = await supabase
+        .from("conversations")
+        .select("id, user1_id, user2_id")
+        .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`);
+
+    if (error) {
+        console.error("Error loading conversations:", error);
+        showMessageError("Unable to load conversations.");
+        return;
+    }
+
+    conversationList.innerHTML = "";
+
+    for (const chat of data) {
+        const conversation = document.createElement("div");
+        conversation.classList.add("conversation");
+        conversation.dataset.conversationId = chat.id;
+
+        const otherUserId =
+            chat.user1_id === user.id ? chat.user2_id : chat.user1_id;
+
+        const name = document.createElement("h3");
+        name.textContent = otherUserId;
+
+        conversation.appendChild(name);
+        conversationList.appendChild(conversation);
+
+        conversation.addEventListener("click", function () {
+            selectedConversation = conversation;
+            currentChatTitle.textContent = name.textContent;
+            clearMessageError();
+        });
+    }
+}
+
+loadConversations();
 //Runs when the user presses the send button
 messageForm.addEventListener("submit", async function (event) {
     event.preventDefault();
