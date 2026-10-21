@@ -1,3 +1,4 @@
+import { supabase } from './supabaseClient.js';
 // Private Messaging - Section 10
 document.addEventListener("DOMContentLoaded", function () {
 const conversations = document.querySelectorAll(".conversation");
@@ -18,7 +19,7 @@ conversations.forEach(function (conversation) {
     });
 });
 //Runs when the user presses the send button
-messageForm.addEventListener("submit", function (event) {
+messageForm.addEventListener("submit", async function (event) {
     event.preventDefault();
     clearMessageError();
     const messageText = messageInput.value.trim();
@@ -35,6 +36,34 @@ messageForm.addEventListener("submit", function (event) {
         showMessageError("Message cannot exceed 1000 characters.");
         return;
     }
+    const { data: { user }, error: authError } =
+    await supabase.auth.getUser();
+
+if (authError || !user) {
+    showMessageError("Please log in to send messages.");
+    return;
+}
+
+const conversationId = selectedConversation.dataset.conversationId;
+
+if (!conversationId) {
+    showMessageError("This conversation is not connected to the database.");
+    return;
+}
+
+const { error: sendError } = await supabase
+    .from("messages")
+    .insert({
+        conversation_id: conversationId,
+        sender_id: user.id,
+        message_text: messageText
+    });
+
+if (sendError) {
+    console.error("Message failed:", sendError);
+    showMessageError("Unable to send message.");
+    return;
+}
     //Gets the current time
     const currentTime = new Date();
     const formattedTime = currentTime.toLocaleTimeString([], { 
@@ -59,7 +88,7 @@ messageForm.addEventListener("submit", function (event) {
     //Updates the conversation preview
     const recentMessage = selectedConversation.querySelector("p");
     const recentMessageTime = selectedConversation.querySelector("span");
-    recentMessage.textContenet = messageText;
+    recentMessage.textContent = messageText;
     recentMessageTime.textContent = formattedTime;
     //Clears the text box after sending
     messageInput.value = "";
