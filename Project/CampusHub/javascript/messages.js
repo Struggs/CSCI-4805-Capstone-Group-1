@@ -41,8 +41,17 @@ async function loadConversations() {
         const name = document.createElement("h3");
         name.textContent = otherUserId;
 
-        conversation.appendChild(name);
-        conversationList.appendChild(conversation);
+        const preview = document.createElement("p");
+preview.textContent = "No messages yet";
+
+const previewTime = document.createElement("span");
+previewTime.textContent = "";
+
+conversation.appendChild(name);
+conversation.appendChild(preview);
+conversation.appendChild(previewTime);
+
+conversationList.appendChild(conversation);
 
         conversation.addEventListener("click", async function () {
     selectedConversation = conversation;
