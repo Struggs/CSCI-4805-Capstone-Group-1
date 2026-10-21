@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient.js';
 // Private Messaging - Section 10
-function initializeMessages() {
+export function initializeMessages() {
 const conversationList = document.getElementById("conversation-list");
 const messageFormElement = document.getElementById("message-form");
 
@@ -219,8 +219,4 @@ function clearMessageError() {
      
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeMessages);
-} else {
-    initializeMessages();
 }
