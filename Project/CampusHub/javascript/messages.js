@@ -2,6 +2,17 @@ import { supabase } from './supabaseClient.js';
 // Private Messaging - Section 10
 function initializeMessages() {
 const conversationList = document.getElementById("conversation-list");
+const messageFormElement = document.getElementById("message-form");
+
+if (!conversationList || !messageFormElement) {
+    return;
+}
+
+if (messageFormElement.dataset.initialized === "true") {
+    return;
+}
+
+messageFormElement.dataset.initialized = "true";
 const currentChatTitle = document.querySelector("#current-chat h2");
 const messageHistory = document.getElementById("message-history");
 //Gets the message form and text box
