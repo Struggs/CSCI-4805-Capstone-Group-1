@@ -68,15 +68,29 @@ export function initializeMarketplace() {
 
     let listings = [];
 
-    function saveListings() {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
-            return true;
-        } catch (error) {
-            console.error("Could not save marketplace listings:", error);
-            return false;
-        }
+    
+async function saveListings(newListing) {
+    const { data, error } = await supabase
+        .from('marketplace_listings')
+        .insert({
+            title: newListing.title,
+            price: newListing.price,
+            category: newListing.category,
+            condition: newListing.condition,
+            description: newListing.description,
+            status: 'active'
+        })
+        .select()
+        .single();
+
+    if (error) {
+        console.error("Could not save marketplace listing:", error);
+        return null;
     }
+
+    return data;
+}
+
 
     function formatPrice(price) {
         return "$" + Number(price).toFixed(2);
@@ -446,24 +460,33 @@ function displayListings() {
                 return;
             }
 
-            const newListing = {
-                id: Date.now(),
-                title: title,
-                price: price,
-                category: category,
-                condition: condition,
-                seller: seller,
-                description: description,
-                createdAt: Date.now()
-            };
+            
+const newListing = {
+    title: title,
+    price: price,
+    category: category,
+    condition: condition,
+    description: description
+};
 
-            listings.unshift(newListing);
 
-            if (!saveListings()) {
-                listings.shift();
-                alert("Your listing could not be saved.");
-                return;
-            }
+             const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+if (authError || !user) {
+    alert("Please sign in to sell an item.");
+    return;
+}
+
+newListing.seller_id = user.id;
+
+const savedListing = await saveListings(newListing);
+
+if (!savedListing) {
+    alert("Your listing could not be saved.");
+    return;
+}
+
+listings.unshift(savedListing);
 
             visibleCount = PAGE_SIZE;
 
