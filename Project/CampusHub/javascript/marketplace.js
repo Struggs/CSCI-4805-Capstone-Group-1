@@ -51,22 +51,22 @@ export function initializeMarketplace() {
         }
     ];
 
-    function loadListings() {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved !== null) {
-                const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed)) {
-                    return parsed;
-                }
-            }
-        } catch (error) {
-            console.error("Could not load marketplace listings:", error);
-        }
-        return exampleListings.map(listing => ({ ...listing }));
+    async function loadListings() {
+    const { data, error } = await supabase
+        .from('marketplace_listings')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Could not load marketplace listings:', error);
+        return [];
     }
 
-    let listings = loadListings();
+    return data || [];
+}
+
+    let listings = [];
 
     function saveListings() {
         try {
@@ -520,7 +520,11 @@ function displayListings() {
         displayListings();
     });
     priceDropdown.style.display = "none";
+
+loadListings().then(function(data) {
+    listings = data;
     displayListings();
+});
 }
         
  
