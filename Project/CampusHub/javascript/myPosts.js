@@ -316,7 +316,7 @@ export function closeEditPostInterface() {
 
     editingPost = null;
 }
-export function deletePost(){
+export async function deletePost(){
 
 }
 
