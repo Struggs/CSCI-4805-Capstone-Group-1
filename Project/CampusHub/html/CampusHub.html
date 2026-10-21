@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/feed.css">
     <link rel="stylesheet" href="../css/myPosts.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/marketplace.css">
+    <link rel="stylesheet" href="../css/messaging.css">
 
 </head>
 
@@ -23,10 +26,21 @@
     <div class="dashboard-layout">
         <nav class="navbar">
 
+    <div class="sidebar-user">
+
+        <img
+            id="sidebar-profile-picture"
+            src="../images/default-profile.png"
+            alt="Profile Picture"
+        >
+        <span id="sidebar-profile-name">  Loading...</span>
+    </div>
+
             <a href="feed.html" class="nav-button" data-page="feed.html">Activity Feed</a>
             <a href="myPosts.html" class="nav-button" data-page="myPosts.html">My Posts</a>
             <a href="marketplace.html" class="nav-button" data-page="marketplace.html">Marketplace</a>
             <a href="messages.html" class="nav-button" data-page="messages.html">Messages</a>
+            <a href="profile.html" class="nav-button" data-page="profile.html">Profile</a>
         </nav>
 
         <main class="main-content"></main>
@@ -39,7 +53,7 @@
     </footer>
 
     <script type="module" src="../javascript/mainpage.js"></script>
-    <script src="../javascript/activityfeed.js"></script>
+    
 
 
 </body>
