@@ -1,7 +1,7 @@
 import { supabase } from './supabaseClient.js';
 // Private Messaging - Section 10
 document.addEventListener("DOMContentLoaded", function () {
-const conversations = document.querySelectorAll(".conversation");
+const conversationList = document.getElementById("conversation-list");
 const currentChatTitle = document.querySelector("#current-chat h2");
 const messageHistory = document.getElementById("message-history");
 //Gets the message form and text box
