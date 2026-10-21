@@ -63,7 +63,13 @@ export function initializeMarketplace() {
         return [];
     }
 
-    return data || [];
+    return (data || []).map(function(listing) {
+    return {
+        ...listing,
+        createdAt: new Date(listing.created_at).getTime(),
+        seller: listing.seller || "CampusHub Student"
+    };
+});
 }
 
     let listings = [];
@@ -442,7 +448,7 @@ function displayListings() {
         popup.appendChild(heading);
         popup.appendChild(form);
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) { 
             event.preventDefault();
 
             const title = titleField.input.value.trim();
