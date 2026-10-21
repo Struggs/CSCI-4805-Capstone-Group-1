@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/feed.css">
-    <link rel="stylesheet" href="../css/myPosts.css">
-
+    <link rel="stylesheet" href="../css/feed.css"> 
+    <link rel="stylesheet" href="../css/myPosts.css"> 
 </head>
 
 <body>
-
-    <header>
+    
+    <header>    
         <div class="main-header">
             <h1>Campus Hub</h1>
             <p>Austin Peay State University</p>
         </div>
     </header>
-
-    <div class="dashboard-layout">
+    
+    <div class="dashboard-layout">        
         <nav class="navbar">
+    <a href="feed.html" class="nav-button">Activity Feed</a>
+    <a href="myPosts.html" class="nav-button">My Posts</a>
+    <a href="comments.html" class="nav-button">Comments</a>
+    <a href="marketplace.html" class="nav-button">Marketplace</a>
+    <a href="messages.html" class="nav-button">Messages</a>
+</nav>
 
-            <a href="feed.html" class="nav-button" data-page="feed.html">Activity Feed</a>
-            <a href="myPosts.html" class="nav-button" data-page="myPosts.html">My Posts</a>
-            <a href="marketplace.html" class="nav-button" data-page="marketplace.html">Marketplace</a>
-            <a href="messages.html" class="nav-button" data-page="messages.html">Messages</a>
-        </nav>
-
-        <main class="main-content"></main>
+<main class="main-content"></main>
     </div>
 
     <footer>
@@ -38,10 +36,7 @@
         </div>
     </footer>
 
-    <script type="module" src="../javascript/mainpage.js"></script>
-    <script src="../javascript/activityfeed.js"></script>
-
+<script type="module" src="../javascript/mainpage.js"></script>
 
 </body>
-
 </html>
