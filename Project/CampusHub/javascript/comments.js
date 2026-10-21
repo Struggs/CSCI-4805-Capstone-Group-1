@@ -1,10 +1,12 @@
 import { supabase } from './supabaseClient.js';
+import { getUserProfile, getProfileImageUrl } from './profileutils.js';
 
 // Original standalone comments functionality.
 // Being adapted for individual Activity Feed posts.
 
 function getCommentElements(postCard) {
     return {
+        commentsButton: postCard.querySelector('.comments-button'),
         commentsSection: postCard.querySelector('.comments-section'),
         commentsList: postCard.querySelector('.comments-list'),
         commentForm: postCard.querySelector('.comment-form'),
@@ -16,6 +18,39 @@ function getCommentElements(postCard) {
 }
 
 const shortenedCommentLength = 200; // Length at which comments will be shortened
+
+function formatCommentDate(createdAt) {
+    const commentDate = new Date(createdAt);
+    const now = new Date();
+    const minutesSincePosted = Math.floor((now - commentDate) / (1000 * 60));
+    const hoursSincePosted = Math.floor(minutesSincePosted / 60);
+    const daysSincePosted = Math.floor(hoursSincePosted / 24);
+    const weeksSincePosted = Math.floor(daysSincePosted / 7);
+    const yearsSincePosted = Math.floor(daysSincePosted / 365);
+    if (minutesSincePosted < 1) {
+        return 'Just now';
+    }
+    if (minutesSincePosted < 60) {
+        return `${minutesSincePosted}m`;
+    }
+
+    if (hoursSincePosted < 24) {
+        return `${hoursSincePosted}h`;
+    }
+
+    if (daysSincePosted < 7) {
+        return `${daysSincePosted}d`;
+    }
+
+    if (weeksSincePosted < 13) {
+        return `${weeksSincePosted}w`;
+    }
+    return commentDate.toLocaleDateString('en-US', {
+        month: 'numeric',
+        day: 'numeric',
+        ...(yearsSincePosted >= 1 ? { year: 'numeric' } : {})
+    });
+}
 
 export function initializeComments(postCard, postId) {
     const elements = getCommentElements(postCard);
@@ -80,9 +115,14 @@ export function initializeComments(postCard, postId) {
 }
 
 async function loadComments(postId, elements, offset = 0) {
+    const { count, error: countError } = await supabase
+        .from('comments')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', postId);
+
     const { data, error } = await supabase
         .from('comments')
-        .select('comment_text')
+        .select('user_id, comment_text, created_at')
         .eq('post_id', postId)
         .order('created_at', { ascending: true })
         .range(offset, offset + 25); // Limit to the first 25 comments
@@ -93,11 +133,16 @@ async function loadComments(postId, elements, offset = 0) {
     }
 
     const { commentsList, viewMoreCommentsButton } = elements;
+
+    if (!countError) {
+        elements.commentsButton.textContent = `💬 Comments (${count})`;
+    }
+
     if (offset === 0) {
         commentsList.innerHTML = ''; // Clear existing comments only on the initial load
     }
     displayComments(
-        data.slice(0, 25).map(comment => comment.comment_text),
+        data.slice(0, 25),
         commentsList,
         viewMoreCommentsButton
     );
@@ -106,30 +151,64 @@ async function loadComments(postId, elements, offset = 0) {
 
 }
 
-function displayComments(comments, commentsList, viewMoreCommentsButton) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
-    comments.forEach(comment => {
+async function displayComments(comments, commentsList, viewMoreCommentsButton) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
+    for (const comment of comments) {
+        const commentText = comment.comment_text;
+        const commentTimestamp = document.createElement('small');
+        commentTimestamp.classList.add('comment-timestamp');
+        commentTimestamp.textContent = formatCommentDate(comment.created_at);
+        const userProfile = await getUserProfile(comment.user_id);
+        const profileImageUrl = getProfileImageUrl(userProfile?.image_path);
+
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
-        if (comment.length > shortenedCommentLength) { // Check if the comment exceeds the shortened length
-            commentDiv.textContent = comment.substring(0, shortenedCommentLength) + '...';
+
+        const commentContent = document.createElement('div');
+        commentContent.classList.add('comment-content');
+
+        const commentWrapper = document.createElement('div');
+        commentWrapper.classList.add('comment-wrapper');
+
+        const commentTextDiv = document.createElement('div');
+        commentTextDiv.classList.add('comment-text');
+        commentContent.appendChild(commentTextDiv);
+
+        const profileImage = document.createElement('img');
+        profileImage.src = profileImageUrl;
+        profileImage.alt = 'Profile picture';
+        profileImage.classList.add('comment-profile-image');
+
+        const commentUsername = document.createElement('strong');
+        commentUsername.textContent = userProfile?.name || 'Unknown user';
+        commentUsername.classList.add('comment-username');
+        commentContent.prepend(commentUsername);
+
+        if (commentText.length > shortenedCommentLength) { // Check if the comment exceeds the shortened length
+            commentTextDiv.textContent = commentText.substring(0, shortenedCommentLength) + '...';
             const viewMoreButton = document.createElement('button');
             viewMoreButton.textContent = 'View More';
-            commentDiv.appendChild(viewMoreButton);
+            commentTextDiv.appendChild(viewMoreButton);
             let isExpanded = false;
             viewMoreButton.addEventListener('click', () => {
                 if (isExpanded) { // If the comment is expanded, shorten it again and change the button text
-                    commentDiv.textContent = comment.substring(0, shortenedCommentLength) + '...';
+                    commentTextDiv.textContent = commentText.substring(0, shortenedCommentLength) + '...';
                     viewMoreButton.textContent = 'View More';
                 } else {    // If the comment is shortened, expand it to show the full comment and change the button text
-                    commentDiv.textContent = comment;
+                    commentTextDiv.textContent = commentText;
                     viewMoreButton.textContent = 'View Less';
                 }
-                commentDiv.appendChild(viewMoreButton);
+                commentTextDiv.appendChild(viewMoreButton);
                 isExpanded = !isExpanded;
             });
         } else {
-            commentDiv.textContent = comment;
+            commentTextDiv.textContent = commentText;  // Display the full comment if it's within the shortened length
         }
+        commentDiv.prepend(profileImage);
+        commentWrapper.appendChild(commentContent);
+        commentWrapper.appendChild(commentTimestamp);
+        commentDiv.appendChild(commentWrapper);
         commentsList.appendChild(commentDiv);   // Append the comment to the comments list
-    });
+
+    }
+
 }
