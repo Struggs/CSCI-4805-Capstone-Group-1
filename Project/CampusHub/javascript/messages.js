@@ -53,6 +53,50 @@ async function loadConversations() {
 });
     }
 }
+    async function loadMessages(conversationId) {
+    messageHistory.innerHTML = "";
+
+    const { data: messages, error } = await supabase
+        .from("messages")
+        .select("id, sender_id, message_text, created_at")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        console.error("Error loading messages:", error);
+        showMessageError("Unable to load messages.");
+        return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    for (const message of messages) {
+        const messageDiv = document.createElement("div");
+
+        messageDiv.classList.add(
+            message.sender_id === user?.id
+                ? "sent-message"
+                : "received-message"
+        );
+
+        const text = document.createElement("p");
+        text.textContent = message.message_text;
+
+        const time = document.createElement("span");
+        time.classList.add("message-time");
+        time.textContent = new Date(message.created_at)
+            .toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit"
+            });
+
+        messageDiv.appendChild(text);
+        messageDiv.appendChild(time);
+        messageHistory.appendChild(messageDiv);
+    }
+
+    messageHistory.scrollTop = messageHistory.scrollHeight;
+}
 
 loadConversations();
 //Runs when the user presses the send button
