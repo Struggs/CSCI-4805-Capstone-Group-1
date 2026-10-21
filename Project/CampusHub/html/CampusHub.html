@@ -1,65 +1,64 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>CampusHub | Dashboard</title>
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/feed.css"> 
-    <link rel="stylesheet" href="../css/myPosts.css"> 
+    <link rel="stylesheet" href="../css/feed.css">
+    <link rel="stylesheet" href="../css/myPosts.css">
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/marketplace.css">
     <link rel="stylesheet" href="../css/messaging.css">
 </head>
 
 <body>
-    
-    <header>    
+    <!-- Main header -->
+    <header>
         <div class="main-header">
             <h1>Campus Hub</h1>
             <p>Austin Peay State University</p>
         </div>
     </header>
-    
-    <div class="dashboard-layout">        
+
+    <!-- Dashboard layout -->
+    <div class="dashboard-layout">
         <nav class="navbar">
-    <a href="feed.html" class="nav-button">Activity Feed</a>
-    <a href="myPosts.html" class="nav-button">My Posts</a>
-    <a href="comments.html" class="nav-button">Comments</a>
-    <a href="marketplace.html" class="nav-button">Marketplace</a>
-    <a href="messages.html" class="nav-button">Messages</a>
-</nav>
 
-    <div class="sidebar-user">
+            <!-- Current user profile -->
+            <div class="sidebar-user">
+                <img
+                    id="sidebar-profile-picture"
+                    src="../images/default-profile.png"
+                    alt="Profile Picture"
+                >
+                <span id="sidebar-profile-name">Loading...</span>
+            </div>
 
-        <img
-            id="sidebar-profile-picture"
-            src="../images/default-profile.png"
-            alt="Profile Picture"
-        >
-        <span id="sidebar-profile-name">  Loading...</span>
-    </div>
-
+            <!-- Navigation links -->
             <a href="feed.html" class="nav-button" data-page="feed.html">Activity Feed</a>
             <a href="myPosts.html" class="nav-button" data-page="myPosts.html">My Posts</a>
+            <a href="comments.html" class="nav-button" data-page="comments.html">Comments</a>
             <a href="marketplace.html" class="nav-button" data-page="marketplace.html">Marketplace</a>
             <a href="messages.html" class="nav-button" data-page="messages.html">Messages</a>
             <a href="profile.html" class="nav-button" data-page="profile.html">Profile</a>
         </nav>
 
+        <!-- Dynamic page content -->
         <main class="main-content"></main>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <div>
-
-        </div>
+        <div></div>
     </footer>
 
+    <!-- Main page JavaScript -->
     <script type="module" src="../javascript/mainpage.js"></script>
-    
-
-
 </body>
 
 </html>
