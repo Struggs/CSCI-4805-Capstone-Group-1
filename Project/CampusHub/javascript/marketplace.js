@@ -1,4 +1,4 @@
-
+import { supabase } from './supabaseClient.js';
 export function initializeMarketplace() {
     //Marketplace elements
     const searchInput = document.querySelector(".marketplace-search input");
