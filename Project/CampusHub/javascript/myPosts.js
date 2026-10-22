@@ -39,9 +39,10 @@ async function loadMyPosts(){
     myPosts = posts ?? [];
     showMyPosts(myPosts, myPostContainer);
 }
-
 //finds template in html
 function showMyPosts(posts, container) {
+
+    container.replaceChildren();
 
     const template = document.getElementById('post-template');
 
@@ -99,11 +100,226 @@ function showMyPosts(posts, container) {
             card.appendChild(image); // adds image to card
         }
 
-        // adds card to feed
+        
+        // Connect the Edit Post button to this specific post.
+        const editButton = clone.querySelector(
+            '.edit-post-interface-button'
+        );
+
+        if (editButton) {
+            editButton.addEventListener('click', () => {
+                editPostInterface(post);
+            });
+        }
+
+        // Add the completed post card to the page.
         container.appendChild(clone);
-    });
+})}
+
+function updateEditAudienceVisibility() {
+    const audience = document.getElementById('audienceFilter')?.value;
+
+    document.getElementById('majorSelectContainer').style.display =
+        audience === 'Major' ? 'block' : 'none';
+
+    document.getElementById('courseSubjectContainer').style.display =
+        audience === 'Course Subject' ? 'block' : 'none';
+
+    document.getElementById('yearSelectContainer').style.display =
+        audience === 'Year' ? 'block' : 'none';
 }
 
+window.handleEditAudienceChange = updateEditAudienceVisibility;
 
- 
+let editingPost = null;
+
+export function editPostInterface(post) {
+    editingPost = post;
+
+    const element = document.getElementById('editPostInterface');
+
+    if (!element) {
+        console.error('Edit post interface was not found.');
+        return;
+    }
+
+    document.getElementById('postTitle').value =
+        post.title ?? '';
+
+    document.getElementById('postDescription').value =
+        post.post_text ?? '';
+
+    const imageContainer =
+        document.getElementById('currentPostImageContainer');
+    const currentImage =
+        document.getElementById('currentPostImage');
+    const imageInput =
+        document.getElementById('postImage');
+
+    if (imageInput) {
+        imageInput.value = '';
+    }
+
+    if (imageContainer && currentImage) {
+        if (post.image_path) {
+            currentImage.src = post.image_path;
+            imageContainer.style.display = 'block';
+        } else {
+            currentImage.removeAttribute('src');
+            imageContainer.style.display = 'none';
+        }
+    }
+
+    const audienceFilter =
+        document.getElementById('audienceFilter');
+
+    const audienceTypeToOption = {
+        all_students: 'All Students',
+        major: 'Major',
+        course_subject: 'Course Subject',
+        class_year: 'Year',
+        transfer_status: 'Transfer Students Only'
+    };
+
+    const selectedAudience =
+        audienceTypeToOption[post.audience_type] ?? 'All Students';
+
+    audienceFilter.value = selectedAudience;
+    updateEditAudienceVisibility();
+
+    const audienceValue = post.audience_value ?? '';
+
+    if (selectedAudience === 'Major') {
+        document.getElementById('majorSelect').value = audienceValue;
+    } else if (selectedAudience === 'Course Subject') {
+        document.getElementById('courseSubjectSelect').value =
+            audienceValue;
+    } else if (selectedAudience === 'Year') {
+        document.getElementById('yearSelect').value = audienceValue;
+    }
+
+    element.style.display = 'block';
+    element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+export async function editPostSubmission() {
+    if (!editingPost) {
+        alert('Please select a post to edit.');
+        return;
+    }
+
+    const titleInput = document.getElementById('postTitle');
+    const descriptionInput = document.getElementById('postDescription');
+    const audienceInput = document.getElementById('audienceFilter');
+
+    if (!titleInput || !descriptionInput || !audienceInput) {
+        alert('The post form could not be loaded. Please refresh the page.');
+        return;
+    }
+
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+
+    if (!description || description.length > 500) {
+        alert('Please enter a description of 1–500 characters.');
+        return;
+    }
+
+    const selectedAudience = audienceInput.value;
+    let audienceType;
+    let audienceValue = null;
+
+    switch (selectedAudience) {
+        case 'All Students':
+            audienceType = 'all_students';
+            break;
+
+        case 'Major':
+            audienceType = 'major';
+            audienceValue =
+                document.getElementById('majorSelect')?.value;
+            break;
+
+        case 'Course Subject':
+            audienceType = 'course_subject';
+            audienceValue =
+                document.getElementById('courseSubjectSelect')?.value;
+            break;
+
+        case 'Year':
+            audienceType = 'class_year';
+            audienceValue =
+                document.getElementById('yearSelect')?.value;
+            break;
+
+        case 'Transfer Students Only':
+            audienceType = 'transfer_status';
+            break;
+
+        default:
+            alert('Please select a valid audience.');
+            return;
+    }
+
+    if (
+        ['major', 'course_subject', 'class_year'].includes(audienceType) &&
+        !audienceValue
+    ) {
+        alert('Please select an option for your chosen audience.');
+        return;
+    }
+
+    const { data: authData, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError || !authData.user) {
+        alert('Please sign in before editing a post.');
+        return;
+    }
+
+    const { data: updatedPosts, error } = await supabase
+        .from('posts')
+        .update({
+            title: title || null,
+            post_text: description,
+            audience: 'All Students',
+            audience_type: audienceType,
+            audience_value: audienceValue
+        })
+        .eq('id', editingPost.id)
+        .eq('user_id', authData.user.id)
+        .select('id');
+
+    if (error) {
+        console.error('Error updating post:', error);
+        alert(`Your post could not be updated: ${error.message}`);
+        return;
+    }
+
+    if (!updatedPosts || updatedPosts.length === 0) {
+        alert('The post was not updated. Check your permissions and try again.');
+        return;
+    }
+
+    closeEditPostInterface();
+    await loadMyPosts();
+
+    alert('Post updated successfully.');
+}
+
+export function closeEditPostInterface() {
+    const element = document.getElementById('editPostInterface');
+    if (element) element.style.display = 'none';
+
+    editingPost = null;
+}
+
+window.editSubmission = editPostSubmission;
+window.closeEditPostInterface = closeEditPostInterface;
+
+//this is the issue
+//window.deletePost = deletePost;
+
 

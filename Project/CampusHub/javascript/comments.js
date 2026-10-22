@@ -25,28 +25,30 @@ function formatCommentDate(createdAt) {
     const minutesSincePosted = Math.floor((now - commentDate) / (1000 * 60));
     const hoursSincePosted = Math.floor(minutesSincePosted / 60);
     const daysSincePosted = Math.floor(hoursSincePosted / 24);
+    const weeksSincePosted = Math.floor(daysSincePosted / 7);
+    const yearsSincePosted = Math.floor(daysSincePosted / 365);
     if (minutesSincePosted < 1) {
         return 'Just now';
     }
     if (minutesSincePosted < 60) {
-        return `${minutesSincePosted} minute${minutesSincePosted === 1 ? '' : 's'} ago`;
+        return `${minutesSincePosted}m`;
     }
 
     if (hoursSincePosted < 24) {
-        return `${hoursSincePosted} hour${hoursSincePosted === 1 ? '' : 's'} ago`;
+        return `${hoursSincePosted}h`;
     }
 
     if (daysSincePosted < 7) {
-        return `${daysSincePosted} day${daysSincePosted === 1 ? '' : 's'} ago`;
+        return `${daysSincePosted}d`;
     }
 
-    if (daysSincePosted === 7) {
-        return '1 week ago';
+    if (weeksSincePosted < 13) {
+        return `${weeksSincePosted}w`;
     }
     return commentDate.toLocaleDateString('en-US', {
         month: 'numeric',
         day: 'numeric',
-        year: 'numeric'
+        ...(yearsSincePosted >= 1 ? { year: 'numeric' } : {})
     });
 }
 

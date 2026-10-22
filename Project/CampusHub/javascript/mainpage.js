@@ -42,6 +42,7 @@ async function loadSidebarUser() {
         )
 }
 
+
 // run when CampusHub first loads
 loadSidebarUser();
 
