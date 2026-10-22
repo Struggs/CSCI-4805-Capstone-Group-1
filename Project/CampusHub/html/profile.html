@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusHub | Profile</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+
+<main class="profile-page">
+
+    <h1>My Profile</h1>
+
+    <div class="profile-header">
+
+        <img
+            id="profile-picture"
+            src="../images/default-profile.png"
+            alt="Profile Picture"
+        >
+
+        <div>
+            <h2 id="profile-name">
+                Loading...
+            </h2>
+        </div>
+
+    </div>
+
+    <div class="profile-details">
+
+        <p>
+            <strong>Major:</strong>
+            <span id="profile-major">
+                Not provided
+            </span>
+        </p>
+
+        <p>
+            <strong>Class Standing:</strong>
+            <span id="profile-class-standing">
+                Not provided
+            </span>
+        </p>
+
+        <p>
+            <strong>Transfer Student:</strong>
+            <span id="profile-transfer">
+                Not provided
+            </span>
+        </p>
+
+    </div>
+
+    <button id="edit-profile-button">
+        Edit Profile
+    </button>
+
+
+    <div id="edit-profile-form" hidden>
+
+        <div class="profile-picture-edit">
+
+            <img
+                id="profile-picture-preview"
+                src="../images/default-profile.png"
+                alt="Profile Picture Preview"
+            >
+
+            <label for="profile-picture-input">
+                Change Profile Picture
+            </label>
+
+            <input
+                type="file"
+                id="profile-picture-input"
+                accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+            >
+
+        </div>
+
+
+        <label for="edit-name">Name</label>
+        <input
+            type="text"
+            id="edit-name"
+            maxlength="100"
+        >
+
+        <label for="edit-major">Major</label>
+        <input
+            type="text"
+            id="edit-major"
+            maxlength="100"
+        >
+
+        <label for="edit-school-year">
+            Class Standing
+        </label>
+
+        <select id="edit-school-year">
+            <option value="">
+                Select class standing
+            </option>
+            <option value="Freshman">
+                Freshman
+            </option>
+            <option value="Sophomore">
+                Sophomore
+            </option>
+            <option value="Junior">
+                Junior
+            </option>
+            <option value="Senior">
+                Senior
+            </option>
+        </select>
+
+        <label for="edit-transfer-student">
+            Transfer Student
+        </label>
+
+        <select id="edit-transfer-student">
+            <option value="">
+                Select an option
+            </option>
+            <option value="true">
+                Yes
+            </option>
+            <option value="false">
+                No
+            </option>
+        </select>
+
+        <div>
+            <button
+                type="button"
+                id="save-profile-button"
+            >
+                Save Changes
+            </button>
+
+            <button
+                type="button"
+                id="cancel-profile-button"
+            >
+                Cancel
+            </button>
+        </div>
+
+    </div>
+
+    <p id="message"></p>
+
+</main>
+
+<script
+    type="module"
+    src="../javascript/profile.js">
+</script>
+
+</body>
+
+</html>
