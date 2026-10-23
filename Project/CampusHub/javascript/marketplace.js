@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return `Posted ${days} day(s) ago`;
     }
 
-   
+
     function makeElement(tag, className, content) {
         const element = document.createElement(tag);
 
@@ -137,74 +137,69 @@ document.addEventListener("DOMContentLoaded", function () {
         const condition = conditionFilter.value;
         const minPrice = minPriceInput.value;
         const maxPrice = maxPriceInput.value;
-    
 
-//Check which listings match the filters 
-return listings.filter(function (listing){
-    const matchesSearch =
-    listing.title.toLowerCase().includes(search) ||
-    listing.description.toLowerCase().includes(search);
 
-const matchesCategory =
-    category === "" || listing.category === category;
-const matchesCondition = 
-    condition === "" || listing.condtion === condition;
-const matchesMin = 
-    minPrice === "" || listing.price <= Number(minPrice);
-const matchesMax =
-    maxPrice === "" || listing.price <= Number(maxPrice);
-return matchesSearch &&
-    matchesCategory &&
-    matchesCondition &&
-    matchesMin &&
-    matchesMax;
-});
-}
+        //Check which listings match the filters 
+        return listings.filter(function (listing) {
+            const matchesSearch =
+                listing.title.toLowerCase().includes(search) ||
+                listing.description.toLowerCase().includes(search);
 
-function displayListings() {
-    const filteredLisitngs = getFilteredListings();
-    const visibleListings = filteredLisitngs.slice(0, visibleCount);
-    listingsGrid.innterHTML= "";
-    visibleListings.forEach(function (listing){
-        const card = document.createElement("div");
-        card.className = "listing-card";
+            const matchesCategory =
+                category === "" || listing.category === category;
+            const matchesCondition =
+                condition === "" || listing.condtion === condition;
+            const matchesMin =
+                minPrice === "" || listing.price <= Number(minPrice);
+            const matchesMax =
+                maxPrice === "" || listing.price <= Number(maxPrice);
+            return matchesSearch &&
+                matchesCategory &&
+                matchesCondition &&
+                matchesMin &&
+                matchesMax;
+        });
+    }
 
-        const image = makeElement("div", "listing-image", "No Image");
-        const title = makeElement("div", "listing-info");
-        const price = makeElement(
-            "p",
-            "listing-price",
-            formatPrice(listing.price)
-        );
-        const condition = makeElement(
-            "p",
-            "listing-price",
-            formatPrice(listing.price)
-        );
-        const condition = makeElement(
-            "p",
-            "listing-condition" ,
-            formatCondition(listing.condition)
-        );
-        const seller = makeElement("div", "listing-seller");
-        const sellerName = makeElement("span","",listing.seller);
-        seller.appendChild(sellerName);
-        const posted = makeElement(
-            "p",
-            "listing-time",
-            timeAgo(listing.createdAt)
-        );
-         info.appendChild(title);
-         info.appendChild(price);
-         info.appendChild(condition);
-         info.appendChild(seller);
-         info.appendChild(posted);
-         card.appendChild(image);
-         card.appendChild(info);
-         card.addEventListener("click", function() {
-        showListingDetails(listing);
-    });
-    listingsGrid.appendChild(card);
+    function displayListings() {
+        const filteredLisitngs = getFilteredListings();
+        const visibleListings = filteredLisitngs.slice(0, visibleCount);
+        listingsGrid.innterHTML = "";
+        visibleListings.forEach(function (listing) {
+            const card = document.createElement("div");
+            card.className = "listing-card";
+
+            const image = makeElement("div", "listing-image", "No Image");
+            const title = makeElement("div", "listing-info");
+            const price = makeElement(
+                "p",
+                "listing-price",
+                formatPrice(listing.price)
+            );
+            const condition = makeElement(
+                "p",
+                "listing-condition",
+                formatCondition(listing.condition)
+            );
+            const seller = makeElement("div", "listing-seller");
+            const sellerName = makeElement("span", "", listing.seller);
+            seller.appendChild(sellerName);
+            const posted = makeElement(
+                "p",
+                "listing-time",
+                timeAgo(listing.createdAt)
+            );
+            info.appendChild(title);
+            info.appendChild(price);
+            info.appendChild(condition);
+            info.appendChild(seller);
+            info.appendChild(posted);
+            card.appendChild(image);
+            card.appendChild(info);
+            card.addEventListener("click", function () {
+                showListingDetails(listing);
+            });
+            listingsGrid.appendChild(card);
         });
 
         noListings.style.display =
@@ -214,7 +209,7 @@ function displayListings() {
             filteredListings.length > visibleCount ? "block" : "none";
     }
 
-   
+
     function createPopup() {
         const overlay = document.createElement("div");
 
@@ -252,7 +247,7 @@ function displayListings() {
         return { overlay, popup };
     }
 
-    
+
     function showListingDetails(listing) {
         const { overlay, popup } = createPopup();
 
@@ -300,7 +295,7 @@ function displayListings() {
         popup.appendChild(closeButton);
     }
 
-  
+
     function createFormInput(labelText, type, required = true) {
         const wrapper = document.createElement("div");
         wrapper.style.marginBottom = "12px";
@@ -356,7 +351,7 @@ function displayListings() {
         return { wrapper, select };
     }
 
-   
+
     function showSellForm() {
         const { overlay, popup } = createPopup();
 
@@ -526,5 +521,5 @@ function displayListings() {
     priceDropdown.style.display = "none";
     displayListings();
 });
-        
- 
+
+
