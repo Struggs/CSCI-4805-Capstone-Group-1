@@ -39,6 +39,9 @@ export function initializeMessages() {
             return;
         }
 
+        if (data.length === 0) {
+            return;
+        }
         conversationList.innerHTML = "";
 
         for (const chat of data) {
