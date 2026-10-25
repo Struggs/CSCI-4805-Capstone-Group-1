@@ -79,6 +79,7 @@ async function saveListings(newListing) {
     const { data, error } = await supabase
         .from('marketplace_listings')
         .insert({
+            seller_id: newListing.seller_id,
             title: newListing.title,
             price: newListing.price,
             category: newListing.category,
@@ -492,7 +493,11 @@ if (!savedListing) {
     return;
 }
 
-listings.unshift(savedListing);
+listings.unshift({
+    ...savedListing,
+    createdAt: new Date(savedListing.created_at).getTime(),
+    seller: seller
+});
 
             visibleCount = PAGE_SIZE;
 
