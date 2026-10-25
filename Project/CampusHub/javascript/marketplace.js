@@ -74,29 +74,29 @@ export function initializeMarketplace() {
 
     let listings = [];
 
+    
+async function saveListings(newListing) {
+    const { data, error } = await supabase
+        .from('marketplace_listings')
+        .insert({
+            seller_id: newListing.seller_id,
+            title: newListing.title,
+            price: newListing.price,
+            category: newListing.category,
+            condition: newListing.condition,
+            description: newListing.description,
+            status: 'active'
+        })
+        .select()
+        .single();
 
-    async function saveListings(newListing) {
-        const { data, error } = await supabase
-            .from('marketplace_listings')
-            .insert({
-                title: newListing.title,
-                price: newListing.price,
-                category: newListing.category,
-                condition: newListing.condition,
-                description: newListing.description,
-                status: 'active'
-            })
-            .select()
-            .single();
-
-        if (error) {
-            console.error("Could not save marketplace listing:", error);
-            return null;
-        }
-
-        return data;
+    if (error) {
+        console.error("Could not save marketplace listing:", error);
+        return null;
     }
 
+    return data;
+}
 
     function formatPrice(price) {
         return "$" + Number(price).toFixed(2);
@@ -492,7 +492,11 @@ export function initializeMarketplace() {
                 return;
             }
 
-            listings.unshift(savedListing);
+listings.unshift({
+    ...savedListing,
+    createdAt: new Date(savedListing.created_at).getTime(),
+    seller: seller
+});
 
             visibleCount = PAGE_SIZE;
 
@@ -551,7 +555,7 @@ export function initializeMarketplace() {
     priceDropdown.style.display = "none";
 
     loadListings().then(function (data) {
-        listings = data.length > 0 ? data : exampleListings;
+        listings = data;
         displayListings();
     });
 }
