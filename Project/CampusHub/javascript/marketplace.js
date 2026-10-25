@@ -148,9 +148,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const matchesCategory =
                 category === "" || listing.category === category;
             const matchesCondition =
-                condition === "" || listing.condtion === condition;
+                condition === "" || listing.condition === condition;
             const matchesMin =
-                minPrice === "" || listing.price <= Number(minPrice);
+                minPrice === "" || listing.price >= Number(minPrice);
             const matchesMax =
                 maxPrice === "" || listing.price <= Number(maxPrice);
             return matchesSearch &&
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayListings() {
         const filteredLisitngs = getFilteredListings();
         const visibleListings = filteredLisitngs.slice(0, visibleCount);
-        listingsGrid.innterHTML = "";
+        listingsGrid.innerHTML = "";
         visibleListings.forEach(function (listing) {
             const card = document.createElement("div");
             card.className = "listing-card";
