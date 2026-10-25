@@ -95,28 +95,8 @@ async function saveListings(newListing) {
         return null;
     }
 
-    async function saveListings(newListing) {
-        const { data, error } = await supabase
-            .from('marketplace_listings')
-            .insert({
-                title: newListing.title,
-                price: newListing.price,
-                category: newListing.category,
-                condition: newListing.condition,
-                description: newListing.description,
-                status: 'active'
-            })
-            .select()
-            .single();
-
-        if (error) {
-            console.error("Could not save marketplace listing:", error);
-            return null;
-        }
-
-        return data;
-    }
-
+    return data;
+}
 
     function formatPrice(price) {
         return "$" + Number(price).toFixed(2);
@@ -575,7 +555,7 @@ listings.unshift({
     priceDropdown.style.display = "none";
 
     loadListings().then(function (data) {
-        listings = data.length > 0 ? data : exampleListings;
+        listings = data;
         displayListings();
     });
 }
