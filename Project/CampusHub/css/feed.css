@@ -91,3 +91,40 @@ body {
     margin-top: 4px;
     margin-left: 10px;
 }
+
+.comment-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.replies-container {
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.reply {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reply-button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #65676b;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.comment-actions .comment-timestamp {
+    margin-top: 0;
+}

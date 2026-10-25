@@ -52,25 +52,25 @@ export function initializeMarketplace() {
     ];
 
     async function loadListings() {
-    const { data, error } = await supabase
-        .from('marketplace_listings')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+        const { data, error } = await supabase
+            .from('marketplace_listings')
+            .select('*')
+            .eq('status', 'active')
+            .order('created_at', { ascending: false });
 
-    if (error) {
-        console.error('Could not load marketplace listings:', error);
-        return [];
+        if (error) {
+            console.error('Could not load marketplace listings:', error);
+            return [];
+        }
+
+        return (data || []).map(function (listing) {
+            return {
+                ...listing,
+                createdAt: new Date(listing.created_at).getTime(),
+                seller: listing.seller || "CampusHub Student"
+            };
+        });
     }
-
-    return (data || []).map(function(listing) {
-    return {
-        ...listing,
-        createdAt: new Date(listing.created_at).getTime(),
-        seller: listing.seller || "CampusHub Student"
-    };
-});
-}
 
     let listings = [];
 
@@ -95,8 +95,27 @@ async function saveListings(newListing) {
         return null;
     }
 
-    return data;
-}
+    async function saveListings(newListing) {
+        const { data, error } = await supabase
+            .from('marketplace_listings')
+            .insert({
+                title: newListing.title,
+                price: newListing.price,
+                category: newListing.category,
+                condition: newListing.condition,
+                description: newListing.description,
+                status: 'active'
+            })
+            .select()
+            .single();
+
+        if (error) {
+            console.error("Could not save marketplace listing:", error);
+            return null;
+        }
+
+        return data;
+    }
 
 
     function formatPrice(price) {
@@ -138,7 +157,7 @@ async function saveListings(newListing) {
         return `Posted ${days} day(s) ago`;
     }
 
-   
+
     function makeElement(tag, className, content) {
         const element = document.createElement(tag);
 
@@ -158,70 +177,70 @@ async function saveListings(newListing) {
         const condition = conditionFilter.value;
         const minPrice = minPriceInput.value;
         const maxPrice = maxPriceInput.value;
-    
 
-//Check which listings match the filters 
-return listings.filter(function (listing){
-    const matchesSearch =
-    listing.title.toLowerCase().includes(search) ||
-    listing.description.toLowerCase().includes(search);
 
-const matchesCategory =
-    category === "" || listing.category === category;
-const matchesCondition = 
-    condition === "" || listing.condition === condition;
-const matchesMin = 
-    minPrice === "" || listing.price >= Number(minPrice);
-const matchesMax =
-    maxPrice === "" || listing.price <= Number(maxPrice);
-return matchesSearch &&
-    matchesCategory &&
-    matchesCondition &&
-    matchesMin &&
-    matchesMax;
-});
-}
+        //Check which listings match the filters 
+        return listings.filter(function (listing) {
+            const matchesSearch =
+                listing.title.toLowerCase().includes(search) ||
+                listing.description.toLowerCase().includes(search);
 
-function displayListings() {
-    const filteredListings = getFilteredListings();
-    const visibleListings = filteredListings.slice(0, visibleCount);
-    listingsGrid.innerHTML= "";
-    visibleListings.forEach(function (listing){
-        const card = document.createElement("div");
-        card.className = "listing-card";
+            const matchesCategory =
+                category === "" || listing.category === category;
+            const matchesCondition =
+                condition === "" || listing.condition === condition;
+            const matchesMin =
+                minPrice === "" || listing.price >= Number(minPrice);
+            const matchesMax =
+                maxPrice === "" || listing.price <= Number(maxPrice);
+            return matchesSearch &&
+                matchesCategory &&
+                matchesCondition &&
+                matchesMin &&
+                matchesMax;
+        });
+    }
 
-        const image = makeElement("div", "listing-image", "No Image");
-        const info = makeElement("div", "listing-info");
-        const title = makeElement("h3", "", listing.title);
-        const price = makeElement(
-            "p",
-            "listing-price",
-            formatPrice(listing.price)
-        );
-        const condition = makeElement(
-            "p",
-            "listing-condition" ,
-            formatCondition(listing.condition)
-        );
-        const seller = makeElement("div", "listing-seller");
-        const sellerName = makeElement("span","",listing.seller);
-        seller.appendChild(sellerName);
-        const posted = makeElement(
-            "p",
-            "listing-time",
-            timeAgo(listing.createdAt)
-        );
-         info.appendChild(title);
-         info.appendChild(price);
-         info.appendChild(condition);
-         info.appendChild(seller);
-         info.appendChild(posted);
-         card.appendChild(image);
-         card.appendChild(info);
-         card.addEventListener("click", function() {
-        showListingDetails(listing);
-    });
-    listingsGrid.appendChild(card);
+    function displayListings() {
+        const filteredListings = getFilteredListings();
+        const visibleListings = filteredListings.slice(0, visibleCount);
+        listingsGrid.innerHTML = "";
+        visibleListings.forEach(function (listing) {
+            const card = document.createElement("div");
+            card.className = "listing-card";
+
+            const image = makeElement("div", "listing-image", "No Image");
+            const info = makeElement("div", "listing-info");
+            const title = makeElement("h3", "", listing.title);
+            const price = makeElement(
+                "p",
+                "listing-price",
+                formatPrice(listing.price)
+            );
+            const condition = makeElement(
+                "p",
+                "listing-condition",
+                formatCondition(listing.condition)
+            );
+            const seller = makeElement("div", "listing-seller");
+            const sellerName = makeElement("span", "", listing.seller);
+            seller.appendChild(sellerName);
+            const posted = makeElement(
+                "p",
+                "listing-time",
+                timeAgo(listing.createdAt)
+            );
+            info.appendChild(title);
+            info.appendChild(price);
+            info.appendChild(condition);
+            info.appendChild(seller);
+            info.appendChild(posted);
+            card.appendChild(image);
+            card.appendChild(info);
+            card.addEventListener("click", function () {
+                showListingDetails(listing);
+            });
+            listingsGrid.appendChild(card);
         });
 
         noListings.style.display =
@@ -231,7 +250,7 @@ function displayListings() {
             filteredListings.length > visibleCount ? "block" : "none";
     }
 
-   
+
     function createPopup() {
         const overlay = document.createElement("div");
 
@@ -269,7 +288,7 @@ function displayListings() {
         return { overlay, popup };
     }
 
-    
+
     function showListingDetails(listing) {
         const { overlay, popup } = createPopup();
 
@@ -317,7 +336,7 @@ function displayListings() {
         popup.appendChild(closeButton);
     }
 
-  
+
     function createFormInput(labelText, type, required = true) {
         const wrapper = document.createElement("div");
         wrapper.style.marginBottom = "12px";
@@ -373,7 +392,7 @@ function displayListings() {
         return { wrapper, select };
     }
 
-   
+
     function showSellForm() {
         const { overlay, popup } = createPopup();
 
@@ -449,7 +468,7 @@ function displayListings() {
         popup.appendChild(heading);
         popup.appendChild(form);
 
-        form.addEventListener("submit", async function (event) { 
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
 
             const title = titleField.input.value.trim();
@@ -467,31 +486,31 @@ function displayListings() {
                 return;
             }
 
-            
-const newListing = {
-    title: title,
-    price: price,
-    category: category,
-    condition: condition,
-    description: description
-};
+
+            const newListing = {
+                title: title,
+                price: price,
+                category: category,
+                condition: condition,
+                description: description
+            };
 
 
-             const { data: { user }, error: authError } = await supabase.auth.getUser();
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-if (authError || !user) {
-    alert("Please sign in to sell an item.");
-    return;
-}
+            if (authError || !user) {
+                alert("Please sign in to sell an item.");
+                return;
+            }
 
-newListing.seller_id = user.id;
+            newListing.seller_id = user.id;
 
-const savedListing = await saveListings(newListing);
+            const savedListing = await saveListings(newListing);
 
-if (!savedListing) {
-    alert("Your listing could not be saved.");
-    return;
-}
+            if (!savedListing) {
+                alert("Your listing could not be saved.");
+                return;
+            }
 
 listings.unshift({
     ...savedListing,
@@ -555,10 +574,10 @@ listings.unshift({
     });
     priceDropdown.style.display = "none";
 
-loadListings().then(function(data) {
-    listings = data;
-    displayListings();
-});
+    loadListings().then(function (data) {
+        listings = data.length > 0 ? data : exampleListings;
+        displayListings();
+    });
 }
-        
- 
+
+
