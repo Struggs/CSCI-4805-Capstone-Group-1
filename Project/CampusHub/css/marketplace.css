@@ -236,3 +236,14 @@
         gap: 12px;
     }
 }
+/* Keep Sell an Item button red */
+#create-listing {
+    background-color: #eb2825;
+    color: white;
+    border: none;
+    opacity: 1;
+}
+
+#create-listing:hover {
+    background-color: #c9201e;
+}
