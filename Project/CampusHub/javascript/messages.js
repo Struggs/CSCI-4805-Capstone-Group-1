@@ -19,6 +19,90 @@ export function initializeMessages() {
     const messageForm = document.getElementById("message-form")
     const messageInput = document.getElementById("message-input");
     let selectedConversation = null;
+    const newConversationButton = document.getElementById("new-conversation-button");
+const studentSelect = document.getElementById("student-select");
+
+newConversationButton.addEventListener("click", async function () {
+    clearMessageError();
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        showMessageError("Please log in first.");
+        return;
+    }
+
+    const { data: students, error } = await supabase
+        .from("profiles")
+        .select("id, name")
+        .neq("id", user.id)
+        .order("name");
+
+    if (error) {
+        console.error("Unable to load students:", error);
+        showMessageError("Unable to load students.");
+        return;
+    }
+
+    studentSelect.innerHTML = '<option value="">Select a student</option>';
+
+    for (const student of students) {
+        const option = document.createElement("option");
+        option.value = student.id;
+        option.textContent = student.name || "Unknown student";
+        studentSelect.appendChild(option);
+    }
+
+    studentSelect.hidden = false;
+});
+
+studentSelect.addEventListener("change", async function () {
+    const otherUserId = studentSelect.value;
+
+    if (!otherUserId) return;
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        showMessageError("Please log in first.");
+        return;
+    }
+
+    const { data: existing, error: lookupError } = await supabase
+        .from("conversations")
+        .select("id, user1_id, user2_id")
+        .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`);
+
+    if (lookupError) {
+        console.error("Unable to check conversations:", lookupError);
+        showMessageError("Unable to check conversations.");
+        return;
+    }
+
+    const previous = existing.find(chat =>
+        (chat.user1_id === user.id && chat.user2_id === otherUserId) ||
+        (chat.user2_id === user.id && chat.user1_id === otherUserId)
+    );
+
+    if (!previous) {
+        const { error } = await supabase
+            .from("conversations")
+            .insert({
+                user1_id: user.id,
+                user2_id: otherUserId
+            });
+
+        if (error) {
+            console.error("Unable to create conversation:", error);
+            showMessageError("Unable to create conversation.");
+            return;
+        }
+    }
+
+    studentSelect.hidden = true;
+    studentSelect.value = "";
+    await loadConversations();
+});
     async function loadConversations() {
         const { data: { user }, error: authError } =
             await supabase.auth.getUser();
@@ -39,12 +123,40 @@ export function initializeMessages() {
             return;
         }
 
-        if (data.length === 0) {
-            return;
-        }
-        conversationList.innerHTML = "";
+       conversationList.querySelectorAll(".conversation").forEach(function (conversation) {
+    conversation.remove();
+});
 
-        for (const chat of data) {
+if (data.length === 0) {
+    return;
+}
+const conversationsWithTime = await Promise.all(
+    data.map(async function (chat) {
+        const { data: latestMessage, error } = await supabase
+            .from("messages")
+            .select("created_at")
+            .eq("conversation_id", chat.id)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+        if (error) {
+            console.error("Unable to load conversation time:", error);
+        }
+
+        return {
+            ...chat,
+            lastMessageTime: latestMessage?.created_at || null
+        };
+    })
+);
+
+conversationsWithTime.sort(function (a, b) {
+    return new Date(b.lastMessageTime || 0) -
+           new Date(a.lastMessageTime || 0);
+});
+
+        for (const chat of conversationsWithTime) { 
             const conversation = document.createElement("div");
             conversation.classList.add("conversation");
             conversation.dataset.conversationId = chat.id;
@@ -52,14 +164,64 @@ export function initializeMessages() {
             const otherUserId =
                 chat.user1_id === user.id ? chat.user2_id : chat.user1_id;
 
-            const name = document.createElement("h3");
-            name.textContent = otherUserId;
+            const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("name")
+    .eq("id", otherUserId)
+    .maybeSingle();
+
+if (profileError) {
+    console.error("Unable to load student name:", profileError);
+}
+
+const name = document.createElement("h3");
+name.textContent = profile?.name || "Unknown student";
 
             const preview = document.createElement("p");
-            preview.textContent = "No messages yet";
+
+const { data: latestMessage, error: latestMessageError } = await supabase
+    .from("messages")
+    .select("message_text, created_at ")
+    .eq("conversation_id", chat.id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+if (latestMessageError) {
+    console.error("Unable to load message preview:", latestMessageError);
+}
+
+preview.textContent = latestMessage?.message_text || "No messages yet";
 
             const previewTime = document.createElement("span");
-            previewTime.textContent = "";
+previewTime.classList.add("conversation-time");
+
+const messageDate = latestMessage?.created_at
+    ? new Date(latestMessage.created_at)
+    : null;
+
+if (messageDate) {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (messageDate.toDateString() === today.toDateString()) {
+        previewTime.textContent = messageDate.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit"
+        });
+    } else if (messageDate.toDateString() === yesterday.toDateString()) {
+        previewTime.textContent = "Yesterday";
+    } else {
+        previewTime.textContent = messageDate.toLocaleDateString([], {
+            month: "short",
+            day: "numeric",
+            year: messageDate.getFullYear() !== today.getFullYear()
+                ? "numeric"
+                : undefined
+        });
+    }
+}
 
             conversation.appendChild(name);
             conversation.appendChild(preview);
