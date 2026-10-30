@@ -1,11 +1,7 @@
 
 import { supabase } from './supabaseClient.js';
 import { initializeComments } from './comments.js';
-<<<<<<< HEAD
 import { getCurrentUserProfile } from './profileutils.js';
-=======
-import { getProfileImageUrl } from './profileutils.js';
->>>>>>> 66c6b11c6b8d61c53ad86299001afda9384a9d75
 
 let feedPosts = [];
 let currentAudience = 'All';
@@ -167,11 +163,14 @@ function showActivityFeed(posts, container, audience = 'All') {
         const card = clone.querySelector('.post-card');
         const profileImage = clone.querySelector('.post-profile-picture');
 
-        // Display the author's profile picture
         if (profileImage) {
-            profileImage.src = getProfileImageUrl(profile?.image_path);
-            profileImage.alt = profile?.name || 'Student profile';
-            profileImage.hidden = false;
+            if (profile?.image_path) {
+                profileImage.src = profile.image_path;
+                profileImage.alt = profile.name || 'Student profile';
+                profileImage.hidden = false;
+            } else {
+                profileImage.hidden = true;
+            }
         }
 
         // Add the post image if one is stored.
