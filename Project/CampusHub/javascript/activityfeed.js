@@ -68,12 +68,12 @@ async function loadPosts() {
     // attaches profiles to their posts. copies properties of post then
     // looks up authors profile using id. adds profile to new "profile" property
     // for post.
-    feedPosts = (posts ?? []).map(post => ({
+feedPosts = (posts ?? []).map(post => ({
     ...post,
     profile: profilesById[post.user_id] ?? null
     }));
 
-    const currentProfile = await getCurrentUserProfile();
+const currentProfile = await getCurrentUserProfile();
 
     if (!currentProfile) {
     feedContainer.textContent = 'Unable to identify your student profile.';
