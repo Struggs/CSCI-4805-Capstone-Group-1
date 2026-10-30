@@ -1,6 +1,7 @@
 
 import { supabase } from './supabaseClient.js';
 import { initializeComments } from './comments.js';
+import { getCurrentUserProfile } from './profileutils.js';
 
 let feedPosts = [];
 let currentAudience = 'All';
@@ -68,11 +69,43 @@ async function loadPosts() {
     // looks up authors profile using id. adds profile to new "profile" property
     // for post.
     feedPosts = (posts ?? []).map(post => ({
-        ...post,
-        profile: profilesById[post.user_id] ?? null
+    ...post,
+    profile: profilesById[post.user_id] ?? null
     }));
 
-    showActivityFeed(feedPosts, feedContainer, currentAudience);
+    const currentProfile = await getCurrentUserProfile();
+
+    if (!currentProfile) {
+    feedContainer.textContent = 'Unable to identify your student profile.';
+    return;
+    }
+
+    const visiblePosts = feedPosts.filter(post => {
+
+    switch (post.audience_type) {
+
+        case 'all_students':
+            return true;
+
+        case 'major':
+            return post.audience_value === currentProfile.major;
+
+        case 'class_year':
+            return post.audience_value === currentProfile.school_year;
+
+        case 'transfer_status':
+            return currentProfile.transfer_student === true;
+
+        case 'course_subject':
+            // Course enrollment matching still needs to be implemented.
+            return false;
+
+        default:
+            return false;
+    }
+    });
+
+    showActivityFeed(visiblePosts, feedContainer);
 }
 
 //finds template in html
@@ -89,9 +122,11 @@ function showActivityFeed(posts, container, audience = 'All') {
     //New audience types use audience_type and audience_value.
     const filteredPosts = audience === 'All'
         ? posts
-        : posts.filter(post =>
+        : posts.filter(
+            post =>
             post.audience === audience ||
-            post.audience_type === audience
+            post.audience_type === audience 
+
         );
 
     container.replaceChildren();
@@ -153,7 +188,7 @@ function showActivityFeed(posts, container, audience = 'All') {
         const commentsSection = card.querySelector('.comments-section');
 
         commentsButton.addEventListener('click', () => {
-            commentsSection.hidden = !commentsSection.hidden;
+        commentsSection.hidden = !commentsSection.hidden;
         });
 
         initializeComments(card, post.id);

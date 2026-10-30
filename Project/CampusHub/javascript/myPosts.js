@@ -317,6 +317,23 @@ export function closeEditPostInterface() {
     editingPost = null;
 }
 
+export async function deletePost(){
+
+    const { error } = await supabase
+        .from('posts')
+        .delete({
+            title: title || null,
+            post_text: description,
+            audience: 'All Students',
+            audience_type: audienceType,
+            audience_value: audienceValue
+        })
+        .eq('id', editingPost.id)
+        .eq('user_id', authData.user.id)
+        .select('id');
+
+}
+
 window.editSubmission = editPostSubmission;
 window.closeEditPostInterface = closeEditPostInterface;
 window.deletePost = deletePost;
