@@ -23,6 +23,12 @@
 
                 <h3 class="post-title"></h3>
                 <p class="post-author"></p>
+                <img
+                class="post-image"
+                alt="Post attachment"
+                hidden
+                style="display:block; width:100%;max-width:600px; height: auto; object-fit: contain; border-radius: 8px; margin: 15px 0;"
+                >
                 <p class="post-desc"></p>
                 <div class="post-stats"></div>
 
@@ -67,8 +73,9 @@
 
                 <label for="postDescription">Description</label>
                 <textarea id="postDescription" placeholder="Enter Post Description" maxlength="500"></textarea>
-                <label for="postImage">Add Picture</label>
-                <input type="file" id="postImage" accept="image/*">
+
+                <label for="postImage">Add Picture (optional) </label>
+                <input type="file" id="postImage" accept="image/jpeg,image/png">
 
                 <label for="audienceFilter">Target Audience *</label>
                 <select id="audienceFilter" name="audienceFilter" onchange="handleAudienceChange()" required>
