@@ -11,30 +11,17 @@
         <h1>Messages</h1>
         <section id="conversation-list">
             <h2>Conversations</h2>
-            <div class="conversation">
-                <h3>John Doe</h3>
-                <p>Hey, how's it going?</p>
-                <span>10:30 AM</span>
-            </div>
-            <div class="conversation">
-                <h3>Jane Smith</h3>
-                <p>Are we still on for the meeting tomorrow?</p>
-                <span>Yesterday</span>
-            </div>
-        </section>
+        <button type="button" id="new-conversation-button">
+        New Conversation
+    </button>
+    <select id="student-select" hidden>
+        <option value="">Select a student</option>
+    </select>
+</section>
         <section id="current-chat">
-            <h2>John Doe</h2>
-        <div id="message-history">
-            <div class="received-message">
-                <p>Hey, how's it going?</p>
-                <span>10:30 AM</span>
-            </div>
-            <div class="sent-message">
-                <p>I'm doing good, how about you?</p>
-                <span>10:31 AM</span>
-            </div>
-        </div>
-        <form id="message-form">
+        <h2>Select a conversation</h2>
+<div id="message-history"></div>
+            <form id="message-form">
             <label for="message-input">Message</label>
             <textarea
             id="message-input"

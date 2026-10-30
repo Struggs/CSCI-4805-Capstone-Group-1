@@ -1,5 +1,5 @@
-
-document.addEventListener("DOMContentLoaded", function () {
+import { supabase } from './supabaseClient.js';
+export function initializeMarketplace() {
     //Marketplace elements
     const searchInput = document.querySelector(".marketplace-search input");
     const categoryFilter = document.getElementById("category");
@@ -51,32 +51,52 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     ];
 
-    function loadListings() {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved !== null) {
-                const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed)) {
-                    return parsed;
-                }
-            }
-        } catch (error) {
-            console.error("Could not load marketplace listings:", error);
+    async function loadListings() {
+        const { data, error } = await supabase
+            .from('marketplace_listings')
+            .select('*')
+            .eq('status', 'active')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Could not load marketplace listings:', error);
+            return [];
         }
-        return exampleListings.map(listing => ({ ...listing }));
+
+        return (data || []).map(function (listing) {
+            return {
+                ...listing,
+                createdAt: new Date(listing.created_at).getTime(),
+                seller: listing.seller || "CampusHub Student"
+            };
+        });
     }
 
-    let listings = loadListings();
+    let listings = [];
 
-    function saveListings() {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
-            return true;
-        } catch (error) {
-            console.error("Could not save marketplace listings:", error);
-            return false;
-        }
+    
+async function saveListings(newListing) {
+    const { data, error } = await supabase
+        .from('marketplace_listings')
+        .insert({
+            seller_id: newListing.seller_id,
+            title: newListing.title,
+            price: newListing.price,
+            category: newListing.category,
+            condition: newListing.condition,
+            description: newListing.description,
+            status: 'active'
+        })
+        .select()
+        .single();
+
+    if (error) {
+        console.error("Could not save marketplace listing:", error);
+        return null;
     }
+
+    return data;
+}
 
     function formatPrice(price) {
         return "$" + Number(price).toFixed(2);
@@ -162,15 +182,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displayListings() {
-        const filteredLisitngs = getFilteredListings();
-        const visibleListings = filteredLisitngs.slice(0, visibleCount);
+        const filteredListings = getFilteredListings();
+        const visibleListings = filteredListings.slice(0, visibleCount);
         listingsGrid.innerHTML = "";
         visibleListings.forEach(function (listing) {
             const card = document.createElement("div");
             card.className = "listing-card";
 
             const image = makeElement("div", "listing-image", "No Image");
-            const title = makeElement("div", "listing-info");
+            const info = makeElement("div", "listing-info");
+            const title = makeElement("h3", "", listing.title);
             const price = makeElement(
                 "p",
                 "listing-price",
@@ -368,13 +389,13 @@ document.addEventListener("DOMContentLoaded", function () {
         priceField.input.step = "0.01";
 
         const categoryField = createFormSelect("Category", [
-            { value: "textbooks", label: "Textbooks" },
-            { value: "electronics", label: "Electronics" },
-            { value: "dorm-essentials", label: "Dorm Essentials" },
-            { value: "clothing", label: "Clothing" },
-            { value: "tickets", label: "Tickets" },
-            { value: "other", label: "Other" }
-        ]);
+    { value: "Textbooks", label: "Textbooks" },
+    { value: "Electronics", label: "Electronics" },
+    { value: "Dorm Essentials", label: "Dorm Essentials" },
+    { value: "Clothing", label: "Clothing" },
+    { value: "Tickets", label: "Tickets" },
+    { value: "Other", label: "Other" }
+]);
 
         const conditionField = createFormSelect("Condition", [
             { value: "new", label: "New" },
@@ -427,7 +448,7 @@ document.addEventListener("DOMContentLoaded", function () {
         popup.appendChild(heading);
         popup.appendChild(form);
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
 
             const title = titleField.input.value.trim();
@@ -445,24 +466,37 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+
             const newListing = {
-                id: Date.now(),
                 title: title,
                 price: price,
                 category: category,
                 condition: condition,
-                seller: seller,
-                description: description,
-                createdAt: Date.now()
+                description: description
             };
 
-            listings.unshift(newListing);
 
-            if (!saveListings()) {
-                listings.shift();
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+            if (authError || !user) {
+                alert("Please sign in to sell an item.");
+                return;
+            }
+
+            newListing.seller_id = user.id;
+
+            const savedListing = await saveListings(newListing);
+
+            if (!savedListing) {
                 alert("Your listing could not be saved.");
                 return;
             }
+
+listings.unshift({
+    ...savedListing,
+    createdAt: new Date(savedListing.created_at).getTime(),
+    seller: seller
+});
 
             visibleCount = PAGE_SIZE;
 
@@ -519,7 +553,11 @@ document.addEventListener("DOMContentLoaded", function () {
         displayListings();
     });
     priceDropdown.style.display = "none";
-    displayListings();
-});
+
+    loadListings().then(function (data) {
+        listings = data;
+        displayListings();
+    });
+}
 
 
