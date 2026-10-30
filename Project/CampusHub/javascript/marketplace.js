@@ -389,13 +389,13 @@ async function saveListings(newListing) {
         priceField.input.step = "0.01";
 
         const categoryField = createFormSelect("Category", [
-            { value: "textbooks", label: "Textbooks" },
-            { value: "electronics", label: "Electronics" },
-            { value: "dorm-essentials", label: "Dorm Essentials" },
-            { value: "clothing", label: "Clothing" },
-            { value: "tickets", label: "Tickets" },
-            { value: "other", label: "Other" }
-        ]);
+    { value: "Textbooks", label: "Textbooks" },
+    { value: "Electronics", label: "Electronics" },
+    { value: "Dorm Essentials", label: "Dorm Essentials" },
+    { value: "Clothing", label: "Clothing" },
+    { value: "Tickets", label: "Tickets" },
+    { value: "Other", label: "Other" }
+]);
 
         const conditionField = createFormSelect("Condition", [
             { value: "new", label: "New" },

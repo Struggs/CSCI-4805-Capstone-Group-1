@@ -220,3 +220,39 @@ min-width: 0;
 
     }
 }
+/* New conversation button */
+#new-conversation-button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    background-color: #ba0c2f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#new-conversation-button:hover {
+    background-color: #990a27;
+}
+
+/* Student selection dropdown */
+#student-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 14px;
+}
+
+#student-select:focus {
+    border-color: #ba0c2f;
+    outline: none;
+}
+
+#student-select[hidden] {
+    display: none;
+}
