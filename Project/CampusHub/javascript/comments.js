@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js';
 import { getUserProfile, getProfileImageUrl } from './profileutils.js';
+import { getLikeCount, hasUserLiked, addLike, removeLike } from './likeutils.js';
 
 // Original standalone comments functionality.
 // Being adapted for individual Activity Feed posts.
@@ -155,7 +156,8 @@ async function loadComments(postId, elements, offset = 0) {
 
 }
 
-async function displayComments(comments, commentsList, viewMoreCommentsButton, postId) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
+async function displayComments(comments, commentsList, viewMoreCommentsButton, postId) {   // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
+    supabase.auth.getUser();
     for (const comment of comments) {
         const commentText = comment.comment_text;
         const commentTimestamp = document.createElement('small');
@@ -213,7 +215,12 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         const commentActions = document.createElement('div');
         commentActions.classList.add('comment-actions');
 
+        const likeButton = document.createElement('button');
+        likeButton.classList.add('like-button');
+        likeButton.textContent = '\u2661';
+
         commentActions.appendChild(commentTimestamp);
+        commentActions.appendChild(likeButton);
 
 
         const replyButton = document.createElement('button');
@@ -281,6 +288,11 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         commentDiv.appendChild(commentWrapper);
         commentsList.appendChild(commentDiv);   // Append the comment to the comments list
 
+        const likeCount = await getLikeCount(comment.id, 'comment');
+        const likeCountSpan = document.createElement('span');
+        likeCountSpan.classList.add('like-count');
+        likeCountSpan.textContent = likeCount;
+        commentActions.appendChild(likeCountSpan);
     }
 
 }
@@ -333,3 +345,4 @@ async function loadReplies(parentCommentId, repliesContainer) {
         repliesContainer.appendChild(replyDiv);
     }
 }
+
