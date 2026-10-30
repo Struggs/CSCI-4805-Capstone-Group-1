@@ -74,29 +74,29 @@ export function initializeMarketplace() {
 
     let listings = [];
 
+    
+async function saveListings(newListing) {
+    const { data, error } = await supabase
+        .from('marketplace_listings')
+        .insert({
+            seller_id: newListing.seller_id,
+            title: newListing.title,
+            price: newListing.price,
+            category: newListing.category,
+            condition: newListing.condition,
+            description: newListing.description,
+            status: 'active'
+        })
+        .select()
+        .single();
 
-    async function saveListings(newListing) {
-        const { data, error } = await supabase
-            .from('marketplace_listings')
-            .insert({
-                title: newListing.title,
-                price: newListing.price,
-                category: newListing.category,
-                condition: newListing.condition,
-                description: newListing.description,
-                status: 'active'
-            })
-            .select()
-            .single();
-
-        if (error) {
-            console.error("Could not save marketplace listing:", error);
-            return null;
-        }
-
-        return data;
+    if (error) {
+        console.error("Could not save marketplace listing:", error);
+        return null;
     }
 
+    return data;
+}
 
     function formatPrice(price) {
         return "$" + Number(price).toFixed(2);
@@ -389,13 +389,13 @@ export function initializeMarketplace() {
         priceField.input.step = "0.01";
 
         const categoryField = createFormSelect("Category", [
-            { value: "textbooks", label: "Textbooks" },
-            { value: "electronics", label: "Electronics" },
-            { value: "dorm-essentials", label: "Dorm Essentials" },
-            { value: "clothing", label: "Clothing" },
-            { value: "tickets", label: "Tickets" },
-            { value: "other", label: "Other" }
-        ]);
+    { value: "Textbooks", label: "Textbooks" },
+    { value: "Electronics", label: "Electronics" },
+    { value: "Dorm Essentials", label: "Dorm Essentials" },
+    { value: "Clothing", label: "Clothing" },
+    { value: "Tickets", label: "Tickets" },
+    { value: "Other", label: "Other" }
+]);
 
         const conditionField = createFormSelect("Condition", [
             { value: "new", label: "New" },
@@ -492,7 +492,11 @@ export function initializeMarketplace() {
                 return;
             }
 
-            listings.unshift(savedListing);
+listings.unshift({
+    ...savedListing,
+    createdAt: new Date(savedListing.created_at).getTime(),
+    seller: seller
+});
 
             visibleCount = PAGE_SIZE;
 
@@ -551,7 +555,7 @@ export function initializeMarketplace() {
     priceDropdown.style.display = "none";
 
     loadListings().then(function (data) {
-        listings = data.length > 0 ? data : exampleListings;
+        listings = data;
         displayListings();
     });
 }
