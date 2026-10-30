@@ -12,13 +12,3 @@ export const supabase = createClient(
     supabaseUrl,
     supabaseKey
 )
-
-console.log('supabase connected', supabase)
-
-// test database connection
-const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-
-console.log('database data', data)
-console.log('database error', error)

@@ -39,7 +39,6 @@ async function loadMyPosts(){
     myPosts = posts ?? [];
     showMyPosts(myPosts, myPostContainer);
 }
-
 //finds template in html
 function showMyPosts(posts, container) {
 
@@ -336,6 +335,8 @@ export async function deletePost(){
 
 window.editSubmission = editPostSubmission;
 window.closeEditPostInterface = closeEditPostInterface;
-window.deletePost = deletePost;
+
+//this is the issue
+//window.deletePost = deletePost;
 
 
