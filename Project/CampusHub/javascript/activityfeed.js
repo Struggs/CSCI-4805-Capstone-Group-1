@@ -1,7 +1,7 @@
 
 import { supabase } from './supabaseClient.js';
 import { initializeComments } from './comments.js';
-import { getProfileImageUrl } from './profileutils.js';
+import { getCurrentUserProfile } from './profileutils.js';
 
 let feedPosts = [];
 let currentAudience = 'All';
@@ -11,13 +11,59 @@ export async function initializeActivityFeed() {
     await loadPosts();
 }
 
+export async function getPostImageUrl(image_path){
+
+    if (!image_path) {
+        return ''
+    }
+
+    const {data} = await supabase.storage
+    .from('post_Images')
+    .getPublicUrl(image_path)
+
+    return data.publicUrl
+}
+
+async function uploadImage(file, userId){
+
+    if (!file){
+        return null;
+    }
+    if (!file.type.startsWith('image/')){
+        throw new Error('please upload a valid image')
+    }
+    if (file.size > 5 *1024 * 1024){
+        throw new Error('file size too large')
+    }
+    const fileExtension = file.name.split('.').pop();
+    const fileName = `${crypto.randomUUID()}.${fileExtension}`;
+
+    // Store images inside a folder belonging to the user.
+    const imagePath = `${userId}/${fileName}`;
+
+    const { data, error } = await supabase.storage
+    .from('post_Images')
+    .upload(imagePath, file, {
+    cacheControl: '3600',
+    upsert: false
+    });
+
+    if (error) {
+        console.error('Image upload failed:', error);
+        throw error;
+    }
+
+    return data.path;
+}
+
 // searches for container in html, if no container,
 //  throw error and return
 // else fetch posts table from supabase and specific columns.
 //handles if supabase throws error
-async function loadPosts() {
+export async function loadPosts() {
     const { data: authData } = await supabase.auth.getUser();
     const feedContainer = document.getElementById('feed');
+    
 
     if (!feedContainer) {
         console.error('Activity feed container was not found.');
@@ -69,15 +115,47 @@ async function loadPosts() {
     // looks up authors profile using id. adds profile to new "profile" property
     // for post.
     feedPosts = (posts ?? []).map(post => ({
-        ...post,
-        profile: profilesById[post.user_id] ?? null
+    ...post,
+    profile: profilesById[post.user_id] ?? null
     }));
 
-    showActivityFeed(feedPosts, feedContainer, currentAudience);
+    const currentProfile = await getCurrentUserProfile();
+
+    if (!currentProfile) {
+    feedContainer.textContent = 'Unable to identify your student profile.';
+    return;
+    }
+
+    const visiblePosts = feedPosts.filter(post => {
+
+    switch (post.audience_type) {
+
+        case 'all_students':
+            return true;
+
+        case 'major':
+            return post.audience_value === currentProfile.major;
+
+        case 'class_year':
+            return post.audience_value === currentProfile.school_year;
+
+        case 'transfer_status':
+            return currentProfile.transfer_student === true;
+
+        case 'course_subject':
+            // Course enrollment matching still needs to be implemented.
+            return false;
+
+        default:
+            return false;
+    }
+    });
+
+    await showActivityFeed(visiblePosts, feedContainer);
 }
 
 //finds template in html
-function showActivityFeed(posts, container, audience = 'All') {
+export async function showActivityFeed(posts, container, audience = 'All') {
     const template = document.getElementById('post-template');
 
     if (!container || !template) {
@@ -90,9 +168,11 @@ function showActivityFeed(posts, container, audience = 'All') {
     //New audience types use audience_type and audience_value.
     const filteredPosts = audience === 'All'
         ? posts
-        : posts.filter(post =>
+        : posts.filter(
+            post =>
             post.audience === audience ||
-            post.audience_type === audience
+            post.audience_type === audience 
+
         );
 
     container.replaceChildren();
@@ -105,7 +185,8 @@ function showActivityFeed(posts, container, audience = 'All') {
 
     //runs once for each post to give it its structure.
     //clone template for each post and tie profile
-    filteredPosts.forEach(post => {
+    for(const post of filteredPosts){
+
         const clone = template.content.cloneNode(true);
         const profile = post.profile;
 
@@ -126,39 +207,52 @@ function showActivityFeed(posts, container, audience = 'All') {
                 : '';
 
         //display profile image.
-        const card = clone.querySelector('.post-card');
         const profileImage = clone.querySelector('.post-profile-picture');
 
-        // Display the author's profile picture
         if (profileImage) {
-            profileImage.src = getProfileImageUrl(profile?.image_path);
-            profileImage.alt = profile?.name || 'Student profile';
-            profileImage.hidden = false;
+            if (profile?.image_path) {
+                profileImage.src = profile.image_path;
+                profileImage.alt = profile.name || 'Student profile';
+                profileImage.hidden = false;
+            } else {
+                profileImage.hidden = true;
+            }
         }
 
         // Add the post image if one is stored.
-        if (post.image_path) {
-            const image = document.createElement('img'); //creates element
-            image.src = post.image_path; //points to image
-            image.alt = 'Post attachment'; //gives text
-            image.className = 'post-image'; //css class
-            image.style.maxWidth = '100%'; //formatting
-            image.style.height = 'auto';
-            card.appendChild(image); // adds image to card
-        }
+        const image = clone.querySelector('.post-image')
+
+        if (image && post.image_path) {
+
+        const postImageUrl = await getPostImageUrl(post.image_path);
+
+            if (postImageUrl) {
+            image.src = postImageUrl;
+            image.alt = 'Post attachment';
+            image.hidden = false;
+            } else {
+            image.hidden = true;
+            }
+
+        } else if (image) {
+        image.hidden = true;
+        }   
+
+        const card = clone.querySelector('.post-card');
 
         const commentsButton = card.querySelector('.comments-button');
         const commentsSection = card.querySelector('.comments-section');
 
         commentsButton.addEventListener('click', () => {
-            commentsSection.hidden = !commentsSection.hidden;
+        commentsSection.hidden = !commentsSection.hidden;
         });
 
         initializeComments(card, post.id);
 
         // adds card to feed
         container.appendChild(clone);
-    });
+   
+    }
 }
 
 export async function createPost() {
@@ -244,6 +338,26 @@ export async function createPost() {
         audienceType,
         audienceValue
     });
+    const imageInput = document.getElementById('postImage');
+    const selectedImage = imageInput?.files[0];
+
+    let imagePath = null;
+
+    try {
+
+    if (selectedImage) {
+        imagePath = await uploadImage(
+            selectedImage,
+            authData.user.id
+        );
+    }
+
+    } catch (error) {
+
+    console.error('Error uploading post image:', error);
+    alert(`Image upload failed: ${error.message}`);
+    return;
+    }  
 
     const { error } = await supabase
         .from('posts')
@@ -251,7 +365,7 @@ export async function createPost() {
             user_id: authData.user.id,
             title: title || null,
             post_text: description,
-            image_path: null,
+            image_path: imagePath,
             audience: 'All Students',
             audience_type: audienceType,
             audience_value: audienceValue
@@ -267,9 +381,9 @@ export async function createPost() {
     titleInput.value = '';
     descriptionInput.value = '';
 
-    const imageInput = document.getElementById('postImage');
-    if (imageInput) imageInput.value = '';
-
+    if (imageInput) {
+    imageInput.value = '';
+}
     //Reset audience selections after a successful post.
     audienceInput.value = 'All Students';
     handleAudienceChange();
