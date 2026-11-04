@@ -46,6 +46,17 @@ async function loadSidebarUser() {
 // run when CampusHub first loads
 loadSidebarUser();
 
+// automatically open the activity feed
+window.addEventListener('DOMContentLoaded', () => {
+    const activityFeedButton = document.querySelector(
+        '.nav-button[data-page="feed.html"]'
+    );
+
+    if (activityFeedButton) {
+        activityFeedButton.click();
+    }
+});
+
 //runs when user clicks, event tells what was clicked
 navbar.addEventListener('click', async (event) => {
 
