@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient.js'
-
+import defaultProfileImage from '../images/default-profile.png'
 
 // gets a profile using a user's ID
 export async function getUserProfile(userId) {
@@ -49,16 +49,16 @@ export async function getCurrentUserProfile() {
 }
 
 
-// turns image_path into an image URL
+// get the student's profile picture or use the default
 export function getProfileImageUrl(imagePath) {
 
+    // use default picture if no image was uploaded
     if (!imagePath) {
-        return '../images/default-profile.png'
+        return defaultProfileImage
     }
 
-    const {
-        data
-    } = supabase.storage
+    // get uploaded picture from Supabase
+    const { data } = supabase.storage
         .from('profile-images')
         .getPublicUrl(imagePath)
 
