@@ -1,45 +1,138 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+
+/* campushub signup page */
+
+/* resets default spacing */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* font and background */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    background-image: url("../../../Documents/requirements/apsu background image.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* main signup box */
 .signup-container {
-    width: 350px;
-    margin: 100px auto;
-    padding: 30px;
-    background-color: white;
-    border-radius: 8px;
+    width: 100%;
+    max-width: 430px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
 }
 
-h1,
-h2 {
+/* headings */
+h1, h2 {
     text-align: center;
 }
 
+h1 {
+    font-size: 36px;
+    color: #ba0c2f;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #555;
+    font-weight: normal;
+    margin-bottom: 30px;
+}
+
+/* signup form */
 form {
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
 
+/* form labels */
 label {
-    margin-top: 15px;
-    margin-bottom: 5px;
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
 }
 
+/* input fields */
 input {
-    padding: 10px;
-    font-size: 16px;
+    width: 100%;
+    padding: 13px 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* selected input */
+input:focus {
+    border-color: #ba0c2f;
+    box-shadow: 0 0 0 3px rgba(186, 12, 47, 0.12);
+}
+
+/* create account button */
 button {
-    margin-top: 20px;
-    padding: 10px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 7px;
+    background-color: #ba0c2f;
+    color: white;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
+button:hover {
+    background-color: #990a27;
+}
+
+button:active {
+    transform: scale(0.99);
+}
+
+/* sign in link */
+a {
+    color: #ba0c2f;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* message display */
 #message {
     margin-top: 15px;
     text-align: center;
+    font-size: 14px;
+}
+
+/* mobile layout */
+@media (max-width: 500px) {
+    .signup-container {
+        padding: 30px 22px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
 }
