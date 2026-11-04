@@ -1,7 +1,7 @@
 
 import { supabase } from './supabaseClient.js';
 import { initializeComments } from './comments.js';
-import { getCurrentUserProfile } from './profileutils.js';
+import { getCurrentUserProfile, getProfileImageUrl, makeProfileClickable } from './profileutils.js';
 
 let feedPosts = [];
 let currentAudience = 'All';
@@ -57,7 +57,7 @@ async function uploadImage(file, userId){
 }
 
 // searches for container in html, if no container,
-//  throw error and return
+// throw error and return
 // else fetch posts table from supabase and specific columns.
 //handles if supabase throws error
 export async function loadPosts() {
@@ -206,18 +206,25 @@ export async function showActivityFeed(posts, container, audience = 'All') {
                 ? new Date(post.created_at).toLocaleString()
                 : '';
 
-        //display profile image.
+        // display the student's profile picture or default image
         const profileImage = clone.querySelector('.post-profile-picture');
 
         if (profileImage) {
-            if (profile?.image_path) {
-                profileImage.src = profile.image_path;
-                profileImage.alt = profile.name || 'Student profile';
-                profileImage.hidden = false;
-            } else {
-                profileImage.hidden = true;
-            }
+            profileImage.src = getProfileImageUrl(profile?.image_path);
+            profileImage.alt = profile?.name || 'Student profile';
+            profileImage.hidden = false;
         }
+
+        // make the post author's name and picture clickable
+        makeProfileClickable(
+            clone.querySelector('.post-author'),
+            post.user_id
+        )
+
+        makeProfileClickable(
+            clone.querySelector('.post-profile-picture'),
+            post.user_id
+        )
 
         // Add the post image if one is stored.
         const image = clone.querySelector('.post-image')
