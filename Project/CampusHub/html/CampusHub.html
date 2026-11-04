@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/marketplace.css">
     <link rel="stylesheet" href="../css/messaging.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body>
@@ -20,7 +22,9 @@
     <header>
         <div class="main-header">
             <h1>Campus Hub</h1>
+            <button onclick="window.location.href='index.html'" style="margin-right:auto">Log Out</button>
             <p>Austin Peay State University</p>
+
         </div>
     </header>
 
@@ -35,11 +39,21 @@
             </div>
 
             <!-- Navigation links -->
-            <a href="feed.html" class="nav-button" data-page="feed.html">Activity Feed</a>
-            <a href="myPosts.html" class="nav-button" data-page="myPosts.html">My Posts</a>
-            <a href="marketplace.html" class="nav-button" data-page="marketplace.html">Marketplace</a>
-            <a href="messages.html" class="nav-button" data-page="messages.html">Messages</a>
-            <a href="profile.html" class="nav-button" data-page="profile.html">Profile</a>
+            <a href="feed.html" class="nav-button" data-page="feed.html"> 
+                <i class="fa-solid fa-house"></i>
+                  Activity Feed</a>
+            <a href="myPosts.html" class="nav-button" data-page="myPosts.html">
+                <i class="fa-solid fa-file-lines"></i>
+                  My Posts</a>
+            <a href="marketplace.html" class="nav-button" data-page="marketplace.html">
+                <i class="fa-solid fa-suitcase"></i>
+                  Marketplace</a>
+            <a href="messages.html" class="nav-button" data-page="messages.html">
+                <i class="fa-solid fa-envelope"></i>
+                  Messages</a>
+            <a href="profile.html" class="nav-button" data-page="profile.html">
+                <i class="fa-solid fa-circle-user"></i>
+                  Profile</a>
         </nav>
 
         <!-- Dynamic page content -->

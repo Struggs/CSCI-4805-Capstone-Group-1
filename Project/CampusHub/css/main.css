@@ -36,7 +36,7 @@ body {
 
 .main-header p {
     font-size: 14px;
-    color: #ba0c2f;
+    color: white;
 }
 
 /* 2. Container that forces children (navbar + main-content) side-by-side */
@@ -68,23 +68,26 @@ body {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    background-color: #ba0c2f;
-    color: #ffffff;
+    background-color: white;
+    color: rgb(96, 96, 96);
+    gap: 16px;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
     transition: background-color 0.2s, color 0.2s;
 }
 
+
 .nav-button:hover, 
 .nav-button.active {
-    background-color: #7d071f;
-    color: rgb(179, 179, 179);
+    background-color: #ba0c2f;
+    color: white;
 }
 
 .main-content {
     flex: 1;
-    width: calc(100vw - 260px);
+    min-width: 0;
+    width: auto;
     padding: 2rem;
     overflow-y: auto;
     background-color: #f4f6f9;
