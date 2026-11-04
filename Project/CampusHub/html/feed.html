@@ -2,83 +2,89 @@
 
 <div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
 
-        <!-- Feed Container -->
-
     <div id="feed" style="margin-top: 20px;"></div>
 
+
+    <div id="create-post-block">
+
+    </div>
         
 <template id="post-template">
     <article class="post-card">
+        <div class = "post-content">
 
         <!-- Post header -->
-        <div class="post-header">
+            <div class="post-header">
 
-            <img class="post-profile-picture"
-                 alt="Student profile"
-                 hidden>
+                <img class="post-profile-picture"
+                    alt="Student profile"
+                    hidden>
 
-            <div class="post-author-info">
-                <div class="post-author-line">
-                    <p class="post-author"></p>
-                    <span class="post-audience"></span>
+                <div class="post-author-info">
+                    <div class="post-author-line">
+                        <p class="post-author"></p>
+                        <span class="post-audience"></span>
+                    </div>
+
+                    <p class="post-stats"></p>
                 </div>
 
-                <p class="post-stats"></p>
             </div>
-
-        </div>
 
         <!-- Post body -->
-        <div class="post-body">
+            <div class="post-body">
 
-            <div class="post-text">
+                <div class="post-text">
 
-                <h3 class="post-title"></h3>
+                    <h3 class="post-title"></h3>
 
-                <p class="post-desc"></p>
+                    <p class="post-desc"></p>
 
-            </div>
-
-            <div class="post-media">
-                <img class="post-image"
-                     alt="Post attachment"
-                     hidden>
-            </div>
-
-        </div>
-
-        <!-- Post actions and comments -->
-        <div class="post-actions">
-            <button type="button" class="comments-button">
-                💬 Comments
-            </button>
-        </div>
-
-        <div class="comments-section" hidden>
-
-            <h2>Comments:</h2>
-
-            <div class="comments-list"></div>
-
-            <button class="view-more-comments-button" hidden>
-                View More Comments
-            </button>
-
-            <form class="comment-form">
-
-                <div class="comment-input-container">
-                    <textarea name="comment"
-                              class="comment"
-                              placeholder="Leave your comment here..."
-                              maxlength="1000"></textarea>
-
-                    <p class="char-count">0/1000</p>
                 </div>
 
-                <button class="post" disabled>Post</button>
+            </div>
 
-            </form>
+        <!-- Post actions and comments -->
+            <div class="post-actions">
+                <button type="button" class="comments-button">
+                    💬 Comments
+                </button>
+            </div>
+        
+            <div class="comments-section" hidden>
 
+                <h2>Comments:</h2>
+
+                <div class="comments-list"></div>
+
+                <button class="view-more-comments-button" hidden>
+                    View More Comments
+                </button>
+
+                <form class="comment-form">
+
+                    <div class="comment-input-container">
+                        <textarea name="comment"
+                                class="comment"
+                                placeholder="Leave your comment here..."
+                                maxlength="1000"></textarea>
+
+                        <p class="char-count">0/1000</p>
+                    </div>
+
+                    <button class="post" disabled>Post</button>
+
+                </form>
+
+            </div>
+
+        </div>
+        <div class="post-media">
+
+            <img class="post-image"
+                    alt="Post attachment"
+                    hidden>
+                     
         </div>
 
     </article>
