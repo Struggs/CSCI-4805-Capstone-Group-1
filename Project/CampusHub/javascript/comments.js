@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js';
 import { getUserProfile, getProfileImageUrl } from './profileutils.js';
+import { getLikeCount, hasUserLiked, addLike, removeLike } from './likeutils.js';
 
 // Original standalone comments functionality.
 // Being adapted for individual Activity Feed posts.
@@ -155,7 +156,9 @@ async function loadComments(postId, elements, offset = 0) {
 
 }
 
-async function displayComments(comments, commentsList, viewMoreCommentsButton, postId) {    // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
+async function displayComments(comments, commentsList, viewMoreCommentsButton, postId) {   // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
     for (const comment of comments) {
         const commentText = comment.comment_text;
         const commentTimestamp = document.createElement('small');
@@ -213,7 +216,36 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         const commentActions = document.createElement('div');
         commentActions.classList.add('comment-actions');
 
+        const likeButton = document.createElement('button');
+        likeButton.classList.add('like-button');
+        let isLiked = user ? await hasUserLiked(user.id, comment.id, 'comment') : false;
+        likeButton.textContent = isLiked ? '\u2665' : '\u2661';
+
+        likeButton.addEventListener('click', async () => {
+            if (!user) {
+                alert('Please sign in or create account to like comments');
+                return;
+            }
+
+            let success;
+            if (isLiked) {
+                success = await removeLike(user.id, comment.id, 'comment');
+            }
+
+            else {
+                success = await addLike(user.id, comment.id, 'comment');
+            }
+
+            if (success) {
+                isLiked = !isLiked;
+                likeButton.textContent = isLiked ? '\u2665' : '\u2661';
+                const updatedLikeCount = await getLikeCount(comment.id, 'comment');
+                likeCountSpan.textContent = updatedLikeCount;
+            }
+        });
+
         commentActions.appendChild(commentTimestamp);
+        commentActions.appendChild(likeButton);
 
 
         const replyButton = document.createElement('button');
@@ -281,6 +313,11 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         commentDiv.appendChild(commentWrapper);
         commentsList.appendChild(commentDiv);   // Append the comment to the comments list
 
+        const likeCount = await getLikeCount(comment.id, 'comment');
+        const likeCountSpan = document.createElement('span');
+        likeCountSpan.classList.add('like-count');
+        likeCountSpan.textContent = likeCount;
+        commentActions.appendChild(likeCountSpan);
     }
 
 }
@@ -333,3 +370,4 @@ async function loadReplies(parentCommentId, repliesContainer) {
         repliesContainer.appendChild(replyDiv);
     }
 }
+
