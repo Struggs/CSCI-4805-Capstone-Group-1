@@ -1,0 +1,129 @@
+
+/* campushub verified page */
+
+/* resets default spacing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* font and background */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    background-image: url("../../../Documents/requirements/apsu background image.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* main verified box */
+.verified-card {
+    width: 100%;
+    max-width: 430px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+/* main heading section */
+.verified-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* campushub title */
+.verified-header h1 {
+    font-size: 36px;
+    color: #ba0c2f;
+    margin-bottom: 8px;
+}
+
+/* email verification subtitle */
+.verified-header p {
+    color: #555;
+    font-size: 16px;
+}
+
+/* centers verification message */
+.verified-content {
+    text-align: center;
+}
+
+/* email verified heading */
+.verified-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 15px;
+}
+
+/* verification description */
+.verified-content p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+/* create profile button */
+.continue-button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+
+    border: none;
+    border-radius: 7px;
+
+    background-color: #ba0c2f;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+
+    /* smooth button changes */
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+/* darkens button when hovered */
+.continue-button:hover {
+    background-color: #990a27;
+    text-decoration: none;
+}
+
+/* slightly shrinks button when clicked */
+.continue-button:active {
+    transform: scale(0.99);
+}
+
+/* mobile layout */
+@media (max-width: 500px) {
+
+    /* adjusts card for smaller screens */
+    .verified-card {
+        padding: 30px 22px;
+    }
+
+    /* makes campushub title smaller */
+    .verified-header h1 {
+        font-size: 30px;
+    }
+
+    /* adjusts verification heading */
+    .verified-content h2 {
+        font-size: 22px;
+    }
+}
