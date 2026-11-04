@@ -21,30 +21,6 @@ body{
     background-size: cover;
     background-position: center;
 }
-.feed-header{
-    width: 100%;
-    max-width: 700px;
-    text-align: center;
-    margin-bottom: 25px;
-}
-.feed-header h1{
-    font-size: 36px;
-    color: black;
-    margin-bottom: 8px;
-}
-.feed-header p {
-    color: #555;
-    font-sise: 16px;
-}
-.feed-header button {
-    margin-top: 12px;
-    padding: 8px 16px;
-    background-color: #ba0c2f;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
 
 .activity-feed {
     width: 100%;
@@ -129,7 +105,7 @@ body{
 }
 
 .post-text {
-    flex: 1;
+    flex: 0,0,70%;
     min-width: 0;
 }
 
@@ -150,7 +126,7 @@ body{
 }
 
 .post-media {
-    flex: 0 0 40%;
+    flex: 0 0 30%;
     min-width: 0;
 }
 
