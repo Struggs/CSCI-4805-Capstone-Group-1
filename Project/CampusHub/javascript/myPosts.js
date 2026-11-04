@@ -1,3 +1,4 @@
+import { getPostImageUrl } from './activityfeed.js';
 import { supabase } from './supabaseClient.js';
 
 let myPosts = [];
@@ -6,6 +7,9 @@ let currentUserId = null;
 export async function initializeMyPosts (){
     await loadMyPosts();
 }
+
+getPostImageUrl()
+
 async function loadMyPosts(){
 
     const myPostContainer = document.getElementById('my-posts');
@@ -40,7 +44,7 @@ async function loadMyPosts(){
     showMyPosts(myPosts, myPostContainer);
 }
 //finds template in html
-function showMyPosts(posts, container) {
+export async function showMyPosts(posts, container) {
 
     container.replaceChildren();
 
@@ -55,7 +59,7 @@ function showMyPosts(posts, container) {
         container.textContent = 'No posts to display yet.';
         return;
     }
-        posts.forEach(post => {
+        posts.forEach(async post => {
         const clone = template.content.cloneNode(true);
         const profile = post.profile;
 
@@ -89,16 +93,23 @@ function showMyPosts(posts, container) {
             }
         }
 
-        // Add the post image if one is stored.
-        if (post.image_path) {
-            const image = document.createElement('img'); //creates element
-            image.src = post.image_path; //points to image
-            image.alt = 'Post attachment'; //gives text
-            image.className = 'post-image'; //css class
-            image.style.maxWidth = '100%'; //formatting
-            image.style.height = 'auto';
-            card.appendChild(image); // adds image to card
-        }
+        const image = clone.querySelector('.post-image')
+
+        if (image && post.image_path) {
+
+        const postImageUrl = await getPostImageUrl(post.image_path);
+
+            if (postImageUrl) {
+            image.src = postImageUrl;
+            image.alt = 'Post attachment';
+            image.hidden = false;
+            } else {
+            image.hidden = true;
+            }
+
+        } else if (image) {
+        image.hidden = true;
+        }   
 
         
         // Connect the Edit Post button to this specific post.
@@ -111,6 +122,16 @@ function showMyPosts(posts, container) {
                 editPostInterface(post);
             });
         }
+
+        const deleteButton = clone.querySelector(
+            '.delete-post-button'
+        )
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                deletePost(post);
+            });
+        }
+
 
         // Add the completed post card to the page.
         container.appendChild(clone);
@@ -316,27 +337,41 @@ export function closeEditPostInterface() {
     editingPost = null;
 }
 
-export async function deletePost(){
+let deletingPost = null;
+
+export async function deletePost(post){
+
+let deletingPost = post
+
+    const titleInput = document.getElementById('postTitle');
+    const descriptionInput = document.getElementById('postDescription');
+    const audienceInput = document.getElementById('audienceFilter');
+
 
     const { error } = await supabase
         .from('posts')
         .delete({
-            title: title || null,
-            post_text: description,
-            audience: 'All Students',
-            audience_type: audienceType,
-            audience_value: audienceValue
+            post
         })
-        .eq('id', editingPost.id)
+        .eq('id', deletingPost.id)
         .eq('user_id', authData.user.id)
         .select('id');
 
+        if (error) {
+        console.error('Error deleting post:', error);
+        alert(`Your post could not be deleted: ${error.message}`);
+        return;
+    }
+
+        await loadMyPosts();
+
+        alert('Post deleted successfully.');
+
 }
+
 
 window.editSubmission = editPostSubmission;
 window.closeEditPostInterface = closeEditPostInterface;
-
-//this is the issue
-//window.deletePost = deletePost;
+window.deletePost = deletePost;
 
 

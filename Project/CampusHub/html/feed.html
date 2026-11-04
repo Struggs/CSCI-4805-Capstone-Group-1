@@ -7,44 +7,49 @@
     </header>
 
 
-    <div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
+<div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
 
         <!-- Feed Container -->
 
-        <div id="feed" style="margin-top: 20px;"></div>
+    <div id="feed" style="margin-top: 20px;"></div>
 
 
         <template id="post-template">
+
             <div class="post-card"
-                style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
+                style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;"> 
+
+                <div class = "row">
 
                 <img class="post-profile-picture" alt="Student profile" hidden
                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
 
-                <h3 class="post-title"></h3>
-                <p class="post-author"></p>
-                <img
-                class="post-image"
-                alt="Post attachment"
-                hidden
-                style="display:block; width:100%;max-width:600px; height: auto; object-fit: contain; border-radius: 8px; margin: 15px 0;"
-                >
-                <p class="post-desc"></p>
-                <div class="post-stats"></div>
+                    <p class="post-author"> <i class='fas fa-caret-right' style='font-size:20px;color:red'></i> <p class = "post-audience"></p></p>
+                    <p class = "post-stats"></p>
 
-                <button type="button" class="comments-button">💬 Comments</button>
+                </div>
 
-                <div class="comments-section" hidden>
-                    <h2>Comments:</h2>
+                <div class = "row">
 
-                    <div class="comments-list"></div>
+                    <div class = "column">
 
-                    <!-- Comments will be dynamically added here -->
-                    <button class="view-more-comments-button" hidden>
+                        <h3 class="post-title"></h3>
+                    
+                        <p class="post-desc"></p>
+                    
+                        <button type="button" class="comments-button">💬 Comments</button>
+
+                        <div class="comments-section" hidden>
+                        <h2>Comments:</h2>
+
+                        <div class="comments-list"></div>
+
+                        <!-- Comments will be dynamically added here -->
+                        <button class="view-more-comments-button" hidden>
                         View More Comments
-                    </button>
+                        </button>
 
-                    <form class="comment-form">
+                        <form class="comment-form">
                         <div class="comment-input-container">
                             <textarea name="comment" class="comment" placeholder="Leave your comment here..."
                                 maxlength="1000"></textarea>
@@ -53,11 +58,29 @@
                         </div>
 
                         <button class="post" disabled>Post</button>
-                    </form>
+                        </form>
+                    </div>
+
+                    </div>
+
+                    <div class = "column">
+
+                    <img
+                    class="post-image"
+                    alt=""
+                    hidden
+                    style="display:block; width:100%;max-width:600px; height: auto; object-fit: contain; border-radius: 8px; margin: 15px 0;"
+                    >
+                    </div>
                 </div>
             </div>
+
         </template>
+
     </div>
+
+</div>
+
     <!-- Post Creation and Interface -->
     <section class="CreatePostInterface">
 

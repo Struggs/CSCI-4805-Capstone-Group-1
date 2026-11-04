@@ -8,6 +8,47 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
+.post-card .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Text and comments on the left */
+.post-card .column:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Image on the right */
+.post-card .column:last-child {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Image sizing */
+.post-card .post-image {
+    width: 100%;
+    max-width: 100%;
+    max-height: 400px;
+    height: auto;
+    object-fit: contain;
+    margin: 0;
+}
+.post-title{
+    font-size: 20px;
+}
+
+/* Stack the columns on smaller screens */
+@media (max-width: 600px) {
+    .post-card .row {
+        flex-direction: column;
+    }
+
+    .post-card .column {
+        width: 100%;
+    }
+}
 
 .activity-feed-page {
     display: flex;
@@ -63,7 +104,7 @@ body {
 .post-image {
     display: block;
     width: 100%;
-    max-width: 1000px;
+    max-width: 100%;
     max-height: 500px;
     height: auto;
     object-fit: contain;
