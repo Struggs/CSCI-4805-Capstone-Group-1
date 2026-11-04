@@ -64,3 +64,49 @@ export function getProfileImageUrl(imagePath) {
 
     return data.publicUrl
 }
+
+// open a student's profile using their user ID
+export function openStudentProfile(userId) {
+
+    if (!userId) {
+        console.error('Student ID is missing')
+        return
+    }
+
+    // tell the dashboard which student's profile to open
+    window.dispatchEvent(new CustomEvent('campushub:view-profile', {
+        detail: {
+            userId: userId
+        }
+    }))
+}
+
+
+// make an element open a student's profile when clicked
+export function makeProfileClickable(element, userId) {
+
+    if (!element || !userId) {
+        return
+    }
+
+    // open the selected student's profile
+    const openProfile = () => {
+        openStudentProfile(userId)
+    }
+
+    element.style.cursor = 'pointer'
+    element.setAttribute('role', 'link')
+    element.tabIndex = 0
+
+    // allow mouse clicks
+    element.addEventListener('click', openProfile)
+
+    // allow keyboard navigation
+    element.addEventListener('keydown', event => {
+
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            openProfile()
+        }
+    })
+}

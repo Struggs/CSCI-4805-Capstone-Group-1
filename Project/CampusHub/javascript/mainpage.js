@@ -66,6 +66,11 @@ navbar.addEventListener('click', async (event) => {
     if (!button) return;
 
     event.preventDefault();
+
+    // identify the student profile we want to view
+    const viewedUserId = button.dataset.viewUserId || null;
+    delete button.dataset.viewUserId;
+
     // pinpoints destination.
     const pageUrl = new URL(button.getAttribute('href'), window.location.href);
     // removes css from each button to update css
@@ -109,13 +114,13 @@ navbar.addEventListener('click', async (event) => {
             await initializeActivityFeed();
         } else if (content.classList.contains('my-posts-page')) {
             await initializeMyPosts();
-} else if (content.classList.contains('marketplace-page')) {
-    initializeMarketplace();
-} else if (content.classList.contains('messages-page')) {
-    initializeMessages();
-} else if (content.classList.contains('profile-page')) {
-    await initializeProfile();
-}
+        } else if (content.classList.contains('marketplace-page')) {
+            initializeMarketplace();
+        } else if (content.classList.contains('messages-page')) {
+            initializeMessages();
+        } else if (content.classList.contains('profile-page')) {
+            await initializeProfile(viewedUserId); //passed in viewedUserId to initializeProfile
+        }
 
         console.log('Feature loaded successfully.');
 
@@ -124,4 +129,22 @@ navbar.addEventListener('click', async (event) => {
         mainContent.textContent =
             'Unable to load this feature. Check the browser console.';
     }
+
+    // open a student's profile when selected from the activity feed
+    window.addEventListener('campushub:view-profile', event => {
+
+    const studentId = event.detail.userId;
+
+    const profileButton = document.querySelector(
+        '.nav-button[data-page="profile.html"]'
+    );
+
+    if (!profileButton || !studentId) return;
+
+    // pass the selected student ID to the profile page
+    profileButton.dataset.viewUserId = studentId;
+
+    // use the navigation system already in place
+    profileButton.click();
+});
 });

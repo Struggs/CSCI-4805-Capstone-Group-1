@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient.js'
 
-export async function initializeProfile() {
+export async function initializeProfile(profileId = null) {
     // get profile page elements
     const profileName = document.getElementById('profile-name')
     const profileMajor = document.getElementById('profile-major')
@@ -38,7 +38,13 @@ export async function initializeProfile() {
         return
     }
 
-    console.log('Loading profile for user:', user.id)
+    // use the selected student's ID or the signed-in user's ID
+    const targetUserId = profileId || user.id;
+
+    // determine whether the student owns this profile
+    const isOwnProfile = targetUserId === user.id;
+
+    console.log('Loading profile for user:', targetUserId);
 
     // retrieve profile belonging to signed-in user
     const {
@@ -47,7 +53,7 @@ export async function initializeProfile() {
     } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id)
+        .eq('id', targetUserId)
         .single()
 
     // if the profile could not be loaded, show an error message
@@ -124,6 +130,23 @@ export async function initializeProfile() {
     }
 
 
+    // update the page heading based on profile ownership
+    const profileHeading = document.querySelector('.profile-page h1');
+
+    if (profileHeading) {
+        profileHeading.textContent = isOwnProfile
+            ? 'My Profile'
+            : 'Student Profile';
+    }
+
+    // only the owner can access profile editing
+    if (!isOwnProfile) {
+        editProfileButton.hidden = true;
+        editProfileForm.hidden = true;
+        return;
+    }
+
+
     // when Edit Profile is clicked, fill the form with current profile data
     editProfileButton.addEventListener('click', () => {
 
@@ -156,25 +179,20 @@ export async function initializeProfile() {
     // save edited profile information
     saveProfileButton.addEventListener('click', async () => {
 
-    const updatedName =
-        editName.value.trim()
+    const updatedName = editName.value.trim()
 
-    const updatedMajor =
-        editMajor.value.trim()
+    const updatedMajor =editMajor.value.trim()
 
-    const updatedSchoolYear =
-        editSchoolYear.value
+    const updatedSchoolYear = editSchoolYear.value
 
     const updatedTransferStudent =
         editTransferStudent.value === ''
             ? null
             : editTransferStudent.value === 'true'
 
-    const selectedFile =
-        profilePictureInput.files[0]
+    const selectedFile = profilePictureInput.files[0]
 
-    let imagePath =
-        profile.image_path
+    let imagePath = profile.image_path
 
     // basic validation
     if (!updatedName) {
@@ -184,43 +202,36 @@ export async function initializeProfile() {
     }
 
     if (selectedFile) {
+        const fileExtension = selectedFile.name
+                .split('.')
+                .pop()
+                .toLowerCase()
 
-    const fileExtension =
-        selectedFile.name
-            .split('.')
-            .pop()
-            .toLowerCase()
+        const storagePath = `${user.id}/profile.${fileExtension}`
 
-    const storagePath =
-        `${user.id}/profile.${fileExtension}`
+        const {
+            error: uploadError
+        } = await supabase.storage
+            .from('profile-images')
+            .upload(
+                storagePath,
+                selectedFile,
+                {
+                    upsert: true
+                }
+            )
 
-    const {
-        error: uploadError
-    } = await supabase.storage
-        .from('profile-images')
-        .upload(
-            storagePath,
-            selectedFile,
-            {
-                upsert: true
-            }
-        )
+        if (uploadError) {
+            console.error(
+                'Profile image upload error:',
+                uploadError
+            )
+            message.textContent = 'Unable to upload profile picture.'
+            return
+        }
 
-    if (uploadError) {
-
-        console.error(
-            'Profile image upload error:',
-            uploadError
-        )
-
-        message.textContent =
-            'Unable to upload profile picture.'
-
-        return
-    }
-
-    // remember the uploaded file locaiton
-    imagePath = storagePath
+        // remember the uploaded file locaiton
+        imagePath = storagePath
     }
 
     // save profile changes to the database
@@ -242,7 +253,6 @@ export async function initializeProfile() {
 
 
     if (updateError) {
-
         console.error(
             'Profile update error:',
             updateError
@@ -250,7 +260,6 @@ export async function initializeProfile() {
 
         message.textContent =
             'Unable to save profile changes.'
-
         return
     }
 
@@ -268,42 +277,30 @@ export async function initializeProfile() {
         const imageUrl =
             imageData.publicUrl + '?t=' + Date.now()
 
-        profilePicture.src =
-            imageUrl
+        profilePicture.src = imageUrl
 
-        profilePicturePreview.src =
-            imageUrl
+        profilePicturePreview.src = imageUrl
     }
 
     // update displayed profile information
-    profileName.textContent =
-        updatedProfile.name || 'Student'
+    profileName.textContent = updatedProfile.name || 'Student'
 
-    profileMajor.textContent =
-        updatedProfile.major || 'Not provided'
+    profileMajor.textContent = updatedProfile.major || 'Not provided'
 
-    profileClassStanding.textContent =
-        updatedProfile.school_year || 'Not provided'
+    profileClassStanding.textContent = updatedProfile.school_year || 'Not provided'
 
 
     if (
         updatedProfile.transfer_student === true
     ) {
-
         profileTransfer.textContent = 'Yes'
-
     } else if (
         updatedProfile.transfer_student === false
     ) {
-
         profileTransfer.textContent = 'No'
-
     } else {
-
-        profileTransfer.textContent =
-            'Not provided'
+        profileTransfer.textContent = 'Not provided'
     }
-
 
     // leave edit mode
     editProfileForm.hidden = true
@@ -314,8 +311,7 @@ export async function initializeProfile() {
 
     profilePictureInput.addEventListener('change', () => {
 
-    const file =
-        profilePictureInput.files[0]
+    const file = profilePictureInput.files[0]
 
     if (!file) {
         return
@@ -328,15 +324,13 @@ export async function initializeProfile() {
 
     if (!allowedTypes.includes(file.type)) {
 
-        message.textContent =
-            'Profile pictures must be JPG or PNG.'
+        message.textContent = 'Profile pictures must be JPG or PNG.'
 
         profilePictureInput.value = ''
         return
     }
 
-    const maxFileSize =
-        10 * 1024 * 1024
+    const maxFileSize = 10 * 1024 * 1024
 
     if (file.size > maxFileSize) {
 
