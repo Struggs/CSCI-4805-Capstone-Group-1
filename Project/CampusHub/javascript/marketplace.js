@@ -55,7 +55,7 @@ export function initializeMarketplace() {
         const { data, error } = await supabase
             .from('marketplace_listings')
             .select('*')
-            .eq('status', 'active')
+            .eq('status', 'Available')
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -74,7 +74,26 @@ export function initializeMarketplace() {
 
     let listings = [];
 
-    
+async function uploadMarketplaceImage(file, userId) {
+    if (!file) return null;
+
+    const extension = file.name.split(".").pop().toLowerCase();
+    const filePath = `${userId}/marketplace/${crypto.randomUUID()}.${extension}`;
+
+    const { error } = await supabase.storage
+        .from("post_Images")
+        .upload(filePath, file, {
+            contentType: file.type,
+            upsert: false
+        });
+
+    if (error) {
+        console.error("Marketplace image upload failed:", error);
+        throw error;
+    }
+
+    return filePath;
+}  
 async function saveListings(newListing) {
     const { data, error } = await supabase
         .from('marketplace_listings')
@@ -85,7 +104,8 @@ async function saveListings(newListing) {
             category: newListing.category,
             condition: newListing.condition,
             description: newListing.description,
-            status: 'active'
+            image_path: newListing.image_path || null,
+            status: 'Available'
         })
         .select()
         .single();
@@ -189,7 +209,25 @@ async function saveListings(newListing) {
             const card = document.createElement("div");
             card.className = "listing-card";
 
-            const image = makeElement("div", "listing-image", "No Image");
+            const image = makeElement("div", "listing-image");
+
+if (listing.image_path) {
+    const { data } = supabase.storage
+        .from("post_Images")
+        .getPublicUrl(listing.image_path);
+
+    const img = document.createElement("img");
+    img.src = data.publicUrl;
+    img.alt = listing.title;
+    img.loading = "lazy";
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "cover";
+
+    image.appendChild(img);
+} else {
+    image.textContent = "No Image";
+}
             const info = makeElement("div", "listing-info");
             const title = makeElement("h3", "", listing.title);
             const price = makeElement(
@@ -306,7 +344,22 @@ async function saveListings(newListing) {
         closeButton.addEventListener("click", function () {
             overlay.remove();
         });
+        if (listing.image_path) {
+    const { data } = supabase.storage
+        .from("post_Images")
+        .getPublicUrl(listing.image_path);
 
+    const image = document.createElement("img");
+    image.src = data.publicUrl;
+    image.alt = listing.title;
+    image.style.width = "100%";
+    image.style.maxHeight = "300px";
+    image.style.objectFit = "contain";
+    image.style.borderRadius = "8px";
+    image.style.marginBottom = "15px";
+
+    popup.appendChild(image);
+}
         popup.appendChild(title);
         popup.appendChild(price);
         popup.appendChild(category);
@@ -384,6 +437,41 @@ async function saveListings(newListing) {
         const titleField = createFormInput("Item Name", "text");
         const priceField = createFormInput("Price ($)", "number");
         const sellerField = createFormInput("Your Name", "text");
+        const imageField = createFormInput("Item Image", "file", false);
+imageField.input.accept = "image/*";
+
+const imagePreview = document.createElement("img");
+imagePreview.style.display = "none";
+imagePreview.style.width = "100%";
+imagePreview.style.maxHeight = "200px";
+imagePreview.style.objectFit = "contain";
+imagePreview.style.marginTop = "10px";
+imagePreview.style.borderRadius = "8px";
+
+imageField.input.addEventListener("change", function () {
+    const file = imageField.input.files[0];
+
+    if (!file) {
+        imagePreview.style.display = "none";
+        imagePreview.removeAttribute("src");
+        return;
+    }
+
+    if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
+        alert("Please choose an image smaller than 5 MB.");
+        imageField.input.value = "";
+        imagePreview.style.display = "none";
+        return;
+    }
+
+    imagePreview.src = URL.createObjectURL(file);
+    imagePreview.style.display = "block";
+    imagePreview.onload = function () {
+        URL.revokeObjectURL(imagePreview.src);
+    };
+});
+
+imageField.wrapper.appendChild(imagePreview);
 
         priceField.input.min = "0";
         priceField.input.step = "0.01";
@@ -398,10 +486,10 @@ async function saveListings(newListing) {
 ]);
 
         const conditionField = createFormSelect("Condition", [
-            { value: "new", label: "New" },
-            { value: "like-new", label: "Used Like New" },
-            { value: "used", label: "Used" }
-        ]);
+    { value: "New", label: "New" },
+    { value: "Used Like New", label: "Used Like New" },
+    { value: "Used", label: "Used" }
+]);
 
         const descriptionWrapper = document.createElement("div");
         descriptionWrapper.style.marginBottom = "12px";
@@ -441,6 +529,7 @@ async function saveListings(newListing) {
         form.appendChild(categoryField.wrapper);
         form.appendChild(conditionField.wrapper);
         form.appendChild(sellerField.wrapper);
+        form.appendChild(imageField.wrapper);
         form.appendChild(descriptionWrapper);
         form.appendChild(submitButton);
         form.appendChild(cancelButton);
@@ -484,13 +573,44 @@ async function saveListings(newListing) {
             }
 
             newListing.seller_id = user.id;
+            const selectedImage = imageField.input.files[0];
+
+if (selectedImage) {
+    submitButton.disabled = true;
+    submitButton.textContent = "Uploading image...";
+
+    try {
+        newListing.image_path = await uploadMarketplaceImage(
+            selectedImage,
+            user.id
+        );
+    } catch (error) {
+        alert("Image upload failed. Please try again.");
+        submitButton.disabled = false;
+        submitButton.textContent = "Post Listing";
+        return;
+    }
+}
 
             const savedListing = await saveListings(newListing);
 
             if (!savedListing) {
-                alert("Your listing could not be saved.");
-                return;
-            }
+    if (newListing.image_path) {
+        const { error: cleanupError } = await supabase.storage
+            .from("post_Images")
+            .remove([newListing.image_path]);
+
+        if (cleanupError) {
+            console.error("Could not clean up uploaded image:", cleanupError);
+        }
+    }
+
+    submitButton.disabled = false;
+    submitButton.textContent = "Post Listing";
+
+    alert("Your listing could not be saved.");
+    return;
+}
 
 listings.unshift({
     ...savedListing,
