@@ -5,23 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>CampusHub - Verified</title>
+
+    <link rel="stylesheet" href="../css/verified.css">
 </head>
 
 <body>
 
-    <h1>Email Verified</h1>
+    <main class="verified-page">
 
-    <p>Your APSU email has been verified successfully.</p>
+        <div class="verified-card">
 
-    <a href="./createProfile.html">
-        Create Your Profile
-    </a>
+            <div class="verified-header">
+                <h1>CampusHub</h1>
+                <p>Email Verification</p>
+            </div>
+
+            <div class="verified-content">
+                <h2>Email Verified!</h2>
+
+                <p>
+                    Your APSU student email has been
+                    successfully verified.
+                </p>
+
+                <p>
+                    Continue to create your student profile.
+                </p>
+            </div>
+
+            <a class="continue-button" href="./createProfile.html">
+                Create Your Profile
+            </a>
+
+        </div>
+
+    </main>
 
     <!-- load Supabase on this page -->
-    <script
-        type="module"
-        src="../javascript/supabaseClient.js">
-    </script>
+    <script type="module" src="../javascript/supabaseClient.js"></script>
 
 </body>
 </html>

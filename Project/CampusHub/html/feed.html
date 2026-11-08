@@ -1,63 +1,100 @@
 <main class="activity-feed-page">
 
-    <header class="feed-header">
-        <h1>Activity Feed</h1>
-        <p>Whats Going on Now</p>
-        <button onclick="window.location.href='index.html'" style="float: right;">Log Out</button>
-    </header>
+<div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
+
+    <div id="feed" style="margin-top: 20px;"></div>
 
 
-    <div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
+    <div id="create-post-block">
 
-        <!-- Feed Container -->
+    </div>
+        
+<template id="post-template">
+    <article class="post-card">
+        <div class = "post-content">
 
-        <div id="feed" style="margin-top: 20px;"></div>
+        <!-- Post header -->
+            <div class="post-header">
 
+                <img class="post-profile-picture"
+                    alt="Student profile"
+                    hidden>
 
-        <template id="post-template">
-            <div class="post-card"
-                style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
+                <div class="post-author-info">
+                    <div class="post-author-line">
+                        <p class="post-author"></p>
+                        <span class="post-audience"></span>
+                    </div>
 
-                <img class="post-profile-picture" alt="Student profile" hidden
-                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <p class="post-stats"></p>
+                </div>
 
-                <h3 class="post-title"></h3>
-                <p class="post-author"></p>
-                <img
-                class="post-image"
-                alt="Post attachment"
-                hidden
-                style="display:block; width:100%;max-width:600px; height: auto; object-fit: contain; border-radius: 8px; margin: 15px 0;"
-                >
-                <p class="post-desc"></p>
-                <div class="post-stats"></div>
+            </div>
 
-                <button type="button" class="comments-button">💬 Comments</button>
+        <!-- Post body -->
+            <div class="post-body">
 
-                <div class="comments-section" hidden>
-                    <h2>Comments:</h2>
+                <div class="post-text">
 
-                    <div class="comments-list"></div>
+                    <h3 class="post-title"></h3>
 
-                    <!-- Comments will be dynamically added here -->
-                    <button class="view-more-comments-button" hidden>
-                        View More Comments
-                    </button>
+                    <p class="post-desc"></p>
 
-                    <form class="comment-form">
-                        <div class="comment-input-container">
-                            <textarea name="comment" class="comment" placeholder="Leave your comment here..."
+                </div>
+
+            </div>
+
+        <!-- Post actions and comments -->
+            <div class="post-actions">
+                <button type="button" class="comments-button">
+                    💬 Comments
+                </button>
+            </div>
+        
+            <div class="comments-section" hidden>
+
+                <h2>Comments:</h2>
+
+                <div class="comments-list"></div>
+
+                <button class="view-more-comments-button" hidden>
+                    View More Comments
+                </button>
+
+                <form class="comment-form">
+
+                    <div class="comment-input-container">
+                        <textarea name="comment"
+                                class="comment"
+                                placeholder="Leave your comment here..."
                                 maxlength="1000"></textarea>
 
-                            <p class="char-count">0/1000</p>
-                        </div>
+                        <p class="char-count">0/1000</p>
+                    </div>
 
-                        <button class="post" disabled>Post</button>
-                    </form>
-                </div>
+                    <button class="post" disabled>Post</button>
+
+                </form>
+
             </div>
-        </template>
+
+        </div>
+        <div class="post-media">
+
+            <img class="post-image"
+                    alt="Post attachment"
+                    hidden>
+                     
+        </div>
+
+    </article>
+</template>
+
+
     </div>
+
+</div>
+
     <!-- Post Creation and Interface -->
     <section class="CreatePostInterface">
 

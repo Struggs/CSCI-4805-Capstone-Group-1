@@ -1,65 +1,119 @@
-  <main class="my-posts-page">
 
-        <header class="feed-header">
-            <h1>My Posts</h1>
-            <p>View your posts</p>
-        </header>
+<main class="my-posts-page">
 
-        
+    <div class="activity-feed my-posts-feed">
 
-    <div class ="my-posts-feed" style ="display: flex; flex-direction: column; gap:10px;">
-
-            <!-- Feed Container -->
-
-        <div id="my-posts" style="margin-top: 20px;"></div>
+        <div id="my-posts"></div>
 
         <template id="post-template">
-            <div class="post-card" style="border: 1px solid #ddd; padding: 30px; margin-bottom:30px; border-radius: 30px;">
-            <img class="post-profile-picture"
-            alt="Student profile"
-            hidden
-            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-            <h3 class="post-title"></h3>
-            <p class="post-author"></p>
-            <p class="post-desc"></p>
-            <div class="post-stats"></div>
-            <button type="button" class="edit-post-interface-button">Edit Post
-            </button> 
-            <button type="button" class="delete-post-button">Delete Post
-            </button>             
-            </div>
-            </template> 
-        </div>  
 
-        <section class="editPostInterface">
+            <article class="post-card">
 
-        <div id="editPostInterface" class="interface"
-            style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
-            <div class="interface" style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="post-header">
+
+                    <img class="post-profile-picture"
+                         alt="Student profile"
+                         hidden>
+
+                    <div class="post-author-info">
+
+                        <div class="post-author-line">
+                            <p class="post-author"></p>
+                        </div>
+
+                        <p class="post-stats"></p>
+
+                    </div>
+
+                </div>
+
+                <div class="post-body">
+
+                    <div class="post-text">
+
+                        <h3 class="post-title"></h3>
+
+                        <p class="post-desc"></p>
+
+                    </div>
+
+                    <div class="post-media">
+
+                        <img class="post-image"
+                             alt="Post attachment"
+                             hidden>
+
+                    </div>
+
+                </div>
+
+                <div class="post-actions">
+
+                    <button type="button"
+                            class="edit-post-interface-button">
+                        Edit Post
+                    </button>
+
+                    <button type="button"
+                            class="delete-post-button">
+                        Delete Post
+                    </button>
+
+                </div>
+
+            </article>
+
+        </template>
+
+    </div>
+
+    <section class="editPostInterface">
+
+        <div id="editPostInterface"
+             class="interface"
+             style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
+
+            <div class="interface"
+                 style="display: flex; flex-direction: column; gap: 10px;">
+
                 <h2>Edit Post</h2>
 
                 <div id="currentPostImageContainer" style="display: none;">
-                <p>Current picture:</p>
-                <img id="currentPostImage"
-                alt="Current post picture"
-                style="max-width: 200px; max-height: 200px; object-fit: contain;">
+
+                    <p>Current picture:</p>
+
+                    <img id="currentPostImage"
+                         alt=""
+                         style="max-width: 200px; max-height: 200px; object-fit: contain;">
+
                 </div>
 
                 <label for="postTitle">Title</label>
-                <input type="text" id="postTitle"
-                    placeholder="Enter a post title" required>
+
+                <input type="text"
+                       id="postTitle"
+                       placeholder="Enter a post title"
+                       required>
 
                 <label for="postDescription">Description</label>
                 <textarea id="postDescription"
-                        placeholder="Write your post..."
-                        maxlength="500" required></textarea>
+                          placeholder="Write your post..."
+                          maxlength="500"
+                          required></textarea>
 
                 <label for="postImage">Add Picture</label>
-                <input type="file" id="postImage" accept="image/*">
 
+                <input type="file"
+                       id="postImage"
+                       accept="image/*">
 
                 <label for="audienceFilter">Target Audience *</label>
-                <select id="audienceFilter" name="audienceFilter" onchange="handleEditAudienceChange()" required>
+
+                <select id="audienceFilter"
+                        name="audienceFilter"
+                        onchange="handleEditAudienceChange()"
+                        required>
+
                     <option value="All Students">All Students</option>
                     <option value="Major">Specific Major</option>
                     <option value="Course Subject">Course Subject</option>
@@ -158,9 +212,10 @@
             <div style="margin-top: 10px;">
                 <button onclick="editSubmission()">Edit Post</button>
                 <button onclick="closeEditPostInterface()">Cancel</button>
-                <button onclick="deletePost()">Delete</button>"
             </div>
-        </section>
 
-        
-    </main>
+        </div>
+
+    </section>
+
+</main>

@@ -13,33 +13,122 @@
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/marketplace.css">
     <link rel="stylesheet" href="../css/messaging.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body>
-    <!-- Main header -->
-    <header>
-        <div class="main-header">
-            <h1>Campus Hub</h1>
+    
+<!-- Main header -->
+<header class="main-header">
+
+    
+        <!-- CampusHub branding -->
+    <div class="header-brand">
+
+        <img
+            src="../images/apsu-seal.png"
+            alt="Austin Peay State University"
+            class="header-logo"
+        >
+
+        <div class="brand-text">
+            <h1>CampusHub</h1>
             <p>Austin Peay State University</p>
         </div>
-    </header>
+
+    </div>
+
+
+    <!-- Search for students and posts -->
+    <div class="header-search">
+
+        <input
+            type="search"
+            id="dashboard-search"
+            placeholder="Search students and posts..."
+            aria-label="Search students and posts"
+            autocomplete="off"
+        >
+
+        <!-- Search results appear here -->
+        <div id="search-results" hidden></div>
+
+    </div>
+
+    <!-- User profile menu -->
+    <div class="header-profile">
+
+        <button
+            type="button"
+            id="profile-menu-button"
+            aria-expanded="false"
+            aria-controls="profile-dropdown"
+        >
+            <img
+                id="header-profile-picture"
+                src="../images/default-profile.png"
+                alt=""
+            >
+            <span id="header-profile-name">Student</span>
+
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div id="profile-dropdown" hidden>
+            <button type="button" id="logout-button">
+                Sign Out
+            </button>
+        </div>
+
+    </div>
+
+</header>
 
     <!-- Dashboard layout -->
     <div class="dashboard-layout">
         <nav class="navbar">
 
+            
             <!-- Current user profile -->
             <div class="sidebar-user">
-                <img id="sidebar-profile-picture" src="../images/default-profile.png" alt="Profile Picture">
-                <span id="sidebar-profile-name">Loading...</span>
+                <img
+                    id="sidebar-profile-picture"
+                    src="../images/default-profile.png"
+                    alt="Profile Picture">
+
+                <div class="sidebar-user-info">
+                    <span id="sidebar-profile-name">Loading...</span>
+                    <span id="sidebar-profile-major">APSU Student</span>
+                </div>
             </div>
 
+
             <!-- Navigation links -->
-            <a href="feed.html" class="nav-button" data-page="feed.html">Activity Feed</a>
-            <a href="myPosts.html" class="nav-button" data-page="myPosts.html">My Posts</a>
-            <a href="marketplace.html" class="nav-button" data-page="marketplace.html">Marketplace</a>
-            <a href="messages.html" class="nav-button" data-page="messages.html">Messages</a>
-            <a href="profile.html" class="nav-button" data-page="profile.html">Profile</a>
+            <a href="feed.html" class="nav-button" data-page="feed.html"> 
+                <i class="fa-solid fa-house"></i>
+                  Activity Feed</a>
+            <a href="myPosts.html" class="nav-button" data-page="myPosts.html">
+                <i class="fa-solid fa-file-lines"></i>
+                  My Posts</a>
+            <a href="marketplace.html" class="nav-button" data-page="marketplace.html">
+                <i class="fa-solid fa-suitcase"></i>
+                  Marketplace</a>
+            <a href="messages.html" class="nav-button" data-page="messages.html">
+                <i class="fa-solid fa-envelope"></i>
+                  Messages</a>
+            <a href="profile.html" class="nav-button" data-page="profile.html">
+                <i class="fa-solid fa-circle-user"></i>
+                  Profile</a>       
+            
+            <!-- APSU branding at bottom of sidebar -->
+            <div class="sidebar-brand">
+                <img
+                    src="../images/apsu-logo.png"
+                    alt="Austin Peay State University branding"
+                >
+            </div>
         </nav>
 
         <!-- Dynamic page content -->
