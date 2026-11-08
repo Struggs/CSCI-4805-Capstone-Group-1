@@ -11,28 +11,28 @@ export async function initializeActivityFeed() {
     await loadPosts();
 }
 
-export async function getPostImageUrl(image_path){
+export async function getPostImageUrl(image_path) {
 
     if (!image_path) {
         return ''
     }
 
-    const {data} = await supabase.storage
-    .from('post_Images')
-    .getPublicUrl(image_path)
+    const { data } = await supabase.storage
+        .from('post_Images')
+        .getPublicUrl(image_path)
 
     return data.publicUrl
 }
 
-async function uploadImage(file, userId){
+async function uploadImage(file, userId) {
 
-    if (!file){
+    if (!file) {
         return null;
     }
-    if (!file.type.startsWith('image/')){
+    if (!file.type.startsWith('image/')) {
         throw new Error('please upload a valid image')
     }
-    if (file.size > 5 *1024 * 1024){
+    if (file.size > 5 * 1024 * 1024) {
         throw new Error('file size too large')
     }
     const fileExtension = file.name.split('.').pop();
@@ -42,11 +42,11 @@ async function uploadImage(file, userId){
     const imagePath = `${userId}/${fileName}`;
 
     const { data, error } = await supabase.storage
-    .from('post_Images')
-    .upload(imagePath, file, {
-    cacheControl: '3600',
-    upsert: false
-    });
+        .from('post_Images')
+        .upload(imagePath, file, {
+            cacheControl: '3600',
+            upsert: false
+        });
 
     if (error) {
         console.error('Image upload failed:', error);
@@ -63,7 +63,7 @@ async function uploadImage(file, userId){
 export async function loadPosts() {
     const { data: authData } = await supabase.auth.getUser();
     const feedContainer = document.getElementById('feed');
-    
+
 
     if (!feedContainer) {
         console.error('Activity feed container was not found.');
@@ -115,40 +115,40 @@ export async function loadPosts() {
     // looks up authors profile using id. adds profile to new "profile" property
     // for post.
     feedPosts = (posts ?? []).map(post => ({
-    ...post,
-    profile: profilesById[post.user_id] ?? null
+        ...post,
+        profile: profilesById[post.user_id] ?? null
     }));
 
     const currentProfile = await getCurrentUserProfile();
 
     if (!currentProfile) {
-    feedContainer.textContent = 'Unable to identify your student profile.';
-    return;
+        feedContainer.textContent = 'Unable to identify your student profile.';
+        return;
     }
 
     const visiblePosts = feedPosts.filter(post => {
 
-    switch (post.audience_type) {
+        switch (post.audience_type) {
 
-        case 'all_students':
-            return true;
+            case 'all_students':
+                return true;
 
-        case 'major':
-            return post.audience_value === currentProfile.major;
+            case 'major':
+                return post.audience_value === currentProfile.major;
 
-        case 'class_year':
-            return post.audience_value === currentProfile.school_year;
+            case 'class_year':
+                return post.audience_value === currentProfile.school_year;
 
-        case 'transfer_status':
-            return currentProfile.transfer_student === true;
+            case 'transfer_status':
+                return currentProfile.transfer_student === true;
 
-        case 'course_subject':
-            // Course enrollment matching still needs to be implemented.
-            return false;
+            case 'course_subject':
+                // Course enrollment matching still needs to be implemented.
+                return false;
 
-        default:
-            return false;
-    }
+            default:
+                return false;
+        }
     });
 
     await showActivityFeed(visiblePosts, feedContainer);
@@ -170,8 +170,8 @@ export async function showActivityFeed(posts, container, audience = 'All') {
         ? posts
         : posts.filter(
             post =>
-            post.audience === audience ||
-            post.audience_type === audience 
+                post.audience === audience ||
+                post.audience_type === audience
 
         );
 
@@ -185,7 +185,7 @@ export async function showActivityFeed(posts, container, audience = 'All') {
 
     //runs once for each post to give it its structure.
     //clone template for each post and tie profile
-    for(const post of filteredPosts){
+    for (const post of filteredPosts) {
 
         const clone = template.content.cloneNode(true);
         const profile = post.profile;
@@ -224,19 +224,19 @@ export async function showActivityFeed(posts, container, audience = 'All') {
 
         if (image && post.image_path) {
 
-        const postImageUrl = await getPostImageUrl(post.image_path);
+            const postImageUrl = await getPostImageUrl(post.image_path);
 
             if (postImageUrl) {
-            image.src = postImageUrl;
-            image.alt = 'Post attachment';
-            image.hidden = false;
+                image.src = postImageUrl;
+                image.alt = 'Post attachment';
+                image.hidden = false;
             } else {
-            image.hidden = true;
+                image.hidden = true;
             }
 
         } else if (image) {
-        image.hidden = true;
-        }   
+            image.hidden = true;
+        }
 
         const card = clone.querySelector('.post-card');
 
@@ -244,14 +244,14 @@ export async function showActivityFeed(posts, container, audience = 'All') {
         const commentsSection = card.querySelector('.comments-section');
 
         commentsButton.addEventListener('click', () => {
-        commentsSection.hidden = !commentsSection.hidden;
+            commentsSection.hidden = !commentsSection.hidden;
         });
 
-        initializeComments(card, post.id);
+        initializeComments(card, post.id, post.user_id);
 
         // adds card to feed
         container.appendChild(clone);
-   
+
     }
 }
 
@@ -345,19 +345,19 @@ export async function createPost() {
 
     try {
 
-    if (selectedImage) {
-        imagePath = await uploadImage(
-            selectedImage,
-            authData.user.id
-        );
-    }
+        if (selectedImage) {
+            imagePath = await uploadImage(
+                selectedImage,
+                authData.user.id
+            );
+        }
 
     } catch (error) {
 
-    console.error('Error uploading post image:', error);
-    alert(`Image upload failed: ${error.message}`);
-    return;
-    }  
+        console.error('Error uploading post image:', error);
+        alert(`Image upload failed: ${error.message}`);
+        return;
+    }
 
     const { error } = await supabase
         .from('posts')
@@ -382,8 +382,8 @@ export async function createPost() {
     descriptionInput.value = '';
 
     if (imageInput) {
-    imageInput.value = '';
-}
+        imageInput.value = '';
+    }
     //Reset audience selections after a successful post.
     audienceInput.value = 'All Students';
     handleAudienceChange();
