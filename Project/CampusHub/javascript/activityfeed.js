@@ -2,6 +2,7 @@
 import { supabase } from './supabaseClient.js';
 import { initializeComments } from './comments.js';
 import { getCurrentUserProfile, getProfileImageUrl, makeProfileClickable } from './profileutils.js';
+import { getLikeCount, hasUserLiked, addLike, removeLike } from './likeutils.js';
 
 let feedPosts = [];
 let currentAudience = 'All';
@@ -246,6 +247,7 @@ export async function showActivityFeed(posts, container, audience = 'All') {
         }
 
         const card = clone.querySelector('.post-card');
+        const likeButton = card.querySelector('.like-button');
 
         const commentsButton = card.querySelector('.comments-button');
         const commentsSection = card.querySelector('.comments-section');
