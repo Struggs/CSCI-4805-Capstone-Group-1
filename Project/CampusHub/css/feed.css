@@ -336,8 +336,7 @@ body{
 }
 
 .like-button:active {
-    background-color: #fcebed;
-    color: #e63946;
+    transform: scale(0.92);
 }
 
 .like-button:disabled {
