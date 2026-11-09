@@ -11,6 +11,8 @@
         
 <template id="post-template">
     <article class="post-card">
+
+        <div class ="post-top-row">
         <div class = "post-content">
 
         <!-- Post header -->
@@ -21,6 +23,7 @@
                     hidden>
 
                 <div class="post-author-info">
+
                     <div class="post-author-line">
                         <p class="post-author"></p>
                         <span class="post-audience"></span>
@@ -44,12 +47,28 @@
 
             </div>
 
+        </div>
+
+        <div class="post-media">
+
+                <img class="post-image"
+                    alt="Post attachment"
+                    hidden>
+                     
+        </div>
+
+    </div>
+
+    <div class ="post-footer">
+
         <!-- Post actions and comments -->
-            <div class="post-actions">
-                <button type="button" class="comments-button">
-                    💬 Comments
-                </button>
-            </div>
+        <div class="post-actions">
+
+            <button type="button" class="comments-button">
+                💬 Comments
+            </button>
+
+        </div>
         
             <div class="comments-section" hidden>
 
@@ -79,19 +98,11 @@
             </div>
 
         </div>
-        <div class="post-media">
-
-            <img class="post-image"
-                    alt="Post attachment"
-                    hidden>
-                     
-        </div>
+        
 
     </article>
+
 </template>
-
-
-    </div>
 
 </div>
 
