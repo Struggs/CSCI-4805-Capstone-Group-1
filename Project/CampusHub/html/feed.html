@@ -1,5 +1,7 @@
 <main class="activity-feed-page">
 
+<button class="post-interface-button" onclick="createPostInterface()"> Create Post</button>
+
 <div class="activity-feed" style="display: flex; flex-direction: column; gap:10px;">
 
     <div id="feed" style="margin-top: 20px;"></div>
@@ -8,6 +10,7 @@
     <div id="create-post-block">
 
     </div>
+
         
 <template id="post-template">
     <article class="post-card">
@@ -113,8 +116,6 @@
 
     <!-- Post Creation and Interface -->
     <section class="CreatePostInterface">
-
-        <button class="post-interface-button" onclick="createPostInterface()"> Create Post</button>
 
         <div id="createPostInterface" class="interface"
             style="display: none; margin-top: 15px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9;">
