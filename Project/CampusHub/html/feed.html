@@ -6,97 +6,99 @@
 
 
         <div id="create-post-block">
-
         </div>
+    </div>
 
-        <template id="post-template">
-            <article class="post-card">
-                <div class="post-main">
-                    <div class="post-content">
+    <template id="post-template">
+        <article class="post-card">
 
-                        <!-- Post header -->
-                        <div class="post-header">
+            <div class="post-top-row">
+                <div class="post-content">
 
-                            <img class="post-profile-picture" alt="Student profile" hidden>
 
-                            <div class="post-author-info">
-                                <div class="post-author-line">
-                                    <p class="post-author"></p>
-                                    <span class="post-audience"></span>
-                                </div>
 
-                                <p class="post-stats"></p>
+                    <!-- Post header -->
+                    <div class="post-header">
+
+                        <img class="post-profile-picture" alt="Student profile" hidden>
+
+                        <div class="post-author-info">
+                            <div class="post-author-line">
+                                <p class="post-author"></p>
+                                <span class="post-audience"></span>
                             </div>
 
-                        </div>
-
-                        <!-- Post body -->
-                        <div class="post-body">
-
-                            <div class="post-text">
-
-                                <h3 class="post-title"></h3>
-
-                                <p class="post-desc"></p>
-
-                            </div>
-
+                            <p class="post-stats"></p>
                         </div>
 
                     </div>
-                    <div class="post-media">
 
-                        <img class="post-image" alt="Post attachment" hidden>
+                    <!-- Post body -->
+                    <div class="post-body">
 
-                    </div>
-                    <!-- Post actions and comments -->
-                    <div class="post-actions">
+                        <div class="post-text">
 
-                        <button type="button" class="like-button">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path
-                                    d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z" />
-                            </svg> Like
-                        </button>
-                        <button type="button" class="comments-button">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path
-                                    d="M5 4.5h14a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H9l-4 3v-3.5A2.5 2.5 0 0 1 2.5 16V7A2.5 2.5 0 0 1 5 4.5z" />
-                            </svg> Comment
-                            <span class="comment-count"> </span>
-                        </button>
+                            <h3 class="post-title"></h3>
+
+                            <p class="post-desc"></p>
+
+                        </div>
+
                     </div>
                 </div>
-                <div class="comments-section" hidden>
+                <div class="post-media">
 
-                    <div class="comments-list"></div>
+                    <img class="post-image" alt="Post attachment" hidden>
 
-                    <button class="view-more-comments-button" hidden>
-                        View More Comments
+                </div>
+
+            </div>
+
+            <div class="post-footer">
+
+                <!-- Post actions and comments -->
+                <div class="post-actions">
+
+                    <button type="button" class="like-button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path
+                                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z" />
+                        </svg> Like
+                        <span class="like-count">0</span>
                     </button>
-
-                    <form class="comment-form">
-
-                        <div class="comment-input-container">
-                            <textarea name="comment" class="comment" placeholder="Leave your comment here..."
-                                maxlength="1000"></textarea>
-
-                            <p class="char-count">0/1000</p>
-                        </div>
-
-                        <button class="post" disabled>Post</button>
-
-                    </form>
+                    <button type="button" class="comments-button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path
+                                d="M5 4.5h14a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H9l-4 3v-3.5A2.5 2.5 0 0 1 2.5 16V7A2.5 2.5 0 0 1 5 4.5z" />
+                        </svg> Comment
+                        <span class="comment-count"> </span>
+                    </button>
                 </div>
-            </article>
-        </template>
+            </div>
+            <div class="comments-section" hidden>
+                <div class="comments-list"></div>
+
+                <button class="view-more-comments-button" hidden>
+                    View More Comments
+                </button>
+
+                <form class="comment-form">
+
+                    <div class="comment-input-container">
+                        <textarea name="comment" class="comment" placeholder="Leave your comment here..."
+                            maxlength="1000"></textarea>
+                        <p class="char-count">0/1000</p>
 
 
-    </div>
+                    </div>
 
-    </div>
+                    <button class="post" disabled>Post</button>
+                </form>
+            </div>
+        </article>
+    </template>
 
     <!-- Post Creation and Interface -->
     <section class="CreatePostInterface">

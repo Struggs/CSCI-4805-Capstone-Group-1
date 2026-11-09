@@ -13,18 +13,17 @@ body {
 .activity-feed-page {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     width: 100%;
-    min-height: 100vh;
-    padding: 0px;
+    max-width: none;
+    min-height: 100%;
+    padding: 0;
     background-color: transparent;
-    background-size: cover;
-    background-position: center;
 }
 
 .activity-feed {
     width: 100%;
-    max-width: 1100px;
+    max-width: none;
     padding: 0;
     background-color: transparent;
     box-shadow: none;
@@ -33,14 +32,15 @@ body {
 #feed {
     display: flex;
     flex-direction: column;
-    gap: 16px;
     width: 100%;
+    max-width: none;
+    gap: 16px;
     margin-top: 20px;
 }
 
 .create-post-block {
     width: 100%;
-    max-width: 700px;
+    max-width: none;
     padding: 20px;
     margin-bottom: 0;
     background-color: #ffffff;
@@ -49,12 +49,19 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+.CreatePostInterface {
+    width: 100%;
+    max-width: none;
+    margin-top: 20px;
+}
+
 .post-card {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 700px;
-    min-height: 250px;
+    max-width: 1500px;
+    min-height: 200px;
+    max-height: 600px;
     overflow: hidden;
     padding: 20px;
     margin-bottom: 0;
@@ -99,6 +106,18 @@ body {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.post-actions .like-button[aria-pressed="false"] svg {
+    fill: none;
+    stroke: #65676b;
+    stroke-width: 2;
+}
+
+.post-actions .like-button[aria-pressed="true"] svg {
+    fill: #ba0c2f;
+    stroke: #ba0c2f;
+    stroke-width: 2;
 }
 
 .post-header {
@@ -152,16 +171,25 @@ body {
 .post-body {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
     width: 100%;
+}
+
+.post-top-row {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+}
+
+.post-top-row:has(.post-image[hidden]) {
+    grid-template-columns: 1fr;
 }
 
 .post-content {
     display: flex;
     flex-direction: column;
-    flex: 1;
     min-width: 0;
-    position: relative;
 }
 
 .post-text {
@@ -184,25 +212,28 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #444;
-    overflow-wrap: hidden;
+    overflow-wrap: anywhere;
 }
 
 .post-media {
-    flex: 1;
-    max-height: none;
     min-width: 0;
-    padding-left: 30px;
+    width: 100%;
     display: flex;
+    align-items: flex-start;
+    justify-content: center;
     overflow: hidden;
     flex-basis: 0;
+}
+
+.post-media:has(.post-image[hidden]) {
+    display: none;
 }
 
 .post-image {
     display: block;
     width: 100%;
+    height: 280px;
     max-width: 100%;
-    max-height: 200px;
-    height: auto;
     object-fit: cover;
     border-radius: 8px;
     margin: 0;
@@ -212,10 +243,12 @@ body {
     display: none;
 }
 
-.CreatePostInterface {
+.post-footer {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    max-width: 700px;
-    margin-top: 20px;
+    margin-top: 16px;
+    padding-top: 10px;
 }
 
 .post-interface-button {
@@ -297,18 +330,18 @@ body {
         padding: 16px;
     }
 
-    .post-body {
-        flex-direction: column;
+    .post-top-row {
+        grid-template-columns: 1fr;
         gap: 12px;
     }
 
     .post-media {
         width: 100%;
-        flex: none;
     }
 
     .post-image {
         max-height: 350px;
+        aspect-ratio: 16 / 9;
     }
 
     .post-author-line {
@@ -322,6 +355,57 @@ body {
     .post-desc {
         font-size: 13px;
     }
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.comments-button {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.like-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: #555;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.like-button:hover {
+    background-color: #fcebed;
+    color: #e63946;
+}
+
+.like-button:active {
+    background-color: #fcebed;
+    color: #e63946;
+}
+
+.like-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.like-count {
+    color: #666;
+    font-size: 14px;
 }
 
 .comment-profile-image {
@@ -345,13 +429,6 @@ body {
     padding: 10px 14px;
     min-width: 0;
     overflow-wrap: anywhere;
-}
-
-.creator-label {
-    color: #ba0c2f;
-    font-size: inherit;
-    font-weight: inherit;
-    white-space: nowrap;
 }
 
 .comment-timestamp {

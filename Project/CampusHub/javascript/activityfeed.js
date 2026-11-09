@@ -7,7 +7,6 @@ import { getLikeCount, hasUserLiked, addLike, removeLike } from './likeutils.js'
 let feedPosts = [];
 let currentAudience = 'All';
 
-//starting point, waits for loadPosts to finish.
 export async function initializeActivityFeed() {
     await loadPosts();
 }
@@ -164,6 +163,15 @@ export async function showActivityFeed(posts, container, audience = 'All') {
         return;
     }
 
+    const { data: authData, error: authError } =
+        await supabase.auth.getUser();
+
+    if (authError) {
+        console.error('Unable to get current user:', authError);
+    }
+
+    const currentUserId = authData?.user?.id ?? null;
+
     //select filtered audience property from database and replace
     //container with relevant posts
     //New audience types use audience_type and audience_value.
@@ -247,7 +255,6 @@ export async function showActivityFeed(posts, container, audience = 'All') {
         }
 
         const card = clone.querySelector('.post-card');
-        const likeButton = card.querySelector('.like-button');
 
         const commentsButton = card.querySelector('.comments-button');
         const commentsSection = card.querySelector('.comments-section');
@@ -258,7 +265,82 @@ export async function showActivityFeed(posts, container, audience = 'All') {
 
         initializeComments(card, post.id, post.user_id);
 
-        // adds card to feed
+        // Get the Like button and count from the HTML template.
+        const likeButton = card.querySelector('.like-button');
+        const likeCountDisplay = card.querySelector('.like-count');
+
+        // Check that both elements exist.
+        if (!likeButton || !likeCountDisplay) {
+            console.error('Like button or like count is missing from the post template.');
+        } else {
+
+            try {
+                // Retrieve the current like count and whether the user liked the post.
+                const [likeCount, userLiked] = await Promise.all([
+                    getLikeCount(post.id, 'post'),
+                    currentUserId
+                        ? hasUserLiked(currentUserId, post.id, 'post')
+                        : Promise.resolve(false)
+                ]);
+
+                // Update the button and count.
+
+                likeButton.disabled = !currentUserId;
+                likeButton.setAttribute('aria-pressed', String(userLiked));
+
+                likeCountDisplay.textContent = likeCount ?? 0;
+
+                // Handle liking and unliking.
+                likeButton.addEventListener('click', async () => {
+
+                    if (!currentUserId || likeButton.disabled) {
+                        return;
+                    }
+
+                    likeButton.disabled = true;
+
+                    try {
+                        let success;
+
+                        if (likeButton.getAttribute('aria-pressed') === 'true') {
+
+                            success = await removeLike(currentUserId, post.id, 'post');
+
+                            if (success) {
+                                likeButton.setAttribute('aria-pressed', 'false');
+
+                                likeCountDisplay.textContent = Math.max(
+                                    0,
+                                    Number(likeCountDisplay.textContent) - 1
+                                );
+                            }
+
+                        } else {
+
+                            success = await addLike(currentUserId, post.id, 'post');
+
+                            if (success) {
+                                likeButton.setAttribute('aria-pressed', 'true');
+
+
+                                likeCountDisplay.textContent =
+                                    Number(likeCountDisplay.textContent) + 1;
+                            }
+                        }
+
+                    } catch (error) {
+                        console.error('Error updating like:', error);
+                    }
+
+                    likeButton.disabled = false;
+                });
+
+            } catch (error) {
+                console.error('Error loading likes for post:', post.id, error);
+                likeButton.disabled = true;
+                likeCountDisplay.textContent = '—';
+            }
+        }
         container.appendChild(clone);
 
     }

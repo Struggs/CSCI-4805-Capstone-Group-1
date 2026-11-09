@@ -70,11 +70,14 @@ export async function showMyPosts(posts, container) {
         clone.querySelector('.post-author').textContent =
             profile?.name || 'CampusHub Student';
 
+        clone.querySelector('.post-audience').textContent =
+            post.audience_type?.audienceValue || 'All Students';
+
         clone.querySelector('.post-desc').textContent =
             post.post_text || '';
 
         //displays creation time
-        clone.querySelector('.post-stats').textContent =
+        clone.querySelector('.post-time').textContent =
             post.created_at
                 ? new Date(post.created_at).toLocaleString()
                 : '';
