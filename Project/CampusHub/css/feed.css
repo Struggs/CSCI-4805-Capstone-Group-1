@@ -10,11 +10,17 @@ body{
     box-sizing: border-box;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 .activity-feed-page{
 =======
+=======
+>>>>>>> staging
 <<<<<<< HEAD
 
 =======
+>>>>>>> Elijah
+=======
+
 >>>>>>> Elijah
 .activity-feed-page {
 >>>>>>> staging
@@ -63,15 +69,24 @@ body{
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> staging
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> Elijah
 .CreatePostInterface {
     width: 100%;
     max-width: none;
     margin-top: 20px;
 }
+<<<<<<< HEAD
+>>>>>>> Elijah
+=======
+
 >>>>>>> Elijah
 >>>>>>> staging
 .post-card {
@@ -358,7 +373,8 @@ body{
 }
 
 .like-button:active {
-    transform: scale(0.92);
+    background-color: #fcebed;
+    color: #e63946;
 }
 
 .like-button:disabled {
