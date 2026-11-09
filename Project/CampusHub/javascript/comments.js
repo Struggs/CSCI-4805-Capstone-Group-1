@@ -153,7 +153,8 @@ async function updateCommentCount(postId, commentsButton) {
         return;
     }
 
-    commentsButton.textContent = `💬 Comments (${count})`;
+    const commentCountSpan = commentsButton.querySelector('.comment-count')
+    commentCountSpan.textContent = `(${count})`;
 }
 
 async function loadComments(postId, elements, offset = 0, postCreatorId) {
