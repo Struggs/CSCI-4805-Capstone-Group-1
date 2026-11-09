@@ -9,6 +9,7 @@ body{
     padding: 0;
     box-sizing: border-box;
 }
+
 .activity-feed-page {
     display: flex;
     flex-direction: column;
@@ -46,12 +47,12 @@ body{
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
-
 .CreatePostInterface {
     width: 100%;
     max-width: none;
     margin-top: 20px;
 }
+
 .post-card {
     display: flex;
     flex-direction: column;
@@ -123,7 +124,7 @@ body{
 }
 .post-top-row {
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     gap: 16px;
     width: 100%;
     min-width: 0;
@@ -176,8 +177,8 @@ body{
 .post-image {
     display: block;
     width: 100%;
+    height: 280px;
     max-width: 100%;
-    aspect-ratio: 4/3;    
     object-fit: cover;
     border-radius: 8px;
     margin: 0;
@@ -336,7 +337,8 @@ body{
 }
 
 .like-button:active {
-    transform: scale(0.92);
+    background-color: #fcebed;
+    color: #e63946;
 }
 
 .like-button:disabled {
