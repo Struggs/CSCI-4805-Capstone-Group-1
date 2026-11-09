@@ -17,6 +17,19 @@ export function initializeMarketplace() {
     const STORAGE_KEY = "campushub_marketplaceListings";
     const PAGE_SIZE = 6;
     let visibleCount = PAGE_SIZE;
+    // Store the logged-in user's ID
+let currentUserId = null;
+
+// Check who is logged in
+supabase.auth.getUser().then(({ data, error }) => {
+    if (error) {
+        console.error("Could not get current user:", error);
+        return;
+    }
+
+    currentUserId = data.user?.id || null;
+    displayListings();
+});
 
     const exampleListings = [
         {
@@ -93,6 +106,75 @@ async function uploadMarketplaceImage(file, userId) {
     }
 
     return filePath;
+}
+// Update a listing that belongs to the logged-in user
+async function updateListing(listing, changes) {
+    if (!currentUserId || listing.seller_id !== currentUserId) {
+        alert("You can only edit your own listings.");
+        return null;
+    }
+
+    const { data, error } = await supabase
+        .from("marketplace_listings")
+        .update(changes)
+        .eq("id", listing.id)
+        .eq("seller_id", currentUserId)
+        .select()
+        .single();
+
+    if (error || !data) {
+        console.error("Could not update listing:", error);
+        alert("Your listing could not be updated.");
+        return null;
+    }
+
+    // Update the listing on the page
+    listings = listings.map(item =>
+        item.id === listing.id
+            ? { ...item, ...data }
+            : item
+    );
+
+    displayListings();
+    return data;
+}
+// Delete a listing that belongs to the logged-in user
+async function deleteListing(listing) {
+    if (!currentUserId || listing.seller_id !== currentUserId) {
+        alert("You can only delete your own listings.");
+        return false;
+    }
+
+    // Remove the listing from Supabase
+    const { data, error } = await supabase
+        .from("marketplace_listings")
+        .delete()
+        .eq("id", listing.id)
+        .eq("seller_id", currentUserId)
+        .select("id");
+
+    if (error || !data || data.length === 0) {
+        console.error("Could not delete listing:", error);
+        alert("Your listing could not be deleted.");
+        return false;
+    }
+// Delete the listing's image from Storage
+if (listing.image_path) {
+    const { error: imageError } = await supabase.storage
+        .from("post_Images")
+        .remove([listing.image_path]);
+
+    if (imageError) {
+        console.error("Could not delete listing image:", imageError);
+    }
+}
+
+// Remove the deleted listing from the page
+listings = listings.filter(item => item.id !== listing.id);
+displayListings();
+
+return true;
+    
 }  
 async function saveListings(newListing) {
     const { data, error } = await supabase
@@ -366,7 +448,56 @@ if (listing.image_path) {
         popup.appendChild(condition);
         popup.appendChild(seller);
         popup.appendChild(description);
-        popup.appendChild(closeButton);
+
+// Only show Delete if this listing belongs to the user
+if (currentUserId && listing.seller_id === currentUserId) {
+    // Show the edit button to the owner
+const editButton = document.createElement("button");
+editButton.textContent = "Edit Listing";
+editButton.style.marginRight = "10px";
+
+editButton.addEventListener("click", function () {
+    overlay.remove();
+    showEditForm(listing);
+});
+
+popup.appendChild(editButton);
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete Listing";
+    deleteButton.type = "button";
+
+    // Make the delete button red
+    deleteButton.style.backgroundColor = "#dc2626";
+    deleteButton.style.color = "white";
+    deleteButton.style.marginRight = "10px";
+    deleteButton.style.marginTop = "15px";
+
+    // Ask before deleting the listing
+    deleteButton.addEventListener("click", async function () {
+        const confirmed = confirm(
+            "Are you sure you want to delete this listing?"
+        );
+
+        if (!confirmed) return;
+
+        deleteButton.disabled = true;
+        deleteButton.textContent = "Deleting...";
+
+        // Delete the listing from Supabase
+        const deleted = await deleteListing(listing);
+
+        if (deleted) {
+            overlay.remove();
+        } else {
+            deleteButton.disabled = false;
+            deleteButton.textContent = "Delete Listing";
+        }
+    });
+
+    popup.appendChild(deleteButton);
+}
+
+popup.appendChild(closeButton);
     }
 
 
@@ -425,7 +556,78 @@ if (listing.image_path) {
         return { wrapper, select };
     }
 
+    // Show the form to edit a listing
+function showEditForm(listing) {
+    const { overlay, popup } = createPopup();
+    const form = document.createElement("form");
 
+    popup.appendChild(makeElement("h2", "", "Edit Listing"));
+
+    // Add the current listing information
+    const title = createFormInput("Item Name", "text");
+    const price = createFormInput("Price ($)", "number");
+    const category = createFormSelect("Category", [
+        { value: "Textbooks", label: "Textbooks" },
+        { value: "Electronics", label: "Electronics" },
+        { value: "Dorm Essentials", label: "Dorm Essentials" },
+        { value: "Clothing", label: "Clothing" },
+        { value: "Tickets", label: "Tickets" },
+        { value: "Other", label: "Other" }
+    ]);
+    const condition = createFormSelect("Condition", [
+        { value: "New", label: "New" },
+        { value: "Used Like New", label: "Used Like New" },
+        { value: "Used", label: "Used" }
+    ]);
+    const description = document.createElement("textarea");
+
+    title.input.value = listing.title;
+    price.input.value = listing.price;
+    price.input.min = "0";
+    price.input.step = "0.01";
+    category.select.value = listing.category;
+    condition.select.value = listing.condition;
+    description.value = listing.description;
+    description.required = true;
+    description.rows = 4;
+    description.style.width = "100%";
+
+    // Add fields to the form
+    [title.wrapper, price.wrapper, category.wrapper,
+        condition.wrapper, description].forEach(field => {
+        field.style.marginBottom = "12px";
+        form.appendChild(field);
+    });
+
+    const save = makeElement("button", "", "Save Changes");
+    save.type = "submit";
+    form.appendChild(save);
+    popup.appendChild(form);
+
+    // Save the edited listing
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const amount = Number(price.input.value);
+
+        if (!Number.isFinite(amount) || amount < 0) {
+            alert("Enter a valid price.");
+            return;
+        }
+
+        save.disabled = true;
+
+        const updated = await updateListing(listing, {
+            title: title.input.value.trim(),
+            price: amount,
+            category: category.select.value,
+            condition: condition.select.value,
+            description: description.value.trim()
+        });
+
+        if (updated) overlay.remove();
+        else save.disabled = false;
+    });
+}
     function showSellForm() {
         const { overlay, popup } = createPopup();
 
