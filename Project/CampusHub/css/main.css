@@ -16,7 +16,6 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f6f9;
 }
-/* 1. Header spans full width at the top */
 .main-header {
     height: 90px;
     background-color: #ba0c2f;
@@ -96,11 +95,14 @@ body {
 }
 
 .main-content {
-    flex: 1;
     min-width: 0;
-    width: auto;
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    min-height: 0;
     padding: 2rem;
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: #f4f6f9;
 }
 
@@ -340,17 +342,14 @@ body {
     height: 100%;
     min-height: 0;
     overflow: hidden;
-    background-color: white;
     padding: 20px;
 }
 
 .right-sidebar-section {
     padding: 16px;
     margin-bottom: 16px;
-
     background-color: white;
     border-radius: 12px;
-
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
