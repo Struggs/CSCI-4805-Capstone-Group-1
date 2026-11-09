@@ -9,21 +9,8 @@ body{
     padding: 0;
     box-sizing: border-box;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-.activity-feed-page{
-=======
-=======
->>>>>>> staging
-<<<<<<< HEAD
 
-=======
->>>>>>> Elijah
-=======
-
->>>>>>> Elijah
 .activity-feed-page {
->>>>>>> staging
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -50,15 +37,8 @@ body{
     gap: 16px;
     margin-top: 20px;
 }
-<<<<<<< HEAD
-.create-post-block{
-=======
-<<<<<<< HEAD
 
-=======
->>>>>>> Elijah
 .create-post-block {
->>>>>>> staging
     width: 100%;
     max-width: none;
     padding: 20px;
@@ -68,27 +48,12 @@ body{
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> staging
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Elijah
 .CreatePostInterface {
     width: 100%;
     max-width: none;
     margin-top: 20px;
 }
-<<<<<<< HEAD
->>>>>>> Elijah
-=======
 
->>>>>>> Elijah
->>>>>>> staging
 .post-card {
     display: flex;
     flex-direction: column;
