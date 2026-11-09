@@ -28,6 +28,7 @@ body {
     padding: 0;
     background-color: transparent;
     box-shadow: none;
+    
 }
 
 #feed {
@@ -51,7 +52,7 @@ body {
 
 .post-card {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     max-width: 700px;
     min-height: 250px;
@@ -115,13 +116,29 @@ body {
 .post-body {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
     width: 100%;
 }
+<<<<<<< HEAD
 
 .post-content {
+=======
+.post-top-row {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Use full width when there is no image */
+.post-top-row:has(.post-image[hidden]) {
+    grid-template-columns: 1fr;
+}
+.post-content{
+>>>>>>> Elijah
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .post-text {
@@ -145,24 +162,26 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #444;
-    overflow-wrap: hidden;
+    overflow-wrap:anywhere;
 }
 
 .post-media {
-    flex: 4;
-    max-height: none;
     min-width: 0;
-    padding-left: 30px;
+    width: 100%;
     display: flex;
+    align-items: flex-start;
+    justify-content: center;
     overflow: hidden;
+}
+.post-media:has(.post-image[hidden]) {
+    display: none;
 }
 
 .post-image {
     display: block;
     width: 100%;
     max-width: 100%;
-    max-height: 100%;
-    height: auto;
+    aspect-ratio: 4/3;    
     object-fit: cover;
     border-radius: 8px;
     margin: 0;
@@ -170,6 +189,14 @@ body {
 
 .post-image[hidden] {
     display: none;
+}
+.post-footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #e4e6eb;
 }
 
 .CreatePostInterface {
@@ -257,18 +284,18 @@ body {
         padding: 16px;
     }
 
-    .post-body {
-        flex-direction: column;
-        gap: 12px;
+    .post-top-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
     }
 
     .post-media {
         width: 100%;
-        flex: none;
     }
 
     .post-image {
         max-height: 350px;
+        aspect-ratio: 16 / 9;
     }
 
     .post-author-line {
