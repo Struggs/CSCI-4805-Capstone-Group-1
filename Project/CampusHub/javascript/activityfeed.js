@@ -348,10 +348,7 @@ if (!likeButton || !likeCountDisplay) {
     }
 }
         container.appendChild(clone);
-<<<<<<< HEAD
 
-=======
->>>>>>> Elijah
     }
 }
 
