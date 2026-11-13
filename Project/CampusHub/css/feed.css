@@ -4,18 +4,17 @@
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
     box-sizing: border-box;
 }
-
 .activity-feed-page {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    max-width: none;
+    max-width: 1000px;
     min-height: 100%;
     padding: 0;
     background-color: transparent;
@@ -23,7 +22,7 @@ body{
 
 .activity-feed {
     width: 100%;
-    max-width: none;
+    max-width: 1000px;
     padding: 0;
     background-color: transparent;
     box-shadow: none;
@@ -33,7 +32,7 @@ body{
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: none;
+    max-width: 1000px;
     gap: 16px;
     margin-top: 20px;
 }
@@ -47,17 +46,17 @@ body{
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+
 .CreatePostInterface {
     width: 100%;
     max-width: none;
     margin-top: 20px;
 }
-
 .post-card {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 1500px;
+    max-width: none;
     min-height: 200px;
     max-height: 600px;
     overflow: hidden;
@@ -124,7 +123,7 @@ body{
 }
 .post-top-row {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-columns: 60% 40%;
     gap: 16px;
     width: 100%;
     min-width: 0;
@@ -138,6 +137,7 @@ body{
     flex-direction: column;
     min-width: 0;
 }
+
 .post-text {
     flex: 6;
     min-width: 0;
@@ -177,8 +177,8 @@ body{
 .post-image {
     display: block;
     width: 100%;
-    height: 280px;
     max-width: 100%;
+    aspect-ratio: 4/3;    
     object-fit: cover;
     border-radius: 8px;
     margin: 0;
@@ -337,8 +337,7 @@ body{
 }
 
 .like-button:active {
-    background-color: #fcebed;
-    color: #e63946;
+    transform: scale(0.92);
 }
 
 .like-button:disabled {
@@ -372,6 +371,13 @@ body{
     padding: 10px 14px;
     min-width: 0;
     overflow-wrap: anywhere;
+}
+
+.creator-label {
+    color: #ba0c2f;
+    font-size: inherit;
+    font-weight: inherit;
+    white-space: nowrap;
 }
 
 .comment-timestamp {
