@@ -475,7 +475,6 @@ export async function createPost() {
     if (imageInput) {
         imageInput.value = '';
     }
-    //Reset audience selections after a successful post.
     audienceInput.value = 'All Students';
     handleAudienceChange();
 

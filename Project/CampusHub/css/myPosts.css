@@ -1,73 +1,333 @@
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
 body {
     font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
 }
+
 .my-posts-page {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 1000px;
+    min-height: 100%;
+    padding: 0;
+    background-color: transparent;
+}
+
+.my-posts-feed {
+    width: 100%;
+    max-width: 1000px;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+#my-posts {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.my-posts-page .post-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    min-height: 200px;
+    max-height: 600px;
+    overflow: hidden;
     padding: 20px;
-    background-size: cover;
-    background-position: center;
+    margin-bottom: 0;
+    background-color: #ffffff;
+    border: 1px solid #e4e6eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.myPosts-header{
-text-align: center;
-margin-bottom: 30px;
-}
-.myPosts-header h1{
-     font-size: 36px;
-    color: #ba0c2f;
-    margin-bottom: 8px;
-}
-.myPosts-header p{
-     color: #555;
-    font-size: 16px;
-}
-.my-posts-feed{
-
+.my-posts-page .post-top-row {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 16px;
     width: 100%;
-    max-width: 700px;
-
-    background-color: White ;
-
-    padding: 40px;
-
-    border-radius: 14px;
-
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+    min-width: 0;
 }
-.post-card {
-    width: 100%;
-    max-width: 700px;
 
-    background-color: rgba(255, 255, 255, 0.95);
-
-    padding: 40px;
-
-    border-radius: 14px;
-
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+.my-posts-page .post-top-row:has(.post-image[hidden]) {
+    grid-template-columns: 1fr;
 }
-.currentPostImage {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    max-height: 500px;
-    height: auto;
-    object-fit: contain;
-    border-radius: 10px;
-    margin: 15px 0;
+
+.my-posts-page .post-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
-.currentPostImage[hidden] {
+
+.my-posts-page .post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.my-posts-page .post-profile-picture {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.my-posts-page .post-profile-picture[hidden] {
     display: none;
 }
 
+.my-posts-page .post-author-info {
+    flex: 1;
+    min-width: 0;
+}
 
+.my-posts-page .post-author-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
+.my-posts-page .post-author {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1c1e21;
+}
+
+.my-posts-page .post-audience {
+    font-size: 20px;
+    color: #65676b;
+}
+
+.my-posts-page .post-stats {
+    margin-top: 4px;
+    font-size: 16px;
+    color: #65676b;
+}
+
+.my-posts-page .post-body {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.my-posts-page .post-text {
+    flex: 6;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.my-posts-page .post-title {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    padding: 0;
+    color: #1c1e21;
+}
+
+.my-posts-page .post-desc {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #444;
+    overflow-wrap: anywhere;
+}
+
+.my-posts-page .post-media {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.my-posts-page .post-media:has(.post-image[hidden]) {
+    display: none;
+}
+
+.my-posts-page .post-image {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 0;
+}
+
+.my-posts-page .post-image[hidden] {
+    display: none;
+}
+
+.my-posts-page .post-footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #e4e6eb;
+}
+
+.my-posts-page .post-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.my-posts-page .edit-post-interface-button,
+.my-posts-page .delete-post-button {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.my-posts-page .edit-post-interface-button {
+    background-color: #ba0c2f;
+    color: white;
+}
+
+.my-posts-page .edit-post-interface-button:hover {
+    background-color: #960a26;
+}
+
+.my-posts-page .delete-post-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.my-posts-page .delete-post-button:hover {
+    background-color: #e0e0e0;
+}
+
+#editPostInterface {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 24px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e4e6eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+#editPostInterface h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: #1c1e21;
+}
+
+#editPostInterface label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#editPostInterface input,
+#editPostInterface textarea,
+#editPostInterface select {
+    width: 100%;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid #ccd0d5;
+    border-radius: 6px;
+    background-color: white;
+}
+
+#editPostInterface textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#currentPostImage {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    max-height: 200px;
+    margin-top: 10px;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+#currentPostImageContainer {
+    margin-bottom: 10px;
+}
+
+.edit-post-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-post-buttons button {
+    padding: 10px 16px;
+    background-color: #ba0c2f;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.edit-post-buttons button:hover {
+    background-color: #960a26;
+}
+
+@media (max-width: 600px) {
+    .my-posts-page {
+        padding: 12px;
+    }
+
+    .my-posts-page .post-card {
+        padding: 16px;
+    }
+
+    .my-posts-page .post-top-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .my-posts-page .post-media {
+        width: 100%;
+    }
+
+    .my-posts-page .post-image {
+        max-height: 350px;
+        aspect-ratio: 16 / 9;
+    }
+
+    .my-posts-page .post-author-line {
+        gap: 4px;
+    }
+
+    .my-posts-page .post-title {
+        font-size: 15px;
+    }
+
+    .my-posts-page .post-desc {
+        font-size: 13px;
+    }
+}
