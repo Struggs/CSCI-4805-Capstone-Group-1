@@ -1,15 +1,18 @@
 import { getPostImageUrl } from './activityfeed.js';
 import { supabase } from './supabaseClient.js';
+import {
+    getCurrentUserProfile,
+    getProfileImageUrl,
+} from './profileutils.js';
+
 
 let myPosts = [];
 let currentUserId = null;
+let editingPost = null;
 
 export async function initializeMyPosts (){
     await loadMyPosts();
 }
-
-getPostImageUrl()
-
 async function loadMyPosts(){
 
     const myPostContainer = document.getElementById('my-posts');
@@ -18,146 +21,196 @@ async function loadMyPosts(){
         return;
     }
 
-    const { data: authData } = await supabase.auth.getUser();
-    currentUserId = authData.user?.id ?? null;
-
-    if (!currentUserId) {
-    myPostContainer.textContent = 'Please sign in to view your posts.';
-    return;
-}
-
     myPostContainer.textContent = 'Loading your posts...';
 
-        const { data: posts, error: postsError } = await supabase
-        .from('posts')
-        .select('id, user_id, title, post_text, image_path, audience, audience_type, audience_value, created_at')
-        .eq('user_id', currentUserId)
-        .order('created_at', { ascending: false });
+    try {
+        const { data: authData, error: authError } =
+            await supabase.auth.getUser();
 
-    if (postsError) {
-        console.error('Error loading posts:', postsError);
+        if (authError || !authData.user) {
+            currentUserId = null;
+            myPostContainer.textContent =
+                'Please sign in to view your posts.';
+            return;
+        }
+
+    currentUserId = authData.user.id;
+
+    const { data: posts, error: postsError } = await supabase
+            .from('posts')
+            .select(`
+                id,
+                user_id,
+                title,
+                post_text,
+                image_path,
+                audience,
+                audience_type,
+                audience_value,
+                created_at
+            `)
+            .eq('user_id', currentUserId)
+            .order('created_at', { ascending: false });
+
+        if (postsError) {
+            throw postsError;
+        }
+
+                const profile = await getCurrentUserProfile();
+
+        myPosts = (posts ?? []).map(post => ({
+            ...post,
+            profile
+        }));
+
+        await showMyPosts(myPosts, myPostContainer);
+
+    } catch (error) {
+        console.error('Error loading your posts:', error);
         myPostContainer.textContent = 'Unable to load your posts.';
+    }
+}
+export async function showMyPosts(posts, container) {
+    const template = document.getElementById('my-posts-template');
+
+    console.log('My Posts container:', container);
+    console.log('My Posts template:', template);
+
+    if (!container) {
+        console.error('My Posts container is missing.');
         return;
     }
 
-    myPosts = posts ?? [];
-    showMyPosts(myPosts, myPostContainer);
-}
-//finds template in html
-export async function showMyPosts(posts, container) {
+    if (!template) {
+        console.error('my-posts-template was not found in the page.');
+        return;
+    }
 
     container.replaceChildren();
 
-    const template = document.getElementById('post-template');
-
-    if (!container || !template) {
-        console.error('Feed container or post template is missing.');
-        return;
-    }
-
-    if (posts.length === 0) {
+    if (!posts || posts.length === 0) {
         container.textContent = 'No posts to display yet.';
         return;
     }
-        posts.forEach(async post => {
+    for (const post of posts) {
         const clone = template.content.cloneNode(true);
+        const card = clone.querySelector('.post-card');
         const profile = post.profile;
 
-        //finds element in cloned template using css labels with consideration for empty values
         clone.querySelector('.post-title').textContent =
             post.title || '';
 
         clone.querySelector('.post-author').textContent =
             profile?.name || 'CampusHub Student';
 
-        clone.querySelector('.post-audience').textContent =
-            post.audience_type?.audienceValue || 'All Students';
-
         clone.querySelector('.post-desc').textContent =
             post.post_text || '';
 
         //displays creation time
-        clone.querySelector('.post-time').textContent =
+        clone.querySelector('.post-stats').textContent =
             post.created_at
                 ? new Date(post.created_at).toLocaleString()
                 : '';
 
+        const audienceLabels = {
+            all_students: 'All Students',
+            major: `Major: ${post.audience_value || ''}`,
+            course_subject: `Course: ${post.audience_value || ''}`,
+            class_year: `Class: ${post.audience_value || ''}`,
+            transfer_status: 'Transfer Students Only'
+        };
+
+            clone.querySelector('.post-audience').textContent =
+            audienceLabels[post.audience_type] || 'All Students';
+
         //display profile image.
-        const card = clone.querySelector('.post-card');
         const profileImage = clone.querySelector('.post-profile-picture');
 
         if (profileImage) {
             if (profile?.image_path) {
-                profileImage.src = profile.image_path;
+                profileImage.src = getProfileImageUrl(profile.image_path);
                 profileImage.alt = profile.name || 'Student profile';
                 profileImage.hidden = false;
-            } else {
+            } else if (profileImage) {
                 profileImage.hidden = true;
             }
         }
 
         const image = clone.querySelector('.post-image')
 
-        if (image && post.image_path) {
+        if (post.image_path) {
+            
+            try {
+                const imageUrl = await getPostImageUrl(post.image_path);
 
-        const postImageUrl = await getPostImageUrl(post.image_path);
-
-            if (postImageUrl) {
-            image.src = postImageUrl;
-            image.alt = 'Post attachment';
-            image.hidden = false;
-            } else {
-            image.hidden = true;
+                if (imageUrl) {
+                    image.src = imageUrl;
+                    image.alt = 'Post attachment';
+                    image.hidden = false;
+                } else {
+                    image.hidden = true;
+                }
+            } catch (error) {
+                console.error('Unable to load post image:', error);
+                image.hidden = true;
             }
+        } else {
+            image.hidden = true;
+        }
 
-        } else if (image) {
-        image.hidden = true;
-        }   
 
         
         // Connect the Edit Post button to this specific post.
-        const editButton = clone.querySelector(
+        const editButton = card.querySelector(
             '.edit-post-interface-button'
         );
 
-        if (editButton) {
-            editButton.addEventListener('click', () => {
-                editPostInterface(post);
-            });
-        }
+        editButton.addEventListener('click', () => {
+            editPostInterface(post);
+        });
 
-        const deleteButton = clone.querySelector(
-            '.delete-post-button'
-        )
-        if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-                deletePost(post);
-            });
-        }
+        const deleteButton =
+            card.querySelector('.delete-post-button');
 
+        deleteButton.addEventListener('click', () => {
+            deletePost(post);
+        });
 
-        // Add the completed post card to the page.
         container.appendChild(clone);
-})}
+    }
+}
 
 function updateEditAudienceVisibility() {
     const audience = document.getElementById('audienceFilter')?.value;
 
-    document.getElementById('majorSelectContainer').style.display =
-        audience === 'Major' ? 'block' : 'none';
+    const majorContainer =
+        document.getElementById('majorSelectContainer');
 
-    document.getElementById('courseSubjectContainer').style.display =
-        audience === 'Course Subject' ? 'block' : 'none';
+    const courseContainer =
+        document.getElementById('courseSubjectContainer');
 
-    document.getElementById('yearSelectContainer').style.display =
-        audience === 'Year' ? 'block' : 'none';
+    const yearContainer =
+        document.getElementById('yearSelectContainer');
+
+    if (majorContainer) {
+        majorContainer.style.display =
+            audience === 'Major' ? 'block' : 'none';
+    }
+
+    if (courseContainer) {
+        courseContainer.style.display =
+            audience === 'Course Subject' ? 'block' : 'none';
+    }
+
+    if (yearContainer) {
+        yearContainer.style.display =
+            audience === 'Year' ? 'block' : 'none';
+    }
 }
 
 window.handleEditAudienceChange = updateEditAudienceVisibility;
 
-let editingPost = null;
-
-export function editPostInterface(post) {
+export async function editPostInterface(post) {
     editingPost = post;
 
     const element = document.getElementById('editPostInterface');
@@ -184,18 +237,19 @@ export function editPostInterface(post) {
         imageInput.value = '';
     }
 
-    if (imageContainer && currentImage) {
-        if (post.image_path) {
-            currentImage.src = post.image_path;
+    if (post.image_path && imageContainer && currentImage) {
+        const imageUrl = await getPostImageUrl(post.image_path);
+
+        if (imageUrl) {
+            currentImage.src = imageUrl;
             imageContainer.style.display = 'block';
         } else {
-            currentImage.removeAttribute('src');
             imageContainer.style.display = 'none';
         }
+    } else if (imageContainer && currentImage) {
+        currentImage.removeAttribute('src');
+        imageContainer.style.display = 'none';
     }
-
-    const audienceFilter =
-        document.getElementById('audienceFilter');
 
     const audienceTypeToOption = {
         all_students: 'All Students',
@@ -208,7 +262,7 @@ export function editPostInterface(post) {
     const selectedAudience =
         audienceTypeToOption[post.audience_type] ?? 'All Students';
 
-    audienceFilter.value = selectedAudience;
+    document.getElementById('audienceFilter').value = selectedAudience;
     updateEditAudienceVisibility();
 
     const audienceValue = post.audience_value ?? '';
@@ -222,7 +276,7 @@ export function editPostInterface(post) {
         document.getElementById('yearSelect').value = audienceValue;
     }
 
-    element.style.display = 'block';
+    element.style.display = 'flex';
     element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
@@ -237,12 +291,6 @@ export async function editPostSubmission() {
     const titleInput = document.getElementById('postTitle');
     const descriptionInput = document.getElementById('postDescription');
     const audienceInput = document.getElementById('audienceFilter');
-
-    if (!titleInput || !descriptionInput || !audienceInput) {
-        alert('The post form could not be loaded. Please refresh the page.');
-        return;
-    }
-
     const title = titleInput.value.trim();
     const description = descriptionInput.value.trim();
 
@@ -303,11 +351,48 @@ export async function editPostSubmission() {
         return;
     }
 
+    let imagePath = editingPost.image_path;
+
+    const imageInput = document.getElementById('postImage');
+    const selectedImage = imageInput?.files[0];
+
+try {
+    if (selectedImage) {
+        if (!selectedImage.type.startsWith('image/')) {
+            alert('Please select a valid image.');
+            return;
+        }
+
+        if (selectedImage.size > 5 * 1024 * 1024) {
+            alert('Image size must be 5 MB or smaller.');
+            return;
+        }
+
+        const extension = selectedImage.name.split('.').pop();
+        const fileName =
+            `${authData.user.id}/${crypto.randomUUID()}.${extension}`;
+
+        const { data: uploadedImage, error: uploadError } =
+            await supabase.storage
+                .from('post_Images')
+                .upload(fileName, selectedImage, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        imagePath = uploadedImage.path;
+    }
+
     const { data: updatedPosts, error } = await supabase
         .from('posts')
         .update({
             title: title || null,
             post_text: description,
+            image_path: imagePath,
             audience: 'All Students',
             audience_type: audienceType,
             audience_value: audienceValue
@@ -316,11 +401,9 @@ export async function editPostSubmission() {
         .eq('user_id', authData.user.id)
         .select('id');
 
-    if (error) {
-        console.error('Error updating post:', error);
-        alert(`Your post could not be updated: ${error.message}`);
-        return;
-    }
+        if (error) {
+            throw error;
+        }
 
     if (!updatedPosts || updatedPosts.length === 0) {
         alert('The post was not updated. Check your permissions and try again.');
@@ -331,45 +414,66 @@ export async function editPostSubmission() {
     await loadMyPosts();
 
     alert('Post updated successfully.');
+    } catch (error) {
+    console.error('Error updating post:', error);
+    alert(`Your post could not be updated: ${error.message}`);
+    }
 }
 
-export function closeEditPostInterface() {
+function closeEditPostInterface() {
     const element = document.getElementById('editPostInterface');
     if (element) element.style.display = 'none';
 
     editingPost = null;
 }
 
-let deletingPost = null;
-
 export async function deletePost(post){
-
-let deletingPost = post
-
-    const titleInput = document.getElementById('postTitle');
-    const descriptionInput = document.getElementById('postDescription');
-    const audienceInput = document.getElementById('audienceFilter');
-
-
-    const { error } = await supabase
-        .from('posts')
-        .delete({
-            post
-        })
-        .eq('id', deletingPost.id)
-        .eq('user_id', authData.user.id)
-        .select('id');
-
-        if (error) {
-        console.error('Error deleting post:', error);
-        alert(`Your post could not be deleted: ${error.message}`);
+    if (!post || !post.id) {
+        alert('Unable to identify this post.');
         return;
     }
+
+    const confirmed = confirm(
+        'Are you sure you want to delete this post? This cannot be undone.'
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const { data: authData, error: authError } =
+            await supabase.auth.getUser();
+
+        if (authError || !authData.user) {
+            alert('Please sign in before deleting a post.');
+            return;
+        }
+
+        const { data: deletedPosts, error } = await supabase
+            .from('posts')
+            .delete()
+            .eq('id', post.id)
+            .eq('user_id', authData.user.id)
+            .select('id');
+
+        if (error) {
+            throw error;
+        }
+
+        if (!deletedPosts || deletedPosts.length === 0) {
+            alert('Post could not be deleted. Check your permissions.');
+            return;
+        }
 
         await loadMyPosts();
 
         alert('Post deleted successfully.');
 
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        alert(`Your post could not be deleted: ${error.message}`);
+    }
 }
 
 

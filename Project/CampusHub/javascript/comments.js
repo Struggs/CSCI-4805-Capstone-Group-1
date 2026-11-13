@@ -177,7 +177,8 @@ async function loadComments(postId, elements, offset = 0, postCreatorId) {
     await updateCommentCount(postId, elements.commentsButton);
 
     if (offset === 0) {
-        commentsList.innerHTML = ''; // Clear existing comments only on the initial load
+        const existingComments = commentsList.querySelectorAll('.comment');
+        existingComments.forEach(comment => comment.remove()); // Clear existing comments only on the initial load
     }
     displayComments(
         data.slice(0, 25),
@@ -215,6 +216,8 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         commentContent.classList.add('comment-content');
 
         const commentWrapper = document.createElement('div');
+        const commentBody = document.createElement('div');
+        commentBody.classList.add('comment-body');
         commentWrapper.classList.add('comment-wrapper');
 
         const commentTextDiv = document.createElement('div');
@@ -240,7 +243,7 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
 
         renderCommentText(commentTextDiv, commentText);
         commentDiv.prepend(profileImage);
-        commentWrapper.appendChild(commentContent);
+        commentBody.appendChild(commentContent);
 
         const commentActions = document.createElement('div');
         commentActions.classList.add('comment-actions');
@@ -254,13 +257,15 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         }
 
         commentActions.appendChild(commentTimestamp);
-        commentActions.appendChild(await createCommentLikeButton(comment, user));
-
         const replyButton = document.createElement('button');
+
         replyButton.textContent = 'Reply';
         replyButton.classList.add('reply-button');
         commentActions.appendChild(replyButton);
-        commentWrapper.appendChild(commentActions);
+        commentActions.appendChild(await createCommentLikeButton(comment, user));
+
+        commentBody.appendChild(commentActions);
+        commentWrapper.appendChild(commentBody);
 
         const replyInput = document.createElement('textarea');
         replyInput.classList.add('reply-input');
@@ -336,8 +341,19 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         const viewRepliesButton = document.createElement('button');
         viewRepliesButton.classList.add('view-replies-button');
         viewRepliesButton.hidden = true;
+
+        const hideRepliesButton = document.createElement('button');
+        hideRepliesButton.classList.add('hide-replies-button');
+        hideRepliesButton.hidden = true;
+        hideRepliesButton.textContent = 'Hide';
+
+        const repliesButtonContainer = document.createElement('div');
+        repliesButtonContainer.classList.add('replies-buttons-container');
+
         commentWrapper.appendChild(repliesContainer);
-        commentWrapper.appendChild(viewRepliesButton);
+        repliesButtonContainer.appendChild(viewRepliesButton);
+        repliesButtonContainer.appendChild(hideRepliesButton);
+        commentWrapper.appendChild(repliesButtonContainer);
 
         let repliesCount = await getReplyCount(comment.id);
         function updateRepliesButton() {
@@ -346,6 +362,7 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
                 return;
             }
 
+            hideRepliesButton.hidden = displayedReplies === 0;
             if (displayedReplies === 0) {
                 viewRepliesButton.textContent = `View ${repliesCount} ${repliesCount === 1 ? 'Reply' : 'Replies'}`;
                 viewRepliesButton.hidden = false;
@@ -355,9 +372,10 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
 
             if (remainingReplies > 0) {
                 viewRepliesButton.textContent = `View ${remainingReplies} more ${remainingReplies === 1 ? 'Reply' : 'Replies'}`;
+                viewRepliesButton.hidden = false;
             }
             else {
-                viewRepliesButton.textContent = 'Hide Replies';
+                viewRepliesButton.hidden = true;
             }
         }
         updateRepliesButton();
@@ -383,8 +401,14 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
             updateRepliesButton();
         });
 
+        hideRepliesButton.addEventListener('click', () => {
+            repliesContainer.hidden = true;
+            displayedReplies = 0;
+            updateRepliesButton();
+        });
+
         commentDiv.appendChild(commentWrapper);
-        commentsList.appendChild(commentDiv);   // Append the comment to the comments list
+        commentsList.insertBefore(commentDiv, viewMoreCommentsButton);   // Append the comment to the comments list
     }
 
 }
@@ -533,9 +557,24 @@ async function deleteComment(commentId) {
 
 async function createCommentLikeButton(comment, user) {
     const likeButton = document.createElement('button');
+    const heartSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    heartSvg.setAttribute('width', '16');
+    heartSvg.setAttribute('height', '16');
+    heartSvg.setAttribute('viewBox', '0 0 24 24');
+    heartSvg.setAttribute('fill', 'none');
+    heartSvg.setAttribute('stroke', 'currentColor');
+    heartSvg.setAttribute('stroke-width', '1.8');
+    const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    heartPath.setAttribute('d', 'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z');
+    heartSvg.appendChild(heartPath);
+    likeButton.appendChild(heartSvg);
+
     likeButton.classList.add('like-button');
     let isLiked = user ? await hasUserLiked(user.id, comment.id, 'comment') : false;
-    likeButton.textContent = isLiked ? '\u2665' : '\u2661';
+    heartSvg.setAttribute('fill', isLiked ? '#ba0c2f' : 'none');
+    heartSvg.setAttribute('stroke', isLiked ? '#ba0c2f' : '#65676b');
+
+
 
     likeButton.addEventListener('click', async () => {
         if (!user) {
@@ -554,7 +593,8 @@ async function createCommentLikeButton(comment, user) {
 
         if (success) {
             isLiked = !isLiked;
-            likeButton.textContent = isLiked ? '\u2665' : '\u2661';
+            heartSvg.setAttribute('fill', isLiked ? '#ba0c2f' : 'none');
+            heartSvg.setAttribute('stroke', isLiked ? '#ba0c2f' : '#65676b');
             const updatedLikeCount = await getLikeCount(comment.id, 'comment');
             likeCountSpan.textContent = updatedLikeCount;
         }
