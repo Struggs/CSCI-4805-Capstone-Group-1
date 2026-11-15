@@ -91,6 +91,8 @@ export function initializeComments(postCard, postId, postCreatorId) {
     commentInput.addEventListener('input', () => {
         charCount.textContent = `${commentInput.value.length}/1000`;
         postButton.disabled = commentInput.value.trim() === '';
+        commentInput.style.height = '0px';
+        commentInput.style.height = (commentInput.scrollHeight + 2) + 'px';
     });
 
     commentForm.addEventListener('submit', async (event) => {
@@ -196,7 +198,9 @@ async function loadComments(postId, elements, offset = 0, postCreatorId) {
 async function displayComments(comments, commentsList, viewMoreCommentsButton, postId, commentsButton, postCreatorId) {   // Display comments in the comments section, shortening them if they exceed the specified length and adding a "View More" button for longer comments
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    for (const comment of comments) {
+    const commentBatch = document.createDocumentFragment();
+
+    const commentElements = await Promise.all(comments.map(async (comment) => {
         const commentText = comment.comment_text;
         const commentTimestamp = document.createElement('small');
         commentTimestamp.classList.add('comment-timestamp');
@@ -267,21 +271,29 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         commentBody.appendChild(commentActions);
         commentWrapper.appendChild(commentBody);
 
+        const replyInputContainer = document.createElement('div');
+        replyInputContainer.classList.add('comment-input-container');
+
         const replyInput = document.createElement('textarea');
         replyInput.classList.add('reply-input');
         replyInput.placeholder = 'Write a reply...';
+        replyInput.rows = 1;
         replyInput.maxLength = 1000;
         replyInput.hidden = true;
 
-        commentWrapper.appendChild(replyInput);
+        replyInputContainer.appendChild(replyInput);
         const replyCharCount = document.createElement('small');
         replyCharCount.classList.add('char-count');
         replyCharCount.textContent = `${replyInput.value.length}/1000`;
         replyCharCount.hidden = true;
-        commentWrapper.appendChild(replyCharCount);
+        replyInputContainer.appendChild(replyCharCount);
+        commentWrapper.appendChild(replyInputContainer);
+
         replyInput.addEventListener('input', () => {
             replyCharCount.textContent = `${replyInput.value.length}/1000`;
             replyInput.value.trim() === '' ? submitReplyButton.disabled = true : submitReplyButton.disabled = false;
+            replyInput.style.height = '0px';
+            replyInput.style.height = (replyInput.scrollHeight + 2) + 'px';
         });
 
         replyButton.addEventListener('click', () => {
@@ -408,9 +420,10 @@ async function displayComments(comments, commentsList, viewMoreCommentsButton, p
         });
 
         commentDiv.appendChild(commentWrapper);
-        commentsList.insertBefore(commentDiv, viewMoreCommentsButton);   // Append the comment to the comments list
-    }
-
+        return commentDiv;
+    }));
+    commentBatch.append(...commentElements);
+    commentsList.insertBefore(commentBatch, viewMoreCommentsButton);
 }
 
 function createCommentOptionsMenu(comment, user, commentElement, onDeleteSuccess) {
@@ -427,29 +440,41 @@ function createCommentOptionsMenu(comment, user, commentElement, onDeleteSuccess
     editButton.classList.add('comment-menu-item');
     optionsMenu.appendChild(editButton);
     editButton.addEventListener('click', () => {
+        optionsContainer.hidden = true;
         const commentTextElement = commentElement.querySelector('.comment-text');
         const commentTimestampElement = commentElement.querySelector('.comment-timestamp');
         console.log('Edit Button clicked');
 
+        const editInputContainer = document.createElement('div');
+        editInputContainer.classList.add('comment-input-container')
+
         const editInput = document.createElement('textarea');
+        editInput.rows = 1;
         editInput.value = comment.comment_text;
         editInput.maxLength = 1000;
         editInput.classList.add('edit-comment-input');
-        commentTextElement.replaceWith(editInput);
 
         const editCharCount = document.createElement('small');
         editCharCount.classList.add('char-count');
         editCharCount.textContent = `${editInput.value.length}/1000`;
-        editInput.insertAdjacentElement('afterend', editCharCount);
+
+        editInputContainer.appendChild(editInput);
+        editInputContainer.appendChild(editCharCount);
+        commentTextElement.replaceWith(editInputContainer);
+
         editInput.addEventListener('input', () => {
             editCharCount.textContent = `${editInput.value.length}/1000`;
             saveButton.disabled = editInput.value.trim() === '' || editInput.value.trim() === comment.comment_text;
+            editInput.style.height = '0px';
+            editInput.style.height = editInput.scrollHeight + 'px'
         });
 
         const saveButton = document.createElement('button');
         saveButton.textContent = 'Save';
         saveButton.classList.add('save-comment-button');
         saveButton.disabled = editInput.value.trim() === '' || editInput.value.trim() === comment.comment_text;
+
+        editInput.dispatchEvent(new Event('input'));
 
         const cancelButton = document.createElement('button');
         cancelButton.textContent = 'Cancel';
@@ -459,7 +484,7 @@ function createCommentOptionsMenu(comment, user, commentElement, onDeleteSuccess
         editActions.classList.add('edit-actions');
         editActions.appendChild(saveButton);
         editActions.appendChild(cancelButton);
-        editCharCount.insertAdjacentElement('afterend', editActions);
+        editInputContainer.insertAdjacentElement('afterend', editActions);
 
         saveButton.addEventListener('click', async () => {
             const newText = editInput.value.trim();
@@ -474,17 +499,31 @@ function createCommentOptionsMenu(comment, user, commentElement, onDeleteSuccess
                 commentTimestampElement.textContent = 'Edited · ' + formatCommentDate(updatedAt);
                 commentTextElement.textContent = '';
                 renderCommentText(commentTextElement, newText);
-                editInput.replaceWith(commentTextElement);
-                editCharCount.remove();
+                document.removeEventListener('click', handleOutsideClick);
+                editInputContainer.replaceWith(commentTextElement);
                 editActions.remove();
+                optionsMenu.hidden = true;
+                optionsContainer.hidden = false;
             }
 
         });
-        cancelButton.addEventListener('click', () => {
-            editInput.replaceWith(commentTextElement);
+        function cancelEdit() {
+            document.removeEventListener('click', handleOutsideClick);
+            editInputContainer.replaceWith(commentTextElement);
             editCharCount.remove();
             editActions.remove();
+            optionsMenu.hidden = true;
+            optionsContainer.hidden = false;
+        }
+        function handleOutsideClick(event) {
+            if (!commentElement.contains(event.target)) {
+                cancelEdit();
+            }
+        }
+        cancelButton.addEventListener('click', () => {
+            cancelEdit();
         });
+        document.addEventListener('click', handleOutsideClick);
     });
 
     const deleteButton = document.createElement('button');
