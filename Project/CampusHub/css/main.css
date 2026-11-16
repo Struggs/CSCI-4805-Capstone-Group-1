@@ -18,6 +18,8 @@ body {
 }
 .main-header {
     height: 90px;
+    min-height: 90px;
+    box-sizing: border-box;
     background-color: #ba0c2f;
     color: white;
 
@@ -49,32 +51,39 @@ body {
 /* 2. Container that forces children (navbar + main-content) side-by-side */
 .dashboard-layout {
     display: grid;
-    grid-template-columns: 280px minmax(0, 1fr) 280px;
-
+    grid-template-columns: minmax(0, 1fr);
     width: 100%;
-    height: calc(100vh - 90px);
+    height: calc(100dvh - 90px);
     margin-top: 90px;
-
     min-height: 0;
     overflow: hidden;
 }
 
 /* 3. Navbar affixed to the left side */
 .navbar {
-    width: 260px;
-    min-width: 260px;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
     background-color: #ffffff;
     border-right: 2px solid #ba0c2f;
     padding: 1rem;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 0.75rem;
-    position: sticky;
-    top: 90px;
-    height: calc(100vh - 90px);
+    position: relative;
+    top: auto;
     overflow-y: auto;
 }
+@media screen and (min-width: 769px) {
+    .dashboard-layout {
+        grid-template-columns: 260px minmax(0, 1fr);
+    }
 
+    .navbar {
+        display: flex;
+    }
+}
 .nav-button {
     display: flex;
     align-items: center;
@@ -97,7 +106,7 @@ body {
 .main-content {
     min-width: 0;
     width: 100%;
-    max-width: 1000px;
+    max-width: none;
     height: 100%;
     min-height: 0;
     padding: 2rem;
@@ -339,12 +348,26 @@ body {
 }
 
 .right-sidebar {
+    display: none;
+    width: 100%;
+    min-width: 0;
     height: 100%;
     min-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 20px;
+    background-color: #f4f6f9;
 }
 
+@media screen and (min-width: 1200px) {
+    .dashboard-layout {
+        grid-template-columns: 260px minmax(0, 1fr) 300px;
+    }
+
+    .right-sidebar {
+        display: block;
+    }
+}
 .right-sidebar-section {
     padding: 16px;
     margin-bottom: 16px;
@@ -369,3 +392,16 @@ body {
     line-height: 1.5;
     color: #65676b;
 }
+
+@media screen and (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1199px) {
+    .main-content {
+        padding: 1.5rem;
+    }
+}
+
