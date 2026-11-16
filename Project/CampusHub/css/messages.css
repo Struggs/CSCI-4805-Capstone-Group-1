@@ -4,7 +4,7 @@
     margin: 30px auto;
     padding: 20px;
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 380px minmax(0, 1fr);
     grid-template-areas:
     "title title"
     "conversations chat";
@@ -31,25 +31,49 @@
     margin-top:0;
     margin-bottom: 15px;
 }
-/*individual conversation item*/
+/* Conversation cards */
 #messages-page .conversation {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+   display: grid;
+    grid-template-columns: 1fr auto;
     padding: 12px;
-    margin-bottom: 10px;
-
-    background-color: #f7f7f7;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-
-    text-align: left;
+    display: flex;
+    
+    gap: 4px 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
     cursor: pointer;
+    box-sizing: border-box;
 }
-/*conversation hover */
-#messages-page .conversation:hover{
-    background-color: #eeeeee;
+/* Student name */
+#messages-page .conversation h3 {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Last message preview */
+#messages-page .conversation p {
+    font-size: 12px;
+    color: #777;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Message date */
+#messages-page .conversation-time {
+    font-size: 11px;
+    color: #999;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+/* Highlight conversations */
+#messages-page .conversation:hover {
+    background: #fff1f3;
+    border-color: #ba0c2f;
 }
 /*conversation profile picture */
 .conversation-profile-picture{
@@ -66,13 +90,15 @@
 width: 100%;
 min-width: 0;
 }
-/*student name*/
+/* Student names */
 .conversation-info strong {
+    font-size: 14px;
     margin-bottom: 4px;
 }
 /* most recent message */ 
 .recent-message {
-    color: #555;
+    color: #777;
+    font-size: 12px;
     
     white-space: nowrap;
     overflow: hidden;
@@ -81,9 +107,9 @@ min-width: 0;
 }
 /* most recent message time*/
 .recent-message-time {
-    margin-top: 5px;
-    font-size: 12px;
-    color: #777;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #999;
 }
 /*currently opened chat */
 #current-chat{
@@ -118,9 +144,9 @@ min-width: 0;
 .received-message{
     align-self: flex-start;
     max-width: 70%;
-    background-color: #eeeeee;
-    padding: 10px 14px;
-    border-radius: 12px;
+    background-color: #f0f0f0;
+    padding: 12px 16px;
+    border-radius: 16px, 16px, 4px, 16px ;
 
 }
 /*sent message */
@@ -162,12 +188,13 @@ min-width: 0;
 /*message text box */
 #message-input{
     width: 100%;
-    min-height:50px;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    resize: vertical;
+    height: 48px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    resize: none;
     box-sizing: border-box;
+    font: inherit;
     
 }
 /*text box when selected */

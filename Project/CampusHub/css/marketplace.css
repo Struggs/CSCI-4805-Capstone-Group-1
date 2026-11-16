@@ -13,17 +13,18 @@
     color: #6b7280;
 }
 
+/* Keep search and filters together */
 .marketplace-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin: 14px 0;
     flex-wrap: wrap;
 }
 
+/* Compact search bar */
 .marketplace-search {
-    flex: 0 0 350px;
+    flex: 0 1 280px;
     position: relative;
 }
 
@@ -81,15 +82,21 @@
     transform: rotate(45deg);
 }
 
+/* Sell button */
 #create-listing {
     padding: 10px 16px;
     border: none;
     border-radius: 8px;
-    background-color: var(--primary-color);
+    background: #eb2825;
     color: white;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+    flex-shrink: 0;
+}
+
+#create-listing:hover {
+    background: #c9201e;
 }
 /* Marketplace listings */
 .marketplace-listings {
@@ -101,10 +108,17 @@
     margin-bottom: 16px;
 }
 
+/* Keep three compact cards per row */
 #listings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 240px));
+    gap: 12px;
+}
+
+@media (max-width: 900px) {
+    #listings-grid {
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
 }
 
 /* Product cards */
@@ -116,13 +130,15 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Product images */
 .listing-image {
-    height: 180px;
-    background-color: #f3f4f6;
+    height: 160px;
+    background: #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #6b7280;
+    overflow: hidden;
 }
 
 .listing-image img {
@@ -131,37 +147,34 @@
     object-fit: cover;
 }
 
+/* Product details */
 .listing-info {
-    padding: 16px;
+    padding: 10px 12px;
 }
 
 .listing-info h3 {
-    font-size: 17px;
-    margin: 0 0 8px;
+    font-size: 14px;
+    margin: 0 0 4px;
 }
 
 .listing-price {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
-    color: var(--primary-color);
-    margin: 0 0 8px;
+    color: #d71935;
+    margin: 0 0 5px;
 }
 
-.listing-condition {
-    color: #6b7280;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
+.listing-condition,
 .listing-seller {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0;
 }
 
 .listing-time {
-    font-size: 12px;
+    font-size: 11px;
     color: #9ca3af;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 /* Marketplace buttons */
 #clear-filters,
@@ -237,13 +250,3 @@
     }
 }
 /* Keep Sell an Item button red */
-#create-listing {
-    background-color: #eb2825;
-    color: white;
-    border: none;
-    opacity: 1;
-}
-
-#create-listing:hover {
-    background-color: #c9201e;
-}

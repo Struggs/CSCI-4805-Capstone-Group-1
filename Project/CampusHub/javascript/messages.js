@@ -18,9 +18,34 @@ export function initializeMessages() {
     //Gets the message form and text box
     const messageForm = document.getElementById("message-form")
     const messageInput = document.getElementById("message-input");
+    // Start the cursor at the beginning when clicking the textbox
+messageInput.addEventListener("click", function () {
+    messageInput.setSelectionRange(0, 0);
+});
+    // Enter sends the message; Shift + Enter adds a new line
+    messageInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+            event.preventDefault();
+            messageForm.requestSubmit();
+        }
+    });
     let selectedConversation = null;
     const newConversationButton = document.getElementById("new-conversation-button");
 const studentSelect = document.getElementById("student-select");
+
+const studentSearch = document.getElementById("student-search");
+
+// Filter the student dropdown as the user types
+studentSearch.addEventListener("input", function () {
+    const search = studentSearch.value.toLowerCase();
+
+    for (const option of studentSelect.options) {
+        if (option.value === "") continue;
+
+        option.hidden = !option.textContent.toLowerCase().includes(search);
+    }
+});
+
 
 newConversationButton.addEventListener("click", async function () {
     clearMessageError();
@@ -53,7 +78,10 @@ newConversationButton.addEventListener("click", async function () {
         studentSelect.appendChild(option);
     }
 
+    studentSearch.hidden = false;
     studentSelect.hidden = false;
+    studentSearch.value = "";
+    studentSearch.focus();
 });
 
 studentSelect.addEventListener("change", async function () {
@@ -235,6 +263,8 @@ if (messageDate) {
                 clearMessageError();
 
                 await loadMessages(chat.id);
+                // Automatically focus the textbox when opening a conversation
+                messageInput.focus();
             });
         }
     }

@@ -266,11 +266,12 @@ async function saveListings(newListing) {
             const matchesSearch =
                 listing.title.toLowerCase().includes(search) ||
                 listing.description.toLowerCase().includes(search);
-
-            const matchesCategory =
-                category === "" || listing.category === category;
-            const matchesCondition =
-                condition === "" || listing.condition === condition;
+            // Match categories and conditions regardless of capitalization
+            const matchesCategory = !category ||
+                listing.category.toLowerCase() === category.toLowerCase();
+            const matchesCondition = !condition ||
+                listing.condition.toLowerCase().replace(/[\s-]/g, "") === 
+                condition.toLowerCase().replace(/[\s-]/g, "");
             const matchesMin =
                 minPrice === "" || listing.price >= Number(minPrice);
             const matchesMax =

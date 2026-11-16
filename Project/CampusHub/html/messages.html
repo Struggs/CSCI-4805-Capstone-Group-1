@@ -14,9 +14,20 @@
         <button type="button" id="new-conversation-button">
         New Conversation
     </button>
-    <select id="student-select" hidden>
-        <option value="">Select a student</option>
-    </select>
+    <!-- Search for a student by name -->
+<input
+    type="text"
+    id="student-search"
+    placeholder="Search students by name..."
+    hidden
+>
+    <!-- Matching students appear here -->
+<div id="student-results" hidden></div>
+
+<!-- Keep this hidden for existing messaging functionality -->
+<select id="student-select" hidden>
+    <option value="">Select a student</option>
+</select>
 </section>
         <section id="current-chat">
         <h2>Select a conversation</h2>
