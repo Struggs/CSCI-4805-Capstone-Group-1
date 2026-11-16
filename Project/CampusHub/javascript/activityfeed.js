@@ -261,6 +261,10 @@ export async function showActivityFeed(posts, container, audience = 'All') {
 
         commentsButton.addEventListener('click', () => {
             commentsSection.hidden = !commentsSection.hidden;
+            if (!commentsSection.hidden) {
+                const commentInput = commentsSection.querySelector('textarea.comment');
+                commentInput?.dispatchEvent(new Event('input'));
+            }
         });
 
         initializeComments(card, post.id, post.user_id);
