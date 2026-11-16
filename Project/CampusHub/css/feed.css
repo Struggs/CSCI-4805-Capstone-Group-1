@@ -14,7 +14,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    max-width: 1000px;
+    max-width: none;
     min-height: 100%;
     padding: 0;
     background-color: transparent;
@@ -22,7 +22,7 @@ body {
 
 .activity-feed {
     width: 100%;
-    max-width: 1000px;
+    max-width: none;
     padding: 0;
     background-color: transparent;
     box-shadow: none;
@@ -32,7 +32,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 1000px;
+    max-width: none;
     gap: 16px;
     margin-top: 20px;
 }
@@ -172,10 +172,11 @@ body {
 
 .post-top-row {
     display: grid;
-    grid-template-columns: 60% 40%;
-    gap: 16px;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 20px;
     width: 100%;
     min-width: 0;
+    align-items: start;
 }
 
 .post-top-row:has(.post-image[hidden]) {
@@ -192,23 +193,26 @@ body {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .post-title {
     font-size: 20px;
     font-weight: bold;
     line-height: 1.4;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     padding: 0;
     color: #1c1e21;
 }
 
 .post-desc {
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6;
     color: #444;
-    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    margin: 0;
+    padding-left: 0;
 }
 
 .post-media {
@@ -229,10 +233,10 @@ body {
     display: block;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 4/3;    
-    object-fit: cover;
+    max-height: 420px;
+    height: auto;
+    object-fit: contain;
     border-radius: 8px;
-    margin: 0;
 }
 
 .post-image[hidden] {
