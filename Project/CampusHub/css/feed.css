@@ -316,8 +316,6 @@ body {
     background-color: #960a26;
 }
 
-<<<<<<< HEAD
-=======
 @media (max-width: 600px) {
     .activity-feed-page {
         padding: 12px;
@@ -367,7 +365,6 @@ body {
     }
 }
 
->>>>>>> f24e5db89a3010d2d555baba423c732ec65b1100
 .post-actions {
     display: flex;
     align-items: center;

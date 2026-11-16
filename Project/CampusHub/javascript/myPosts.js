@@ -10,7 +10,15 @@ let myPosts = [];
 let currentUserId = null;
 let editingPost = null;
 
-export async function initializeMyPosts (){
+export async function initializeMyPosts() {
+    const editInterface = document.getElementById('editPostInterface');
+
+    if (editInterface) {
+        editInterface.style.display = 'none';
+    }
+
+    editingPost = null;
+
     await loadMyPosts();
 }
 async function loadMyPosts(){
