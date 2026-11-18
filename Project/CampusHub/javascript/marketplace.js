@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { getUserProfile } from './profileutils.js';
 export function initializeMarketplace() {
     //Marketplace elements
     const searchInput = document.querySelector(".marketplace-search input");
@@ -76,14 +77,19 @@ supabase.auth.getUser().then(({ data, error }) => {
             return [];
         }
 
-        return (data || []).map(function (listing) {
-            return {
-                ...listing,
-                createdAt: new Date(listing.created_at).getTime(),
-                seller: listing.seller || "CampusHub Student"
-            };
-        });
+        return await Promise.all(
+    (data || []).map(async function (listing) {
+        const profile = await getUserProfile(listing.seller_id);
+
+        return {
+            ...listing,
+            createdAt: new Date(listing.created_at).getTime(),
+            seller: profile?.name || "CampusHub Student"
+        };
+    })
+);
     }
+          
 
     let listings = [];
 
@@ -815,11 +821,14 @@ if (selectedImage) {
     return;
 }
 
+const profile = await getUserProfile(user.id);
+
 listings.unshift({
     ...savedListing,
     createdAt: new Date(savedListing.created_at).getTime(),
-    seller: seller
+    seller: profile?.name || "CampusHub Student"
 });
+
 
             visibleCount = PAGE_SIZE;
 
