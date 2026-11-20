@@ -44,7 +44,7 @@ body {
     width: 100%;
     max-width: none;
     min-height: 200px;
-    max-height: 600px;
+    max-height: none;
     overflow: hidden;
     padding: 20px;
     margin-bottom: 0;
@@ -156,7 +156,7 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .my-posts-page .post-media:has(.post-image[hidden]) {
@@ -167,10 +167,10 @@ body {
     display: block;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+    max-height: 420px;
+    height: auto;
+    object-fit: contain;
     border-radius: 8px;
-    margin: 0;
 }
 
 .my-posts-page .post-image[hidden] {
